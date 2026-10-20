@@ -1,0 +1,52 @@
+# Generated corpus
+astronomy_corpus/
+
+# Python virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Python caches and build artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.ipynb_checkpoints/
+build/
+dist/
+*.egg-info/
+
+# Local environment variables and credentials
+.env
+.env.*
+!.env.example
+!.env.sample
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_ed25519
+credentials.json
+service-account*.json
+
+# Local model weights and vector indexes
+.ollama/
+.cache/
+*.gguf
+*.safetensors
+.chroma/
+chroma_db/
+faiss_index/
+*.sqlite
+*.sqlite3
+
+# Logs and editor/OS temporary files
+*.log
+*.swp
+*.swo
+.DS_Store
