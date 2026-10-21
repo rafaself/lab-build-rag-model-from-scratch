@@ -1,13 +1,15 @@
-# Answer benchmark review notes
+# Answer benchmark source review
 
-This is a source-based Codex inspection of `answer-quality.json`, not an independent human review. The report retains the original model verdicts and the exact references, claims, and source excerpts used in each judgment.
+This is a Codex source-comparison audit of the current `answer-quality.json`, not an independent human review. `answer-source-audit.json` binds the audit to the report's SHA-256 and records every reviewed claim. Model verdicts remain unchanged in the original report.
 
-| Case(s) | Observed result |
+| Cases | Source-based assessment |
 | --- | --- |
-| `sun-energy`, `sun-history`, `kepler-assistant`, `first-telescopes`, `neutrino-force`, `orion-stars`, `pleiades-location`, `jupiter-storm` | Answer matches the reference fact and its cited excerpt. |
-| `milky-way-type`, `mercury-size` | Correct reference fact, repeated across two source citations; duplication remains a presentation limitation. |
-| `gravity-relativity` | Correct spacetime-curvature answer, plus an unnecessary Mercury-orbit claim. The full second excerpt describes the unexplained perihelion shift and Einstein's successful model. The judge's rejection reason concerns relevance rather than entailment. Its `faithful: false` is a grading inconsistency, while the runtime grounding check also failed to remove this irrelevant extra claim. |
-| `sun-neutrinos` | Abstained; counted as an accuracy failure. The gold answer is 2.3 seconds. Earlier retrieval measurements show that good document recall does not guarantee the required passage appears within the three supplied chunks. |
-| `private-password`, `private-package` | Correct abstention. Neither expected private fact exists in this public astronomy corpus. |
+| `sun-energy`, `sun-neutrinos`, `sun-history`, `gravity-relativity`, `kepler-assistant`, `milky-way-type`, `neutrino-force`, `orion-stars`, `pleiades-location`, `jupiter-storm`, `mercury-size` | Essential answer facts match the reference answers and cited context. Mercury repeats its answer across two citations, a remaining presentation limitation. |
+| `first-telescopes` | The Netherlands answer is supported. The extra assertion that a telescope was **patented** strengthens the source's statement that a patent was **submitted**. The model grounding and answer judges both accepted this overstatement. The source-based audit counts this answer as incorrect and that claim as unfaithful under the original strict rubric. |
+| `private-password`, `private-package` | Correct abstentions; the source corpus contains neither private fact. |
 
-The measured 11/12 answerable accuracy and 13/14 claim faithfulness are the model evaluator's outputs on this small development set. Do not interpret them as held-out accuracy, independent verification, or a proof of security. The model evaluator is exposed to untrusted answer/source text in a separate user payload and can itself be manipulated. Deterministic citation checks establish only source-ID/quote validity, not truth or relevance.
+The model judge scored 14/14 cases correct and 14/14 claims faithful. The stricter source audit scored 13/14 cases correct (11/12 answerable) and 13/14 claims supported. `answer-judge-calibration.json` preserves the telescope claim, original verdict, and source excerpt. An explicit extra prompt rule distinguishing applications from approvals also failed an isolated live check, so it was discarded rather than presented as a fix.
+
+The initial answer baseline is preserved in `answer-baseline.json`; it abstained on the solar-neutrino question and its judge conflated relevance with faithfulness for an extra Mercury-orbit claim. The revised concise prompt answered the neutrino question and reduced surplus facts, but the patent example demonstrates remaining semantic-validation limits. The initial baseline's 11/12 answerable correctness and 13/14 model-judged claim faithfulness are separate from the final measurements.
+
+Valid source IDs and verbatim quotes establish citation validity. They do not establish entailment, real-world truth, or relevance. A model can strengthen a source's qualifiers, and its own evaluator may accept the same error. Use the per-claim audit and explicit denominators; these development cases do not establish generalization or injection immunity.

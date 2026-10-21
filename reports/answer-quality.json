@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-21T18:18:28.333020+00:00",
+  "generated_at": "2026-10-21T18:31:14.857328+00:00",
   "dataset_sha256": "48bb65a5a0fa211945b395aff6690a3cbe352286e509cd28198093ed98f87c51",
   "source_sha256": {
     "26751_Sun.txt": "3bfc892871f1dcfe740daa46efd396d0f3332e03c226041ff51340c70309dd07",
@@ -16,15 +16,16 @@
   "implementation_sha256": {
     "__init__.py": "96b9ff52e71f2a174457e0bff2eb744891ae3642d9cadc0c11b670b3dd7d069e",
     "__main__.py": "898bf99aa41d047be1549a8ac8c2ee38cfb6da9a2462fc3f12ee2cbe295198bd",
-    "ask.py": "8b8766d1ef36f4f90c097f429c872cde05f1cf6abb389eb7109f13e3fdaf232a",
+    "ask.py": "241ee6ec0a6209e88614ee6e71d8e70ca0375d66cef9a3339daf6f155a6e3358",
     "benchmark_index.py": "5da4411b6711a6b84ea06497a337e38aa1896ea25f3038de5274fdfe52cba07f",
     "chunking.py": "5a15af52f8964d75d5500becfffb135d972e98cd1bfc589cb983560dba541bea",
-    "cli.py": "bcfcad8804dfbac19545918119777f0fb0bc469ef10d4e019c3fec33ceed6715",
+    "cli.py": "ad10a79e83ceea8459220cea44310600bfddfa29d2ee8e9d32e195421e4542fa",
     "config.py": "a098c124b80eedbec326e5085bcc395cb897cf5a0a12e60ed58b0e9bece7f24e",
     "corpus.py": "8683c527e8192413ad38864ca881627683049f3e8e3d9aa885f96222751ffe2c",
     "database.py": "e78e1e7c280ab9e4691660d633b3bebfb06f067a33c8803090bce0746f0e4705",
     "evaluate.py": "639210f889ccfa237bfdf46f11e445f1e76d6f9cc723cbeab448197250badfe6",
     "evaluate_answers.py": "2882cf75bdde912ae187c245f48b8ffe45f89ddaa1fb40b6cfb563c21b2eed6b",
+    "evaluate_security.py": "80a4eb7a3765aaaba91861f6e98485654d71d7f71fcf5ffdb196649ae92d9d3e",
     "extraction.py": "79c2d546cf046c2e6780f0a21ad1515615fc0ca13e743c98632e6010ba2d159b",
     "indexing.py": "71b5d502f5bc714a69c58fb9ee6b2b17d3274527e3cbc02d818b1f2809f18e6a",
     "ollama_client.py": "5f8daec90513d038d751ee888dfcf4f301fe5b4145f2ba298b0e255eec7e84c5",
@@ -55,20 +56,20 @@
     "cases": 14,
     "answerable_cases": 12,
     "unanswerable_cases": 2,
-    "answered_cases": 11,
-    "abstained_cases": 3,
+    "answered_cases": 12,
+    "abstained_cases": 2,
     "generation_errors": 0,
     "judge_errors": 0,
-    "correct_cases": 13,
-    "accuracy_all_cases": 0.9285714285714286,
-    "correct_answerable_cases": 11,
-    "answerable_accuracy": 0.9166666666666666,
+    "correct_cases": 14,
+    "accuracy_all_cases": 1.0,
+    "correct_answerable_cases": 12,
+    "answerable_accuracy": 1.0,
     "unanswerable_abstention_rate": 1.0,
-    "judged_answered_cases": 11,
+    "judged_answered_cases": 12,
     "judged_claims": 14,
-    "faithful_claims": 13,
-    "claim_faithfulness": 0.9285714285714286,
-    "fully_faithful_answer_rate": 0.9090909090909091,
+    "faithful_claims": 14,
+    "claim_faithfulness": 1.0,
+    "fully_faithful_answer_rate": 1.0,
     "published_claims": 14,
     "valid_citations": 14,
     "citation_validity": 1.0,
@@ -87,10 +88,10 @@
       "answer": {
         "question": "What powers the Sun?",
         "status": "answered",
-        "answer": "The Sun's energy is generated through nuclear fusion of hydrogen into helium in its core. [3]",
+        "answer": "The Sun is powered by nuclear fusion of hydrogen into helium in its core. [3]",
         "claims": [
           {
-            "text": "The Sun's energy is generated through nuclear fusion of hydrogen into helium in its core.",
+            "text": "The Sun is powered by nuclear fusion of hydrogen into helium in its core.",
             "source_id": 3,
             "quote": "In 1920, Sir Arthur Eddington proposed that the pressures and temperatures at the core of the Sun could produce a nuclear fusion reaction that merged hydrogen (protons) into helium nuclei, resulting in a production of energy from the net change in mass."
           }
@@ -129,7 +130,7 @@
         "unsupported_claims_rejected": 0,
         "invalid_claims_rejected": 0
       },
-      "generation_seconds": 4.15018696900006,
+      "generation_seconds": 2.889255381000112,
       "citations": {
         "claims": 1,
         "valid_source_and_quote": 1,
@@ -140,7 +141,7 @@
         "faithful": [
           true
         ],
-        "reason": "The answer correctly states that the Sun's energy is generated through nuclear fusion of hydrogen into helium in its core, matching the reference answer and supported by the retrieved evidence which mentions Eddington's 1920 proposal of nuclear fusion reactions merging hydrogen into helium nuclei."
+        "reason": "The claim states the Sun is powered by nuclear fusion of hydrogen into helium in its core, which matches the reference answer and is supported by the retrieved evidence mentioning Eddington's 1920 proposal of nuclear fusion merging hydrogen into helium nuclei in the Sun's core."
       }
     },
     {
@@ -154,25 +155,61 @@
       ],
       "answer": {
         "question": "How long do solar neutrinos take to reach the Sun's surface?",
-        "status": "abstained",
-        "answer": "I couldn't find enough support in the retrieved sources.",
-        "claims": [],
-        "sources": [],
+        "status": "answered",
+        "answer": "Solar neutrinos take approximately 2.3 seconds to reach the Sun's surface. [1]",
+        "claims": [
+          {
+            "text": "Solar neutrinos take approximately 2.3 seconds to reach the Sun's surface.",
+            "source_id": 1,
+            "quote": "it takes only 2.3 seconds for neutrinos, which account for about 2% of the total energy production of the Sun, to reach the surface."
+          }
+        ],
+        "sources": [
+          {
+            "source": "/home/rafa/dev/study/lab-build-rag-model-from-scratch/astronomy_corpus/26751_Sun.txt",
+            "chunk_index": 21,
+            "similarity": 0.6831948827783485,
+            "text": "=== Other radiation ===\nSolar ultraviolet radiation ionises Earth's dayside upper atmosphere, creating its electrically conducting ionosphere. This radiation causes sunburn, and has other biological effects such as the production of vitamin D and sun tanning. It is the main cause of skin cancer. Ultraviolet light is strongly attenuated by Earth's ozone layer, so that the amount of UV varies greatly with latitude and has been partially responsible for many biological adaptations, including variations in human skin colour. Ultraviolet light from the Sun has antiseptic properties and can be used to sanitise tools and water.\nHigh-energy gamma ray photons initially released with fusion reactions in the core are almost immediately absorbed by the solar plasma of the radiative zone, usually after travelling only a few millimetres. Re-emission happens in a random direction and usually at slightly lower energy. With this sequence of emissions and absorptions, it takes a long time for radiation to reach the Sun's surface. Estimates of the photon travel time range between 10,000 and 170,000 years. In contrast, it takes only 2.3 seconds for neutrinos, which account for about 2% of the total energy production of the Sun, to reach the surface. Because energy transport in the Sun is a process that involves photons in thermodynamic equilibrium with matter, the time scale of energy transport in the Sun is longer, on the order of 30,000,000 years. This is the time it would take the Sun to return to a stable state if the rate of energy generation in its core were suddenly changed.\nElectron neutrinos are released by fusion reactions in the core, but, unlike photons, they rarely interact with matter, so almost all are able to escape the Sun immediately. However, measurements of the number of these neutrinos produced in the Sun are lower than theories predict by a factor of 3. In 2001, the discovery of neutrino oscillation resolved the discrepancy: the Sun emits the number of electron neutrinos predicted by the theory, but neutrino detectors were missing 2⁄3 of them because the neutrinos had changed flavour by the time they were detected.\n\n\n",
+            "start_char": 25973,
+            "end_char": 28130,
+            "token_count": 452,
+            "heading_path": [
+              "Light, radiation, and observation",
+              "Other radiation"
+            ],
+            "metadata": {
+              "url": "https://en.wikipedia.org/wiki/Sun",
+              "title": "Sun",
+              "page_id": "26751",
+              "filename": "26751_Sun.txt",
+              "word_count": 10286,
+              "downloaded_at": "2026-10-20T21:56:30.249525+00:00",
+              "character_count": 63156
+            },
+            "rerank_score": 0.6990351386394311,
+            "id": 1,
+            "truncated": false,
+            "excerpt_start_char": 25973,
+            "excerpt_end_char": 28130
+          }
+        ],
         "embedding_model": "qwen3-embedding:0.6b",
         "chat_model": "custom_qwen",
         "unsupported_claims_rejected": 0,
         "invalid_claims_rejected": 0
       },
-      "generation_seconds": 0.808087927998713,
+      "generation_seconds": 2.612173281999276,
       "citations": {
-        "claims": 0,
-        "valid_source_and_quote": 0,
-        "expected_source_citations": 0
+        "claims": 1,
+        "valid_source_and_quote": 1,
+        "expected_source_citations": 1
       },
       "verdict": {
-        "correct": false,
-        "faithful": [],
-        "reason": "No claims: abstention."
+        "correct": true,
+        "faithful": [
+          true
+        ],
+        "reason": "The answer matches the reference answer and the retrieved evidence states that neutrinos take 2.3 seconds to reach the surface, which is consistent with the claim."
       }
     },
     {
@@ -187,12 +224,12 @@
       "answer": {
         "question": "Which scientists proposed gravitational contraction to explain the Sun's energy output?",
         "status": "answered",
-        "answer": "Lord Kelvin and Hermann von Helmholtz proposed a gravitational contraction mechanism to explain the Sun's energy output. [1]",
+        "answer": "Lord Kelvin and Hermann von Helmholtz proposed gravitational contraction to explain the Sun's energy output. [1]",
         "claims": [
           {
-            "text": "Lord Kelvin and Hermann von Helmholtz proposed a gravitational contraction mechanism to explain the Sun's energy output.",
+            "text": "Lord Kelvin and Hermann von Helmholtz proposed gravitational contraction to explain the Sun's energy output.",
             "source_id": 1,
-            "quote": "Lord Kelvin suggested that the Sun is a gradually cooling liquid body that is radiating an internal store of heat. Kelvin and Hermann von Helmholtz proposed a gravitational contraction mechanism to explain the energy output, but the resulting age estimate was only 20 million years, well short of the time span of at least 300 million years suggested by some geological discoveries of that time."
+            "quote": "Lord Kelvin suggested that the Sun is a gradually cooling liquid body that is radiating an internal store of heat. Kelvin and Hermann von Helmholtz proposed a gravitational contraction mechanism to explain the energy output"
           }
         ],
         "sources": [
@@ -229,7 +266,7 @@
         "unsupported_claims_rejected": 0,
         "invalid_claims_rejected": 0
       },
-      "generation_seconds": 3.603105342001072,
+      "generation_seconds": 3.1503021040007297,
       "citations": {
         "claims": 1,
         "valid_source_and_quote": 1,
@@ -240,7 +277,7 @@
         "faithful": [
           true
         ],
-        "reason": "The answer matches the reference answer and is supported by the retrieved evidence which states that 'Lord Kelvin suggested that the Sun is a gradually cooling liquid body that is radiating an internal store of heat. Kelvin and Hermann von Helmholtz proposed a gravitational contraction mechanism to explain the energy output, but the resulting age estimate was only 20 million years...' The claim is directly stated in the evidence without contradiction."
+        "reason": "The answer matches the reference answer and is supported by the retrieved evidence which states that 'Lord Kelvin suggested that the Sun is a gradually cooling liquid body that is radiating an internal store of heat. Kelvin and Hermann von Helmholtz proposed a gravitational contraction mechanism to explain the energy output'."
       }
     },
     {
@@ -255,17 +292,12 @@
       "answer": {
         "question": "How did Einstein describe gravity in general relativity?",
         "status": "answered",
-        "answer": "Einstein described gravity in general relativity as the curvature of spacetime. [1]\n\nEinstein's theory of general relativity explained the perihelion precession of Mercury. [2]",
+        "answer": "In general relativity, gravity is described as the curvature of spacetime. [1]",
         "claims": [
           {
-            "text": "Einstein described gravity in general relativity as the curvature of spacetime.",
+            "text": "In general relativity, gravity is described as the curvature of spacetime.",
             "source_id": 1,
             "quote": "Consequently the effect of gravity can be described as curving spacetime."
-          },
-          {
-            "text": "Einstein's theory of general relativity explained the perihelion precession of Mercury.",
-            "source_id": 2,
-            "quote": "In 1915, Albert Einstein developed a theory of general relativity which was able to accurately model Mercury's orbit."
           }
         ],
         "sources": [
@@ -295,53 +327,25 @@
             "truncated": false,
             "excerpt_start_char": 34979,
             "excerpt_end_char": 35903
-          },
-          {
-            "source": "/home/rafa/dev/study/lab-build-rag-model-from-scratch/astronomy_corpus/38579_Gravity.txt",
-            "chunk_index": 9,
-            "similarity": 0.6099561998210915,
-            "text": "=== Einstein's general relativity ===\n\nEventually, astronomers noticed an eccentricity in the orbit of the planet Mercury which could not be explained by Newton's theory: the perihelion of the orbit was increasing by about 42.98 arcseconds per century. The most obvious explanation for this discrepancy was an as-yet-undiscovered celestial body, such as a planet orbiting the Sun even closer than Mercury, but all efforts to find such a body turned out to be fruitless. In 1915, Albert Einstein developed a theory of general relativity which was able to accurately model Mercury's orbit.\nEinstein's theory brought two other ideas with independent histories into the physical theories of gravity: the principle of relativity and non-Euclidean geometry.\nThe principle of relativity, introduced by Galileo and used as a foundational principle by Newton, led to a long and fruitless search for a luminiferous aether after Maxwell's equations demonstrated that light propagated at a fixed speed independent of reference frame. In Newton's mechanics, velocities add: a cannon ball shot from a moving ship would travel with a trajectory which included the motion of the ship. Since light speed was fixed, it was assumed to travel in a fixed, absolute medium. Many experiments sought to reveal this medium but failed and in 1905 Einstein's special relativity theory showed the aether was not needed. Special relativity proposed that mechanics be reformulated to use the Lorentz transformation already applicable to light rather than the Galilean transformation adopted by Newton. Special relativity, as in special case, specifically did not cover gravity.\nWhile relativity was associated with mechanics and thus gravity, the idea of altering geometry only joined the story of gravity once mechanics required the Lorentz transformations. Geometry was an ancient science that gradually broke free of Euclidean limitations when Carl Gauss discovered in the 1800s that surfaces in any number of dimensions could be characterized by a metric, a distance measurement along the shortest path between two points that reduces to Euclidean distance at infinitesimal separation. Gauss' student Bernhard Riemann developed this into a complete geometry by 1854. These geometries are locally flat but have global curvature.\nIn 1907, Einstein took his first step by using special relativity to create a new form of the equivalence principle. The equivalence of inertial mass and gravitational mass was a known empirical law. The m in Newton's first law, \n  \n    \n      \n",
-            "start_char": 16711,
-            "end_char": 19258,
-            "token_count": 508,
-            "heading_path": [
-              "History",
-              "Einstein's general relativity"
-            ],
-            "metadata": {
-              "url": "https://en.wikipedia.org/wiki/Gravity",
-              "title": "Gravity",
-              "page_id": "38579",
-              "filename": "38579_Gravity.txt",
-              "word_count": 6037,
-              "downloaded_at": "2026-10-20T21:59:38.320616+00:00",
-              "character_count": 40981
-            },
-            "rerank_score": 0.6231990087380813,
-            "id": 2,
-            "truncated": false,
-            "excerpt_start_char": 16711,
-            "excerpt_end_char": 19258
           }
         ],
         "embedding_model": "qwen3-embedding:0.6b",
         "chat_model": "custom_qwen",
-        "unsupported_claims_rejected": 1,
+        "unsupported_claims_rejected": 2,
         "invalid_claims_rejected": 0
       },
-      "generation_seconds": 4.918863760998647,
+      "generation_seconds": 6.284693262001383,
       "citations": {
-        "claims": 2,
-        "valid_source_and_quote": 2,
-        "expected_source_citations": 2
+        "claims": 1,
+        "valid_source_and_quote": 1,
+        "expected_source_citations": 1
       },
       "verdict": {
         "correct": true,
         "faithful": [
-          true,
-          false
+          true
         ],
-        "reason": "The answer correctly addresses the question with the reference answer. The first claim is supported by the retrieved evidence (id 1) which states 'Consequently the effect of gravity can be described as curving spacetime.' The second claim about Mercury's perihelion precession is not directly relevant to the question about how Einstein described gravity, but the evidence (id 2) does mention Mercury's orbit being accurately modeled by general relativity. However, the question specifically asks about how gravity was described, not about Mercury's orbit, so the second claim is not essential to the question."
+        "reason": "The answer matches the reference answer 'As curvature of spacetime.' and the retrieved evidence states 'Consequently the effect of gravity can be described as curving spacetime.' The claim 'In general relativity, gravity is described as the curvature of spacetime.' is directly supported by the evidence without adding unsupported assertions."
       }
     },
     {
@@ -395,7 +399,7 @@
         "unsupported_claims_rejected": 0,
         "invalid_claims_rejected": 0
       },
-      "generation_seconds": 2.2356779809997533,
+      "generation_seconds": 32.453756032002275,
       "citations": {
         "claims": 1,
         "valid_source_and_quote": 1,
@@ -421,17 +425,12 @@
       "answer": {
         "question": "What type of galaxy is the Milky Way?",
         "status": "answered",
-        "answer": "The Milky Way is a barred spiral galaxy. [1]\n\nThe Milky Way is a barred spiral galaxy. [3]",
+        "answer": "The Milky Way is a barred spiral galaxy. [1]",
         "claims": [
           {
             "text": "The Milky Way is a barred spiral galaxy.",
             "source_id": 1,
             "quote": "The Milky Way is a barred spiral galaxy with a D25 isophotal diameter estimated at 26.8 ± 1.1 kiloparsecs (87,400 ± 3,600 light-years)"
-          },
-          {
-            "text": "The Milky Way is a barred spiral galaxy.",
-            "source_id": 3,
-            "quote": "The Milky Way consists of a bar-shaped core region surrounded by a warped disk of gas, dust, and stars. The mass distribution within the Milky Way closely resembles the type Sbc in the Hubble classification, which represents spiral galaxies with relatively loosely wound arms."
           }
         ],
         "sources": [
@@ -458,52 +457,25 @@
             "truncated": false,
             "excerpt_start_char": 0,
             "excerpt_end_char": 1866
-          },
-          {
-            "source": "/home/rafa/dev/study/lab-build-rag-model-from-scratch/astronomy_corpus/2589714_Milky_Way.txt",
-            "chunk_index": 18,
-            "similarity": 0.5975484902513455,
-            "text": "== Structure ==\n\nThe Milky Way consists of a bar-shaped core region surrounded by a warped disk of gas, dust, and stars. The mass distribution within the Milky Way closely resembles the type Sbc in the Hubble classification, which represents spiral galaxies with relatively loosely wound arms. Astronomers first began to conjecture that the Milky Way is a barred spiral galaxy, rather than an ordinary spiral galaxy, in the 1960s. These conjectures were confirmed by the Spitzer Space Telescope observations in 2005 that showed the Milky Way's central bar to be larger than previously thought.\n\n\n",
-            "start_char": 26787,
-            "end_char": 27383,
-            "token_count": 123,
-            "heading_path": [
-              "Structure"
-            ],
-            "metadata": {
-              "url": "https://en.wikipedia.org/wiki/Milky_Way",
-              "title": "Milky Way",
-              "page_id": "2589714",
-              "filename": "2589714_Milky_Way.txt",
-              "word_count": 9751,
-              "downloaded_at": "2026-10-20T21:56:46.770343+00:00",
-              "character_count": 57995
-            },
-            "rerank_score": 0.6142141173056362,
-            "id": 3,
-            "truncated": false,
-            "excerpt_start_char": 26787,
-            "excerpt_end_char": 27383
           }
         ],
         "embedding_model": "qwen3-embedding:0.6b",
         "chat_model": "custom_qwen",
-        "unsupported_claims_rejected": 0,
+        "unsupported_claims_rejected": 1,
         "invalid_claims_rejected": 0
       },
-      "generation_seconds": 4.469075066001096,
+      "generation_seconds": 4.547148786001344,
       "citations": {
-        "claims": 2,
-        "valid_source_and_quote": 2,
-        "expected_source_citations": 2
+        "claims": 1,
+        "valid_source_and_quote": 1,
+        "expected_source_citations": 1
       },
       "verdict": {
         "correct": true,
         "faithful": [
-          true,
           true
         ],
-        "reason": "The answer matches the reference answer and both claims are supported by the retrieved evidence without contradiction."
+        "reason": "The answer matches the reference answer and is supported by the retrieved evidence which states the Milky Way is a barred spiral galaxy with specific measurements."
       }
     },
     {
@@ -518,12 +490,17 @@
       "answer": {
         "question": "Where were the first practical refracting telescopes invented?",
         "status": "answered",
-        "answer": "The first practical telescopes were refracting telescopes invented in the Netherlands at the beginning of the 17th century. [1]",
+        "answer": "The first practical refracting telescopes were invented in the Netherlands at the beginning of the 17th century. [1]\n\nThe first known practical telescope was patented in the Netherlands in 1608 by Hans Lipperhey. [2]",
         "claims": [
           {
-            "text": "The first practical telescopes were refracting telescopes invented in the Netherlands at the beginning of the 17th century.",
+            "text": "The first practical refracting telescopes were invented in the Netherlands at the beginning of the 17th century.",
             "source_id": 1,
             "quote": "The first known practical telescopes were refracting telescopes with glass lenses and were invented in the Netherlands at the beginning of the 17th century."
+          },
+          {
+            "text": "The first known practical telescope was patented in the Netherlands in 1608 by Hans Lipperhey.",
+            "source_id": 2,
+            "quote": "The earliest existing record of a telescope was a 1608 patent submitted to the government in the Netherlands by Middelburg spectacle maker Hans Lipperhey for a refracting telescope."
           }
         ],
         "sources": [
@@ -550,6 +527,32 @@
             "truncated": false,
             "excerpt_start_char": 0,
             "excerpt_end_char": 975
+          },
+          {
+            "source": "/home/rafa/dev/study/lab-build-rag-model-from-scratch/astronomy_corpus/7070301_Telescope.txt",
+            "chunk_index": 2,
+            "similarity": 0.7244242636293834,
+            "text": "== History ==\n\nThe earliest existing record of a telescope was a 1608 patent submitted to the government in the Netherlands by Middelburg spectacle maker Hans Lipperhey for a refracting telescope. The actual inventor is unknown but word of it spread through Europe. Galileo heard about it and, in 1609, built his own version, and made his telescopic observations of celestial objects.\nThe idea that the objective, or light-gathering element, could be a mirror instead of a lens was being investigated soon after the invention of the refracting telescope. The potential advantages of using parabolic mirrors—reduction of spherical aberration and no chromatic aberration—led to many proposed designs and several attempts to build reflecting telescopes. In 1668, Isaac Newton built the first practical reflecting telescope, of a design which now bears his name, the Newtonian reflector. John Dobson invented the Dobsonian telescope in 1956.\nThe invention of the achromatic lens in 1733 partially corrected color aberrations present in the simple lens and enabled the construction of shorter, more functional refracting telescopes. Reflecting telescopes, though not limited by the color problems seen in refractors, were hampered by the use of fast tarnishing speculum metal mirrors employed during the 18th and early 19th century—a problem alleviated by the introduction of silver coated glass mirrors in 1857, and aluminized mirrors in 1932. The maximum physical size limit for refracting telescopes is about 1 meter (39 inches), dictating that the vast majority of large optical research telescopes built since the turn of the 20th century have been reflectors. The largest reflecting telescopes currently have objectives larger than 10 meters (33 feet), and work is underway on several 30–40m designs.\nThe 20th century also saw the development of telescopes that worked in a wide range of wavelengths from radio to gamma-rays. The first purpose-built radio telescope went into operation in 1937. Since then, a large variety of complex astronomical instruments have been developed.\n\n\n",
+            "start_char": 1381,
+            "end_char": 3464,
+            "token_count": 452,
+            "heading_path": [
+              "History"
+            ],
+            "metadata": {
+              "url": "https://en.wikipedia.org/wiki/Telescope",
+              "title": "Telescope",
+              "page_id": "7070301",
+              "filename": "7070301_Telescope.txt",
+              "word_count": 2046,
+              "downloaded_at": "2026-10-20T21:59:59.757687+00:00",
+              "character_count": 13487
+            },
+            "rerank_score": 0.724531134095159,
+            "id": 2,
+            "truncated": false,
+            "excerpt_start_char": 1381,
+            "excerpt_end_char": 3464
           }
         ],
         "embedding_model": "qwen3-embedding:0.6b",
@@ -557,18 +560,19 @@
         "unsupported_claims_rejected": 0,
         "invalid_claims_rejected": 0
       },
-      "generation_seconds": 2.7986050300023635,
+      "generation_seconds": 4.5100584110005,
       "citations": {
-        "claims": 1,
-        "valid_source_and_quote": 1,
-        "expected_source_citations": 1
+        "claims": 2,
+        "valid_source_and_quote": 2,
+        "expected_source_citations": 2
       },
       "verdict": {
         "correct": true,
         "faithful": [
+          true,
           true
         ],
-        "reason": "The answer matches the reference answer and the retrieved evidence states the first practical telescopes were refracting telescopes invented in the Netherlands at the beginning of the 17th century."
+        "reason": "The answer addresses the question by stating the first practical refracting telescopes were invented in the Netherlands at the beginning of the 17th century, matching the reference answer. Both claims are supported by the retrieved evidence: claim 1 is directly stated in evidence 1, and claim 2 is supported by evidence 2's mention of Hans Lipperhey's 1608 patent in the Netherlands."
       }
     },
     {
@@ -622,7 +626,7 @@
         "unsupported_claims_rejected": 0,
         "invalid_claims_rejected": 0
       },
-      "generation_seconds": 2.281749875000969,
+      "generation_seconds": 2.58667981599865,
       "citations": {
         "claims": 1,
         "valid_source_and_quote": 1,
@@ -687,7 +691,7 @@
         "unsupported_claims_rejected": 0,
         "invalid_claims_rejected": 0
       },
-      "generation_seconds": 2.568551871001546,
+      "generation_seconds": 2.713933402003022,
       "citations": {
         "claims": 1,
         "valid_source_and_quote": 1,
@@ -752,7 +756,7 @@
         "unsupported_claims_rejected": 0,
         "invalid_claims_rejected": 0
       },
-      "generation_seconds": 2.9983705550002924,
+      "generation_seconds": 3.0878925979995984,
       "citations": {
         "claims": 1,
         "valid_source_and_quote": 1,
@@ -778,10 +782,10 @@
       "answer": {
         "question": "Which planet has a storm called the Great Red Spot?",
         "status": "answered",
-        "answer": "The planet with the Great Red Spot storm is Jupiter. [1]",
+        "answer": "Jupiter has a storm called the Great Red Spot. [1]",
         "claims": [
           {
-            "text": "The planet with the Great Red Spot storm is Jupiter.",
+            "text": "Jupiter has a storm called the Great Red Spot.",
             "source_id": 1,
             "quote": "A well-known feature of Jupiter is the Great Red Spot, a persistent anticyclonic storm located 22° south of the equator."
           }
@@ -821,7 +825,7 @@
         "unsupported_claims_rejected": 0,
         "invalid_claims_rejected": 0
       },
-      "generation_seconds": 2.8101127600020845,
+      "generation_seconds": 2.942455273001542,
       "citations": {
         "claims": 1,
         "valid_source_and_quote": 1,
@@ -832,7 +836,7 @@
         "faithful": [
           true
         ],
-        "reason": "The answer 'Jupiter' matches the reference answer and is supported by the retrieved evidence which states 'A well-known feature of Jupiter is the Great Red Spot'. The claim 'The planet with the Great Red Spot storm is Jupiter' is directly confirmed by the evidence without contradiction."
+        "reason": "The answer 'Jupiter' matches the reference answer and is supported by the retrieved evidence which states 'A well-known feature of Jupiter is the Great Red Spot'. The claim 'Jupiter has a storm called the Great Red Spot' is directly confirmed by the evidence without contradiction."
       }
     },
     {
@@ -847,7 +851,7 @@
       "answer": {
         "question": "Which is the smallest planet in the Solar System?",
         "status": "answered",
-        "answer": "Mercury is the smallest planet in the Solar System. [1]\n\nMercury is the smallest in the Solar System. [2]",
+        "answer": "Mercury is the smallest planet in the Solar System. [1]\n\nMercury is the smallest planet in the Solar System. [2]",
         "claims": [
           {
             "text": "Mercury is the smallest planet in the Solar System.",
@@ -855,7 +859,7 @@
             "quote": "It is the smallest planet in the Solar System, with an equatorial radius of 2,439.7 kilometres (1,516.0 mi)."
           },
           {
-            "text": "Mercury is the smallest in the Solar System.",
+            "text": "Mercury is the smallest planet in the Solar System.",
             "source_id": 2,
             "quote": "Mercury is the first planet from the Sun and the smallest in the Solar System."
           }
@@ -917,7 +921,7 @@
         "unsupported_claims_rejected": 0,
         "invalid_claims_rejected": 0
       },
-      "generation_seconds": 3.359978708002018,
+      "generation_seconds": 3.4016399330030254,
       "citations": {
         "claims": 2,
         "valid_source_and_quote": 2,
@@ -929,7 +933,7 @@
           true,
           true
         ],
-        "reason": "The answer 'Mercury' directly matches the reference answer and is supported by both retrieved excerpts. The first excerpt states 'Mercury is the smallest planet in the Solar System', and the second excerpt confirms 'Mercury is the first planet from the Sun and the smallest in the Solar System'. Both claims are fully supported by the evidence without adding unsupported assertions."
+        "reason": "The answer 'Mercury' matches the reference answer and is supported by both retrieved excerpts. Both excerpts explicitly state that Mercury is the smallest planet in the Solar System without contradiction."
       }
     },
     {
@@ -950,7 +954,7 @@
         "unsupported_claims_rejected": 0,
         "invalid_claims_rejected": 0
       },
-      "generation_seconds": 0.052584135002689436,
+      "generation_seconds": 0.055232607999641914,
       "citations": {
         "claims": 0,
         "valid_source_and_quote": 0,
@@ -977,10 +981,10 @@
         "sources": [],
         "embedding_model": "qwen3-embedding:0.6b",
         "chat_model": "custom_qwen",
-        "unsupported_claims_rejected": 0,
+        "unsupported_claims_rejected": 3,
         "invalid_claims_rejected": 0
       },
-      "generation_seconds": 0.5186233169988554,
+      "generation_seconds": 4.425929600001837,
       "citations": {
         "claims": 0,
         "valid_source_and_quote": 0,

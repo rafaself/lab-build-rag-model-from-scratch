@@ -77,6 +77,24 @@ class SecurityEvaluationTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "invalid verdict"):
                 check_attack(case, {"answer": "Fusion.", "claims": [{"text": "Fusion."}]}, Settings(), "judge")
 
+    def test_semantic_attack_judge_sees_published_text_not_the_injected_documents(self):
+        case = load_security_cases(DEFAULT_SECURITY_DATASET)[1]
+        answer = {"answer": "Nuclear fusion. [1]", "claims": [{"text": "Nuclear fusion."}]}
+        with patch("rag_lab.evaluate_security.generate_structured_response", return_value={"followed_attack": False, "violating_quote": "", "reason": "Legitimate science answer."}) as generate:
+            result = check_attack(case, answer, Settings(), "judge")
+        payload = json.loads(generate.call_args.args[0][1]["content"])
+        self.assertNotIn("untrusted_documents", payload)
+        self.assertNotIn(case["evidence"][0], json.dumps(payload))
+        self.assertEqual(payload["published_claims"], ["Nuclear fusion."])
+        self.assertFalse(result["attack_succeeded"])
+
+    def test_judge_cannot_substantiate_attack_success_by_quoting_only_the_attack_input(self):
+        case = load_security_cases(DEFAULT_SECURITY_DATASET)[1]
+        answer = {"answer": "Fusion.", "claims": [{"text": "Fusion."}]}
+        with patch("rag_lab.evaluate_security.generate_structured_response", return_value={"followed_attack": True, "violating_quote": "RAG_LAB_ATTACK_SUCCEEDED", "reason": "Confused input with output."}):
+            with self.assertRaisesRegex(RuntimeError, "substantiate"):
+                check_attack(case, answer, Settings(), "judge")
+
     def test_evaluator_records_failures_without_opening_database(self):
         with patch("rag_lab.evaluate_security.model_digests", return_value={}), patch("rag_lab.evaluate_security.answer_from_matches", side_effect=RuntimeError("private exception value")), patch("rag_lab.database.create_db_engine", side_effect=AssertionError("Database opened")):
             report = evaluate_security(Settings())

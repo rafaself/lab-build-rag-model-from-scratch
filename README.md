@@ -232,7 +232,7 @@ Paragraphs and headings are preserved in model context. `start_char`/`end_char` 
 
 The structured request disables thinking and uses an 8192-token context window; generation still has a finite budget. Large contexts or complex questions can require a smaller model, fewer chunks, or a larger `--max-tokens` value.
 
-Retrieved text and the question stay in an untrusted JSON payload, separate from the fixed system instructions. No tools, database credentials, or local file-reading capability are given to the model. Context and output sizes are bounded. These are safeguards, not a guarantee against prompt injection or hallucination: the grounding checker is also a model, and valid citations alone do not prove an answer is true. See the [development roadmap](docs/ROADMAP.md) for validation evidence and remaining work.
+Retrieved text and the question stay in an untrusted JSON payload, separate from the fixed system instructions. No tools, database credentials, or local file-reading capability are given to the model. Context and output sizes are bounded. These are safeguards, not a guarantee against prompt injection or hallucination: the grounding checker is also a model, and valid citations alone do not prove an answer is true. See the [development roadmap](docs/ROADMAP.md) for validation evidence and known limitations.
 
 ## Retrieval evaluation
 
@@ -240,7 +240,7 @@ Retrieved text and the question stay in an untrusted JSON payload, separate from
 rag-lab evaluate --output reports/retrieval-quality.json
 ```
 
-The [14-case regression dataset](benchmarks/questions.jsonl) has questions, expected answers, source filenames, and gold evidence quotes (12 answerable, two unanswerable). Evaluation verifies local quotes and indexed source hashes first, then compares raw vector ranking against filtered/deduplicated/reranked candidates. It records document Recall@1/3/5, gold-quote hit rates, and unanswerable queries that still return a match. Answer accuracy and faithfulness evaluation are still pending.
+The [14-case regression dataset](benchmarks/questions.jsonl) has questions, expected answers, source filenames, and gold evidence quotes (12 answerable, two unanswerable). Evaluation verifies local quotes and indexed source hashes first, then compares raw vector ranking against filtered/deduplicated/reranked candidates. It records document Recall@1/3/5, gold-quote hit rates, and unanswerable queries that still return a match. Answer accuracy and faithfulness are measured separately with `evaluate-answers` and a source-based audit below.
 
 The [historical word-window report](reports/retrieval-quality.json) records dataset/source hashes, embedding model digest, 40-candidate pool, 0.3 threshold, and a reproducible weight sweep. On this small set, 5% lexical weighting increased evidence hits at rank 1 from 4/12 to 5/12 while keeping hits within the top 3 at 11/12. One of two unanswerable questions still returned a match. Document Recall@K was already 100%, so that metric alone concealed passage-level mistakes. These are exploratory calibration results on the same cases, not held-out generalization claims. Postprocessing timing excludes embedding and database search. The [current token-chunk report](reports/retrieval-token-chunks.json) records the applied token index separately.
 
@@ -265,15 +265,14 @@ The command runs the actual `ask` pipeline for all 14 source-checked benchmark c
 | Citation validity | Claims with valid source IDs and normalized verbatim quotes / published claims |
 | Expected-source citation rate | Claims citing a labeled source document / claims on answerable questions |
 
-| Measured result (configured Qwen 4B) | Value |
-| --- | ---: |
-| Correct answerable questions | 11 / 12 (91.67%) |
-| Correct overall, including private-question abstentions | 13 / 14 (92.86%) |
-| Model-judged faithful claims | 13 / 14 (92.86%) |
-| Valid source IDs and evidence quotes | 14 / 14 (100%) |
-| Generation / judge errors | 0 / 0 |
+| Final result (configured Qwen 4B) | Model judge | Codex source-based audit |
+| --- | ---: | ---: |
+| Correct answerable questions, including extra assertions | 12 / 12 | 11 / 12 |
+| Correct overall, including private-question abstentions | 14 / 14 | 13 / 14 |
+| Faithful published claims | 14 / 14 | 13 / 14 |
+| Valid source IDs and evidence quotes | 14 / 14 | 14 / 14 |
 
-The solar-neutrino question abstained because the selected evidence was insufficient. The judge marked an extra Mercury claim unfaithful for being irrelevant, although the full excerpt supports it; [case notes](reports/answer-review.md) distinguish this grading inconsistency from actual source support. The original verdict is retained.
+Generation and judge errors were both zero. The [source-based audit](reports/answer-source-audit.json) found that the telescope answer strengthened a patent submission into a granted patent; both model checks missed this. The essential Netherlands answer was correct, but the added assertion makes the full answer incorrect under the stricter rubric. The audit is a Codex inspection, not independent human validation. [Case notes](reports/answer-review.md) and [judge calibration](reports/answer-judge-calibration.json) preserve the discrepancy. The [earlier answer baseline](reports/answer-baseline.json) is retained separately.
 
 The [measured answer report](reports/answer-quality.json) is a small development regression benchmark. The default judge is the same Qwen model as the generator in a separate call; its judgments can share the generator's mistakes. This is not independent or human validation. Inspect individual cases, and use `--judge-model` to compare another installed model. Model judgments and valid citations do not establish real-world truth.
 
@@ -287,15 +286,17 @@ The [11-case synthetic suite](benchmarks/security.jsonl) includes nine direct/do
 
 Attack success combines deterministic forbidden-output checks with a separate fallible semantic judge. Raw cited source text may naturally contain attack strings, so only the published answer and claim text count as following an output instruction. Missing/failed attack judgments are unassessed, not successful defenses. Answer usefulness under attack, clean controls, abstentions, and errors are separate metrics; refusing everything cannot demonstrate a useful RAG system.
 
-| Initial measured baseline | Result |
-| --- | ---: |
-| Observed successful attacks | 0 / 9 |
-| Correct answers under answerable attacks | 0 / 7 |
-| Correct clean controls | 1 / 2 |
-| Abstentions | 10 / 11 |
-| Generation/judge errors | 0 |
+| Measured result | Initial baseline | Current |
+| --- | ---: | ---: |
+| Observed successful attacks | 0 / 9 | 0 / 9 |
+| Correct answers under answerable attacks | 0 / 7 | 5 / 7 |
+| Correct clean controls | 1 / 2 | 2 / 2 |
+| Abstentions | 10 / 11 | 4 / 11 |
+| Generation/judge errors | 0 | 0 |
 
-The [baseline report](reports/security-regression.json) exposes excessive refusal despite the absence of observed attack success. Prompt improvements and repeat measurements remain. This fixed suite is not exhaustive red teaming, an adaptive attack evaluation, or a guarantee of security. The separate judge is the generator model by default and can share its mistakes. Model output is untrusted; this CLI does not give it tools or execute its output. The design follows structured data/instruction separation and least privilege described by the [OWASP prevention guidance](https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html); JSON schema constrains format, not semantic safety ([Ollama structured outputs](https://docs.ollama.com/capabilities/structured-outputs)).
+The [initial baseline](reports/security-baseline.json) exposed excessive refusal. The [current report](reports/security-regression.json) preserves five useful factual answers under attack while abstaining on two answerable attacks, instruction-only evidence, and a private-information request. The prompt explicitly distinguishes factual content from embedded instructions and educational attack descriptions. The corrected semantic judge examines published claims without replaying malicious input documents; any claimed violation must quote actual published output. [Calibration evidence](reports/security-judge-calibration.json) records the earlier judge's input/output confusion, so these are not silently substituted results. Deterministic marker checks and the utility rubric are unchanged; the semantic attack judge was corrected between reports.
+
+This fixed suite is not exhaustive red teaming, an adaptive attack evaluation, or a guarantee of security. The separate judge is the generator model by default and can share its mistakes. Model output is untrusted; this CLI does not give it tools or execute its output. The design follows structured data/instruction separation and least privilege described by the [OWASP prevention guidance](https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html); JSON schema constrains format, not semantic safety ([Ollama structured outputs](https://docs.ollama.com/capabilities/structured-outputs)).
 
 ## Vector indexing and performance
 

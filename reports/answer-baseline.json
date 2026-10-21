@@ -1,0 +1,1003 @@
+{
+  "generated_at": "2026-10-21T18:18:28.333020+00:00",
+  "dataset_sha256": "48bb65a5a0fa211945b395aff6690a3cbe352286e509cd28198093ed98f87c51",
+  "source_sha256": {
+    "26751_Sun.txt": "3bfc892871f1dcfe740daa46efd396d0f3332e03c226041ff51340c70309dd07",
+    "38579_Gravity.txt": "08ea0ec3cf0ebfb54191aea303ca8c033a2efb763995e4417be90b53ce9ce479",
+    "15736_Johannes_Kepler.txt": "e1f18597edfdf89333a5a859f206495616ddced84ce393e7e4b4144df772525b",
+    "2589714_Milky_Way.txt": "b2f475653715e318276798e69b6db0e36731b5a1c466bc8bddde2e7f5efba3f1",
+    "7070301_Telescope.txt": "71d75c71c03006d82c9d4fb5b1044a137760df329231898220abfad71fddbc0b",
+    "633325_Neutrino_astronomy.txt": "5c9407655cefc67c8d5c6ce891cc038993b7990434ece0c0efec6c66fa96fd9b",
+    "153797_Orion_constellation.txt": "7e47f7a619ce893b36479fca8e987f74648a67ed7c7656598da6b4d0a11e7848",
+    "56568_Pleiades.txt": "87c46480fcbf0c08b8508ac0a8cd188c33c9df5a63d5a750d204fc33f9bbb74c",
+    "38930_Jupiter.txt": "044fccbd38c9baeb7e3e7ef0a95806e70dde4dad780bf5e0679a6b435ce70050",
+    "19694_Mercury_planet.txt": "f5f970645d44c4f2556bc7c9a680057b6768317c7094c291811cf1e6585f22fc"
+  },
+  "implementation_sha256": {
+    "__init__.py": "96b9ff52e71f2a174457e0bff2eb744891ae3642d9cadc0c11b670b3dd7d069e",
+    "__main__.py": "898bf99aa41d047be1549a8ac8c2ee38cfb6da9a2462fc3f12ee2cbe295198bd",
+    "ask.py": "8b8766d1ef36f4f90c097f429c872cde05f1cf6abb389eb7109f13e3fdaf232a",
+    "benchmark_index.py": "5da4411b6711a6b84ea06497a337e38aa1896ea25f3038de5274fdfe52cba07f",
+    "chunking.py": "5a15af52f8964d75d5500becfffb135d972e98cd1bfc589cb983560dba541bea",
+    "cli.py": "bcfcad8804dfbac19545918119777f0fb0bc469ef10d4e019c3fec33ceed6715",
+    "config.py": "a098c124b80eedbec326e5085bcc395cb897cf5a0a12e60ed58b0e9bece7f24e",
+    "corpus.py": "8683c527e8192413ad38864ca881627683049f3e8e3d9aa885f96222751ffe2c",
+    "database.py": "e78e1e7c280ab9e4691660d633b3bebfb06f067a33c8803090bce0746f0e4705",
+    "evaluate.py": "639210f889ccfa237bfdf46f11e445f1e76d6f9cc723cbeab448197250badfe6",
+    "evaluate_answers.py": "2882cf75bdde912ae187c245f48b8ffe45f89ddaa1fb40b6cfb563c21b2eed6b",
+    "extraction.py": "79c2d546cf046c2e6780f0a21ad1515615fc0ca13e743c98632e6010ba2d159b",
+    "indexing.py": "71b5d502f5bc714a69c58fb9ee6b2b17d3274527e3cbc02d818b1f2809f18e6a",
+    "ollama_client.py": "5f8daec90513d038d751ee888dfcf4f301fe5b4145f2ba298b0e255eec7e84c5",
+    "populate.py": "38d9ab29f460a79b5df750a776f50a876ee538f3bba0dc9a5b5ae15145ae74a8",
+    "pull.py": "c47d5c87b0b958659fa4f77fddf4fb6812aa5d878f013c4c29d11a88f007cb01",
+    "retrieval.py": "1d8f25e7adb94ad0af31be91c87161ce64ce8ffb8684eacbde6fc2c4757290f0",
+    "tune_chunking.py": "db7ee15402b82edc13972008552794565c52b0c98b110326a7a85ce31535456d"
+  },
+  "model_digests": {
+    "qwen3-embedding:0.6b": "ac6da0dfba84a81fdbfbaf330198c33cd77c4cdfc53e8bc50eb581914a15621d",
+    "custom_qwen": "0328b7043179efdb11d2e44314673c927a2b893bb08f9de8789729cf0491ac29"
+  },
+  "embedding_model": "qwen3-embedding:0.6b",
+  "chat_model": "custom_qwen",
+  "judge_model": "custom_qwen",
+  "indexed_documents": 99,
+  "indexed_chunks": 1548,
+  "configuration": {
+    "top_k": 3,
+    "candidate_k": 40,
+    "min_similarity": 0.3,
+    "max_context_chars": 6000,
+    "max_tokens": 2048,
+    "search_mode": "exact",
+    "ef_search": 200
+  },
+  "summary": {
+    "cases": 14,
+    "answerable_cases": 12,
+    "unanswerable_cases": 2,
+    "answered_cases": 11,
+    "abstained_cases": 3,
+    "generation_errors": 0,
+    "judge_errors": 0,
+    "correct_cases": 13,
+    "accuracy_all_cases": 0.9285714285714286,
+    "correct_answerable_cases": 11,
+    "answerable_accuracy": 0.9166666666666666,
+    "unanswerable_abstention_rate": 1.0,
+    "judged_answered_cases": 11,
+    "judged_claims": 14,
+    "faithful_claims": 13,
+    "claim_faithfulness": 0.9285714285714286,
+    "fully_faithful_answer_rate": 0.9090909090909091,
+    "published_claims": 14,
+    "valid_citations": 14,
+    "citation_validity": 1.0,
+    "expected_source_citation_rate": 1.0
+  },
+  "results": [
+    {
+      "id": "sun-energy",
+      "question": "What powers the Sun?",
+      "unanswerable": false,
+      "expected_answer": "Nuclear fusion in its core.",
+      "gold_quote": "heated to incandescence by nuclear fusion reactions in its core",
+      "expected_sources": [
+        "26751_Sun.txt"
+      ],
+      "answer": {
+        "question": "What powers the Sun?",
+        "status": "answered",
+        "answer": "The Sun's energy is generated through nuclear fusion of hydrogen into helium in its core. [3]",
+        "claims": [
+          {
+            "text": "The Sun's energy is generated through nuclear fusion of hydrogen into helium in its core.",
+            "source_id": 3,
+            "quote": "In 1920, Sir Arthur Eddington proposed that the pressures and temperatures at the core of the Sun could produce a nuclear fusion reaction that merged hydrogen (protons) into helium nuclei, resulting in a production of energy from the net change in mass."
+          }
+        ],
+        "sources": [
+          {
+            "source": "/home/rafa/dev/study/lab-build-rag-model-from-scratch/astronomy_corpus/26751_Sun.txt",
+            "chunk_index": 39,
+            "similarity": 0.49160981128278547,
+            "text": " absorption lines were found that did not correspond to any chemical elements then known on Earth. In 1868, Norman Lockyer hypothesised that these absorption lines were caused by a new element that he dubbed helium, after the Greek Sun god Helios. Twenty-five years later, helium was isolated on Earth.\nIn the early modern scientific era, the source of the Sun's energy was a significant puzzle. Lord Kelvin suggested that the Sun is a gradually cooling liquid body that is radiating an internal store of heat. Kelvin and Hermann von Helmholtz proposed a gravitational contraction mechanism to explain the energy output, but the resulting age estimate was only 20 million years, well short of the time span of at least 300 million years suggested by some geological discoveries of that time. In 1890, Lockyer proposed a meteoritic hypothesis for the formation and evolution of the Sun.\nNot until 1904 was a documented solution offered. Ernest Rutherford suggested that the Sun's output could be maintained by an internal source of heat, and suggested radioactive decay as the source. Albert Einstein provided the essential clue to the source of the Sun's energy output with his mass–energy equivalence relation E = mc2. In 1920, Sir Arthur Eddington proposed that the pressures and temperatures at the core of the Sun could produce a nuclear fusion reaction that merged hydrogen (protons) into helium nuclei, resulting in a production of energy from the net change in mass. The preponderance of hydrogen in the Sun was confirmed in 1925 by Cecilia Payne using the ionisation theory developed by Meghnad Saha. The theoretical concept of fusion was developed in the 1930s by the astrophysicists Subrahmanyan Chandrasekhar and Hans Bethe. Bethe calculated the details of the two main energy-producing nuclear reactions that power the Sun. In 1957, Margaret Burbidge, Geoffrey Burbidge, William Fowler and Fred Hoyle showed that most of the elements in the universe have been synthesised by nuclear reactions inside stars, some like the Sun.\n\n\n",
+            "start_char": 52843,
+            "end_char": 54883,
+            "token_count": 438,
+            "heading_path": [
+              "Observational history",
+              "Development of scientific understanding"
+            ],
+            "metadata": {
+              "url": "https://en.wikipedia.org/wiki/Sun",
+              "title": "Sun",
+              "page_id": "26751",
+              "filename": "26751_Sun.txt",
+              "word_count": 10286,
+              "downloaded_at": "2026-10-20T21:56:30.249525+00:00",
+              "character_count": 63156
+            },
+            "rerank_score": 0.5156780613004442,
+            "id": 3,
+            "truncated": false,
+            "excerpt_start_char": 52843,
+            "excerpt_end_char": 54883
+          }
+        ],
+        "embedding_model": "qwen3-embedding:0.6b",
+        "chat_model": "custom_qwen",
+        "unsupported_claims_rejected": 0,
+        "invalid_claims_rejected": 0
+      },
+      "generation_seconds": 4.15018696900006,
+      "citations": {
+        "claims": 1,
+        "valid_source_and_quote": 1,
+        "expected_source_citations": 1
+      },
+      "verdict": {
+        "correct": true,
+        "faithful": [
+          true
+        ],
+        "reason": "The answer correctly states that the Sun's energy is generated through nuclear fusion of hydrogen into helium in its core, matching the reference answer and supported by the retrieved evidence which mentions Eddington's 1920 proposal of nuclear fusion reactions merging hydrogen into helium nuclei."
+      }
+    },
+    {
+      "id": "sun-neutrinos",
+      "question": "How long do solar neutrinos take to reach the Sun's surface?",
+      "unanswerable": false,
+      "expected_answer": "About 2.3 seconds.",
+      "gold_quote": "it takes only 2.3 seconds for neutrinos",
+      "expected_sources": [
+        "26751_Sun.txt"
+      ],
+      "answer": {
+        "question": "How long do solar neutrinos take to reach the Sun's surface?",
+        "status": "abstained",
+        "answer": "I couldn't find enough support in the retrieved sources.",
+        "claims": [],
+        "sources": [],
+        "embedding_model": "qwen3-embedding:0.6b",
+        "chat_model": "custom_qwen",
+        "unsupported_claims_rejected": 0,
+        "invalid_claims_rejected": 0
+      },
+      "generation_seconds": 0.808087927998713,
+      "citations": {
+        "claims": 0,
+        "valid_source_and_quote": 0,
+        "expected_source_citations": 0
+      },
+      "verdict": {
+        "correct": false,
+        "faithful": [],
+        "reason": "No claims: abstention."
+      }
+    },
+    {
+      "id": "sun-history",
+      "question": "Which scientists proposed gravitational contraction to explain the Sun's energy output?",
+      "unanswerable": false,
+      "expected_answer": "Kelvin and Hermann von Helmholtz.",
+      "gold_quote": "Kelvin and Hermann von Helmholtz proposed a gravitational contraction mechanism to explain the energy output",
+      "expected_sources": [
+        "26751_Sun.txt"
+      ],
+      "answer": {
+        "question": "Which scientists proposed gravitational contraction to explain the Sun's energy output?",
+        "status": "answered",
+        "answer": "Lord Kelvin and Hermann von Helmholtz proposed a gravitational contraction mechanism to explain the Sun's energy output. [1]",
+        "claims": [
+          {
+            "text": "Lord Kelvin and Hermann von Helmholtz proposed a gravitational contraction mechanism to explain the Sun's energy output.",
+            "source_id": 1,
+            "quote": "Lord Kelvin suggested that the Sun is a gradually cooling liquid body that is radiating an internal store of heat. Kelvin and Hermann von Helmholtz proposed a gravitational contraction mechanism to explain the energy output, but the resulting age estimate was only 20 million years, well short of the time span of at least 300 million years suggested by some geological discoveries of that time."
+          }
+        ],
+        "sources": [
+          {
+            "source": "/home/rafa/dev/study/lab-build-rag-model-from-scratch/astronomy_corpus/26751_Sun.txt",
+            "chunk_index": 39,
+            "similarity": 0.5755502491533623,
+            "text": " absorption lines were found that did not correspond to any chemical elements then known on Earth. In 1868, Norman Lockyer hypothesised that these absorption lines were caused by a new element that he dubbed helium, after the Greek Sun god Helios. Twenty-five years later, helium was isolated on Earth.\nIn the early modern scientific era, the source of the Sun's energy was a significant puzzle. Lord Kelvin suggested that the Sun is a gradually cooling liquid body that is radiating an internal store of heat. Kelvin and Hermann von Helmholtz proposed a gravitational contraction mechanism to explain the energy output, but the resulting age estimate was only 20 million years, well short of the time span of at least 300 million years suggested by some geological discoveries of that time. In 1890, Lockyer proposed a meteoritic hypothesis for the formation and evolution of the Sun.\nNot until 1904 was a documented solution offered. Ernest Rutherford suggested that the Sun's output could be maintained by an internal source of heat, and suggested radioactive decay as the source. Albert Einstein provided the essential clue to the source of the Sun's energy output with his mass–energy equivalence relation E = mc2. In 1920, Sir Arthur Eddington proposed that the pressures and temperatures at the core of the Sun could produce a nuclear fusion reaction that merged hydrogen (protons) into helium nuclei, resulting in a production of energy from the net change in mass. The preponderance of hydrogen in the Sun was confirmed in 1925 by Cecilia Payne using the ionisation theory developed by Meghnad Saha. The theoretical concept of fusion was developed in the 1930s by the astrophysicists Subrahmanyan Chandrasekhar and Hans Bethe. Bethe calculated the details of the two main energy-producing nuclear reactions that power the Sun. In 1957, Margaret Burbidge, Geoffrey Burbidge, William Fowler and Fred Hoyle showed that most of the elements in the universe have been synthesised by nuclear reactions inside stars, some like the Sun.\n\n\n",
+            "start_char": 52843,
+            "end_char": 54883,
+            "token_count": 438,
+            "heading_path": [
+              "Observational history",
+              "Development of scientific understanding"
+            ],
+            "metadata": {
+              "url": "https://en.wikipedia.org/wiki/Sun",
+              "title": "Sun",
+              "page_id": "26751",
+              "filename": "26751_Sun.txt",
+              "word_count": 10286,
+              "downloaded_at": "2026-10-20T21:56:30.249525+00:00",
+              "character_count": 63156
+            },
+            "rerank_score": 0.5967727366956942,
+            "id": 1,
+            "truncated": false,
+            "excerpt_start_char": 52843,
+            "excerpt_end_char": 54883
+          }
+        ],
+        "embedding_model": "qwen3-embedding:0.6b",
+        "chat_model": "custom_qwen",
+        "unsupported_claims_rejected": 0,
+        "invalid_claims_rejected": 0
+      },
+      "generation_seconds": 3.603105342001072,
+      "citations": {
+        "claims": 1,
+        "valid_source_and_quote": 1,
+        "expected_source_citations": 1
+      },
+      "verdict": {
+        "correct": true,
+        "faithful": [
+          true
+        ],
+        "reason": "The answer matches the reference answer and is supported by the retrieved evidence which states that 'Lord Kelvin suggested that the Sun is a gradually cooling liquid body that is radiating an internal store of heat. Kelvin and Hermann von Helmholtz proposed a gravitational contraction mechanism to explain the energy output, but the resulting age estimate was only 20 million years...' The claim is directly stated in the evidence without contradiction."
+      }
+    },
+    {
+      "id": "gravity-relativity",
+      "question": "How did Einstein describe gravity in general relativity?",
+      "unanswerable": false,
+      "expected_answer": "As curvature of spacetime.",
+      "gold_quote": "describes gravity in terms of the curvature of spacetime",
+      "expected_sources": [
+        "38579_Gravity.txt"
+      ],
+      "answer": {
+        "question": "How did Einstein describe gravity in general relativity?",
+        "status": "answered",
+        "answer": "Einstein described gravity in general relativity as the curvature of spacetime. [1]\n\nEinstein's theory of general relativity explained the perihelion precession of Mercury. [2]",
+        "claims": [
+          {
+            "text": "Einstein described gravity in general relativity as the curvature of spacetime.",
+            "source_id": 1,
+            "quote": "Consequently the effect of gravity can be described as curving spacetime."
+          },
+          {
+            "text": "Einstein's theory of general relativity explained the perihelion precession of Mercury.",
+            "source_id": 2,
+            "quote": "In 1915, Albert Einstein developed a theory of general relativity which was able to accurately model Mercury's orbit."
+          }
+        ],
+        "sources": [
+          {
+            "source": "/home/rafa/dev/study/lab-build-rag-model-from-scratch/astronomy_corpus/38579_Gravity.txt",
+            "chunk_index": 27,
+            "similarity": 0.6414096355439873,
+            "text": "=== General characteristics ===\nUnlike Newton's formula with one parameter, G, force in general relativity is terms of 10 numbers formed in to a metric tensor.In general relativity the effects of gravitation are described in different ways in different frames of reference. In a free-falling or co-moving coordinate system, an object travels in a straight line. In other coordinate systems, the object accelerates and thus is seen to move under a force. The path in spacetime (not 3D space) taken by a free-falling object is called a geodesic and the length of that path as measured by time in the objects frame is the shortest (or rarely the longest) one. Consequently the effect of gravity can be described as curving spacetime. In a weak stationary gravitational field, general relativity reduces to Newton's equations. The corrections introduced by general relativity on Earth are on the order of 1 part in a billion.\n\n\n",
+            "start_char": 34979,
+            "end_char": 35903,
+            "token_count": 192,
+            "heading_path": [
+              "General relativity",
+              "General characteristics"
+            ],
+            "metadata": {
+              "url": "https://en.wikipedia.org/wiki/Gravity",
+              "title": "Gravity",
+              "page_id": "38579",
+              "filename": "38579_Gravity.txt",
+              "word_count": 6037,
+              "downloaded_at": "2026-10-20T21:59:38.320616+00:00",
+              "character_count": 40981
+            },
+            "rerank_score": 0.637389845003644,
+            "id": 1,
+            "truncated": false,
+            "excerpt_start_char": 34979,
+            "excerpt_end_char": 35903
+          },
+          {
+            "source": "/home/rafa/dev/study/lab-build-rag-model-from-scratch/astronomy_corpus/38579_Gravity.txt",
+            "chunk_index": 9,
+            "similarity": 0.6099561998210915,
+            "text": "=== Einstein's general relativity ===\n\nEventually, astronomers noticed an eccentricity in the orbit of the planet Mercury which could not be explained by Newton's theory: the perihelion of the orbit was increasing by about 42.98 arcseconds per century. The most obvious explanation for this discrepancy was an as-yet-undiscovered celestial body, such as a planet orbiting the Sun even closer than Mercury, but all efforts to find such a body turned out to be fruitless. In 1915, Albert Einstein developed a theory of general relativity which was able to accurately model Mercury's orbit.\nEinstein's theory brought two other ideas with independent histories into the physical theories of gravity: the principle of relativity and non-Euclidean geometry.\nThe principle of relativity, introduced by Galileo and used as a foundational principle by Newton, led to a long and fruitless search for a luminiferous aether after Maxwell's equations demonstrated that light propagated at a fixed speed independent of reference frame. In Newton's mechanics, velocities add: a cannon ball shot from a moving ship would travel with a trajectory which included the motion of the ship. Since light speed was fixed, it was assumed to travel in a fixed, absolute medium. Many experiments sought to reveal this medium but failed and in 1905 Einstein's special relativity theory showed the aether was not needed. Special relativity proposed that mechanics be reformulated to use the Lorentz transformation already applicable to light rather than the Galilean transformation adopted by Newton. Special relativity, as in special case, specifically did not cover gravity.\nWhile relativity was associated with mechanics and thus gravity, the idea of altering geometry only joined the story of gravity once mechanics required the Lorentz transformations. Geometry was an ancient science that gradually broke free of Euclidean limitations when Carl Gauss discovered in the 1800s that surfaces in any number of dimensions could be characterized by a metric, a distance measurement along the shortest path between two points that reduces to Euclidean distance at infinitesimal separation. Gauss' student Bernhard Riemann developed this into a complete geometry by 1854. These geometries are locally flat but have global curvature.\nIn 1907, Einstein took his first step by using special relativity to create a new form of the equivalence principle. The equivalence of inertial mass and gravitational mass was a known empirical law. The m in Newton's first law, \n  \n    \n      \n",
+            "start_char": 16711,
+            "end_char": 19258,
+            "token_count": 508,
+            "heading_path": [
+              "History",
+              "Einstein's general relativity"
+            ],
+            "metadata": {
+              "url": "https://en.wikipedia.org/wiki/Gravity",
+              "title": "Gravity",
+              "page_id": "38579",
+              "filename": "38579_Gravity.txt",
+              "word_count": 6037,
+              "downloaded_at": "2026-10-20T21:59:38.320616+00:00",
+              "character_count": 40981
+            },
+            "rerank_score": 0.6231990087380813,
+            "id": 2,
+            "truncated": false,
+            "excerpt_start_char": 16711,
+            "excerpt_end_char": 19258
+          }
+        ],
+        "embedding_model": "qwen3-embedding:0.6b",
+        "chat_model": "custom_qwen",
+        "unsupported_claims_rejected": 1,
+        "invalid_claims_rejected": 0
+      },
+      "generation_seconds": 4.918863760998647,
+      "citations": {
+        "claims": 2,
+        "valid_source_and_quote": 2,
+        "expected_source_citations": 2
+      },
+      "verdict": {
+        "correct": true,
+        "faithful": [
+          true,
+          false
+        ],
+        "reason": "The answer correctly addresses the question with the reference answer. The first claim is supported by the retrieved evidence (id 1) which states 'Consequently the effect of gravity can be described as curving spacetime.' The second claim about Mercury's perihelion precession is not directly relevant to the question about how Einstein described gravity, but the evidence (id 2) does mention Mercury's orbit being accurately modeled by general relativity. However, the question specifically asks about how gravity was described, not about Mercury's orbit, so the second claim is not essential to the question."
+      }
+    },
+    {
+      "id": "kepler-assistant",
+      "question": "Which astronomer did Johannes Kepler assist in Prague?",
+      "unanswerable": false,
+      "expected_answer": "Tycho Brahe.",
+      "gold_quote": "he became an assistant to the astronomer Tycho Brahe in Prague",
+      "expected_sources": [
+        "15736_Johannes_Kepler.txt"
+      ],
+      "answer": {
+        "question": "Which astronomer did Johannes Kepler assist in Prague?",
+        "status": "answered",
+        "answer": "Johannes Kepler assisted Tycho Brahe in Prague. [1]",
+        "claims": [
+          {
+            "text": "Johannes Kepler assisted Tycho Brahe in Prague.",
+            "source_id": 1,
+            "quote": "Later he became an assistant to the astronomer Tycho Brahe in Prague"
+          }
+        ],
+        "sources": [
+          {
+            "source": "/home/rafa/dev/study/lab-build-rag-model-from-scratch/astronomy_corpus/15736_Johannes_Kepler.txt",
+            "chunk_index": 0,
+            "similarity": 0.6234105755655341,
+            "text": "Johannes Kepler (27 December 1571 – 15 November 1630) was a German polymath who was an astronomer, mathematician, astrologer, natural philosopher and music theorist. He is a key figure in the 17th-century Scientific Revolution, best known for his laws of planetary motion, and his books Astronomia nova, Harmonice Mundi, and Epitome Astronomiae Copernicanae. The variety and impact of his work made Kepler one of the founders and fathers of modern astronomy, the scientific method, natural science, and modern science. He has been described as the \"father of science fiction\" for his novel Somnium.\nKepler was a mathematics teacher at a seminary school in Graz, where he became an associate of Prince Hans Ulrich von Eggenberg. Later he became an assistant to the astronomer Tycho Brahe in Prague, and eventually the imperial mathematician to Emperor Rudolf II and his two successors Matthias and Ferdinand II. He also taught mathematics in Linz, and was an adviser to General Wallenstein.\nKepler lived in an era when there was no clear distinction between astronomy and astrology, but there was a strong division between astronomy (a branch of mathematics within the liberal arts) and physics (a branch of natural philosophy). Kepler also incorporated religious arguments and reasoning into his work, motivated by the religious conviction and belief that God had created the world according to an intelligible plan that is accessible through the natural light of reason. Kepler described his new astronomy as \"celestial physics\", as \"an excursion into Aristotle's Metaphysics\", and as \"a supplement to Aristotle's On the Heavens\", transforming the ancient tradition of physical cosmology by treating astronomy as part of a universal mathematical physics. Additionally, he did fundamental work in the field of optics, being named the father of modern optics, in particular for his Astronomiae pars optica. He also invented an improved version of the refracting telescope, the Keplerian telescope, which became the foundation of the modern refracting telescope, while also improving on the telescope design by Galileo Galilei, who mentioned Kepler's discoveries in his work. He postulated the Kepler conjecture. Kepler influenced among others Isaac Newton, providing one of the foundations for his theory of universal gravitation.\n\n\n",
+            "start_char": 0,
+            "end_char": 2332,
+            "token_count": 478,
+            "heading_path": [],
+            "metadata": {
+              "url": "https://en.wikipedia.org/wiki/Johannes_Kepler",
+              "title": "Johannes Kepler",
+              "page_id": "15736",
+              "filename": "15736_Johannes_Kepler.txt",
+              "word_count": 11641,
+              "downloaded_at": "2026-10-20T21:59:55.061582+00:00",
+              "character_count": 74164
+            },
+            "rerank_score": 0.6347500885696552,
+            "id": 1,
+            "truncated": false,
+            "excerpt_start_char": 0,
+            "excerpt_end_char": 2332
+          }
+        ],
+        "embedding_model": "qwen3-embedding:0.6b",
+        "chat_model": "custom_qwen",
+        "unsupported_claims_rejected": 0,
+        "invalid_claims_rejected": 0
+      },
+      "generation_seconds": 2.2356779809997533,
+      "citations": {
+        "claims": 1,
+        "valid_source_and_quote": 1,
+        "expected_source_citations": 1
+      },
+      "verdict": {
+        "correct": true,
+        "faithful": [
+          true
+        ],
+        "reason": "The answer 'Tycho Brahe' matches the reference answer and is supported by the retrieved evidence stating 'Later he became an assistant to the astronomer Tycho Brahe in Prague'. The claim 'Johannes Kepler assisted Tycho Brahe in Prague' is directly confirmed by the evidence without contradiction."
+      }
+    },
+    {
+      "id": "milky-way-type",
+      "question": "What type of galaxy is the Milky Way?",
+      "unanswerable": false,
+      "expected_answer": "A barred spiral galaxy.",
+      "gold_quote": "The Milky Way is a barred spiral galaxy",
+      "expected_sources": [
+        "2589714_Milky_Way.txt"
+      ],
+      "answer": {
+        "question": "What type of galaxy is the Milky Way?",
+        "status": "answered",
+        "answer": "The Milky Way is a barred spiral galaxy. [1]\n\nThe Milky Way is a barred spiral galaxy. [3]",
+        "claims": [
+          {
+            "text": "The Milky Way is a barred spiral galaxy.",
+            "source_id": 1,
+            "quote": "The Milky Way is a barred spiral galaxy with a D25 isophotal diameter estimated at 26.8 ± 1.1 kiloparsecs (87,400 ± 3,600 light-years)"
+          },
+          {
+            "text": "The Milky Way is a barred spiral galaxy.",
+            "source_id": 3,
+            "quote": "The Milky Way consists of a bar-shaped core region surrounded by a warped disk of gas, dust, and stars. The mass distribution within the Milky Way closely resembles the type Sbc in the Hubble classification, which represents spiral galaxies with relatively loosely wound arms."
+          }
+        ],
+        "sources": [
+          {
+            "source": "/home/rafa/dev/study/lab-build-rag-model-from-scratch/astronomy_corpus/2589714_Milky_Way.txt",
+            "chunk_index": 0,
+            "similarity": 0.6487904529779003,
+            "text": "The Milky Way or Milky Way Galaxy, or simply the Galaxy, is the galaxy that includes the Solar System, with the name describing the galaxy's appearance from Earth: a hazy band of light seen in the night sky formed by stars in other arms of the galaxy, which are so far away that they cannot be individually distinguished by the naked eye.\nGalileo Galilei first resolved the band of light into individual stars with his telescope in 1610. Until the early 1920s, most astronomers thought that the Milky Way contained all the stars in the universe, but following the 1920 Great Debate between the astronomers Harlow Shapley and Heber Doust Curtis, observations by Edwin Hubble in 1923 showed that the Milky Way was just one of many galaxies.\nThe Milky Way is a barred spiral galaxy with a D25 isophotal diameter estimated at 26.8 ± 1.1 kiloparsecs (87,400 ± 3,600 light-years), but also has a surrounding area of dark matter with a total diameter possibly approaching 613 kpc (2 million ly). The stars in the innermost 10,000 light-years form a bulge, from which one or more bars radiate. At the Milky Way's center is an intense radio source known as Sagittarius A*, a supermassive black hole with a mass of 4.100 (± 0.034) million solar masses. The galaxy is estimated to contain 100–400 billion stars and at least that number of planets. \nThe galaxy's oldest stars probably formed shortly after the Dark Ages of the early universe, taking a spherical shape before flattening into a spiral disk, in which later generations of stars formed. The Solar System is located on the inner edge of the Orion Arm at a radius of about 27,000 light-years (8.3 kpc) from the Galactic Center. The Milky Way has several satellite galaxies and is part of the Local Group of galaxies, forming part of the Virgo Supercluster, which is itself a component of the Laniakea Supercluster.\n\n\n",
+            "start_char": 0,
+            "end_char": 1866,
+            "token_count": 459,
+            "heading_path": [],
+            "metadata": {
+              "url": "https://en.wikipedia.org/wiki/Milky_Way",
+              "title": "Milky Way",
+              "page_id": "2589714",
+              "filename": "2589714_Milky_Way.txt",
+              "word_count": 9751,
+              "downloaded_at": "2026-10-20T21:56:46.770343+00:00",
+              "character_count": 57995
+            },
+            "rerank_score": 0.6305851907852511,
+            "id": 1,
+            "truncated": false,
+            "excerpt_start_char": 0,
+            "excerpt_end_char": 1866
+          },
+          {
+            "source": "/home/rafa/dev/study/lab-build-rag-model-from-scratch/astronomy_corpus/2589714_Milky_Way.txt",
+            "chunk_index": 18,
+            "similarity": 0.5975484902513455,
+            "text": "== Structure ==\n\nThe Milky Way consists of a bar-shaped core region surrounded by a warped disk of gas, dust, and stars. The mass distribution within the Milky Way closely resembles the type Sbc in the Hubble classification, which represents spiral galaxies with relatively loosely wound arms. Astronomers first began to conjecture that the Milky Way is a barred spiral galaxy, rather than an ordinary spiral galaxy, in the 1960s. These conjectures were confirmed by the Spitzer Space Telescope observations in 2005 that showed the Milky Way's central bar to be larger than previously thought.\n\n\n",
+            "start_char": 26787,
+            "end_char": 27383,
+            "token_count": 123,
+            "heading_path": [
+              "Structure"
+            ],
+            "metadata": {
+              "url": "https://en.wikipedia.org/wiki/Milky_Way",
+              "title": "Milky Way",
+              "page_id": "2589714",
+              "filename": "2589714_Milky_Way.txt",
+              "word_count": 9751,
+              "downloaded_at": "2026-10-20T21:56:46.770343+00:00",
+              "character_count": 57995
+            },
+            "rerank_score": 0.6142141173056362,
+            "id": 3,
+            "truncated": false,
+            "excerpt_start_char": 26787,
+            "excerpt_end_char": 27383
+          }
+        ],
+        "embedding_model": "qwen3-embedding:0.6b",
+        "chat_model": "custom_qwen",
+        "unsupported_claims_rejected": 0,
+        "invalid_claims_rejected": 0
+      },
+      "generation_seconds": 4.469075066001096,
+      "citations": {
+        "claims": 2,
+        "valid_source_and_quote": 2,
+        "expected_source_citations": 2
+      },
+      "verdict": {
+        "correct": true,
+        "faithful": [
+          true,
+          true
+        ],
+        "reason": "The answer matches the reference answer and both claims are supported by the retrieved evidence without contradiction."
+      }
+    },
+    {
+      "id": "first-telescopes",
+      "question": "Where were the first practical refracting telescopes invented?",
+      "unanswerable": false,
+      "expected_answer": "The Netherlands.",
+      "gold_quote": "were invented in the Netherlands at the beginning of the 17th century",
+      "expected_sources": [
+        "7070301_Telescope.txt"
+      ],
+      "answer": {
+        "question": "Where were the first practical refracting telescopes invented?",
+        "status": "answered",
+        "answer": "The first practical telescopes were refracting telescopes invented in the Netherlands at the beginning of the 17th century. [1]",
+        "claims": [
+          {
+            "text": "The first practical telescopes were refracting telescopes invented in the Netherlands at the beginning of the 17th century.",
+            "source_id": 1,
+            "quote": "The first known practical telescopes were refracting telescopes with glass lenses and were invented in the Netherlands at the beginning of the 17th century."
+          }
+        ],
+        "sources": [
+          {
+            "source": "/home/rafa/dev/study/lab-build-rag-model-from-scratch/astronomy_corpus/7070301_Telescope.txt",
+            "chunk_index": 0,
+            "similarity": 0.7162606305712418,
+            "text": "A telescope is a device used to observe distant objects by their emission, absorption, or reflection of electromagnetic radiation. Originally, it was an optical instrument using lenses, curved mirrors, or a combination of both to observe distant objects – an optical telescope. Nowadays, the word \"telescope\" is defined as a wide range of instruments capable of detecting different regions of the electromagnetic spectrum, and in some cases other types of detectors.\nThe first known practical telescopes were refracting telescopes with glass lenses and were invented in the Netherlands at the beginning of the 17th century. They were used for both terrestrial applications and astronomy.\nThe reflecting telescope, which uses mirrors to collect and focus light, was invented within a few decades of the first refracting telescope.\nIn the 20th century, many new types of telescopes were invented, including radio telescopes in the 1930s and infrared telescopes in the 1960s.\n\n\n",
+            "start_char": 0,
+            "end_char": 975,
+            "token_count": 193,
+            "heading_path": [],
+            "metadata": {
+              "url": "https://en.wikipedia.org/wiki/Telescope",
+              "title": "Telescope",
+              "page_id": "7070301",
+              "filename": "7070301_Telescope.txt",
+              "word_count": 2046,
+              "downloaded_at": "2026-10-20T21:59:59.757687+00:00",
+              "character_count": 13487
+            },
+            "rerank_score": 0.7304475990426798,
+            "id": 1,
+            "truncated": false,
+            "excerpt_start_char": 0,
+            "excerpt_end_char": 975
+          }
+        ],
+        "embedding_model": "qwen3-embedding:0.6b",
+        "chat_model": "custom_qwen",
+        "unsupported_claims_rejected": 0,
+        "invalid_claims_rejected": 0
+      },
+      "generation_seconds": 2.7986050300023635,
+      "citations": {
+        "claims": 1,
+        "valid_source_and_quote": 1,
+        "expected_source_citations": 1
+      },
+      "verdict": {
+        "correct": true,
+        "faithful": [
+          true
+        ],
+        "reason": "The answer matches the reference answer and the retrieved evidence states the first practical telescopes were refracting telescopes invented in the Netherlands at the beginning of the 17th century."
+      }
+    },
+    {
+      "id": "neutrino-force",
+      "question": "Through which fundamental force do neutrinos interact with matter?",
+      "unanswerable": false,
+      "expected_answer": "The weak nuclear force.",
+      "gold_quote": "Neutrinos rarely interact with matter (only via the weak nuclear force)",
+      "expected_sources": [
+        "633325_Neutrino_astronomy.txt"
+      ],
+      "answer": {
+        "question": "Through which fundamental force do neutrinos interact with matter?",
+        "status": "answered",
+        "answer": "Neutrinos interact with matter through the weak nuclear force. [2]",
+        "claims": [
+          {
+            "text": "Neutrinos interact with matter through the weak nuclear force.",
+            "source_id": 2,
+            "quote": "Neutrinos rarely interact with matter (only via the weak nuclear force)"
+          }
+        ],
+        "sources": [
+          {
+            "source": "/home/rafa/dev/study/lab-build-rag-model-from-scratch/astronomy_corpus/633325_Neutrino_astronomy.txt",
+            "chunk_index": 0,
+            "similarity": 0.540987348460704,
+            "text": "Neutrino astronomy is a branch of astronomy that gathers information about astronomical objects by observing and studying neutrinos emitted by them with the help of neutrino detectors in special Earth observatories. It is an emerging field in astroparticle physics providing insights into the high-energy and non-thermal processes in the universe. \nNeutrinos are nearly massless and electrically neutral or chargeless elementary particles. They are created as a result of certain types of radioactive decay, nuclear reactions such as those that take place in the Sun or high energy astrophysical phenomena, in nuclear reactors, or when cosmic rays hit atoms in the atmosphere. Neutrinos rarely interact with matter (only via the weak nuclear force), travel at nearly the speed of light in straight lines, pass through large amounts of matter without any notable absorption or without being deflected by magnetic fields. Unlike photons, neutrinos rarely scatter along their trajectory. But like photons, neutrinos are some of the most common particles in the universe. Because of this, neutrinos offer a unique opportunity to observe processes that are inaccessible to optical telescopes, such as reactions in the Sun's core. Neutrinos that are created in the Sun's core are barely absorbed, so a large quantity of them escape from the Sun and reach the Earth. Neutrinos can also offer a very strong pointing direction compared to charged particle cosmic rays.\nNeutrinos are very hard to detect due to their non-interactive nature, which poses significant challenges to the design and construction of neutrino detectors. In order to detect neutrinos, the detectors must be isolated from cosmic rays and other background radiation, which can penetrate hundreds of meters of rock. Thus neutrino detectors are placed many hundreds of meters underground, usually at the bottom of mines. They also need to be very large in order to detect a significant number of neutrinos. In general, a neutrino detector consists of a large volume of material (often in the order of thousands of tons) that can interact with a passing neutrino. A number of sensors placed around or between said material detect the resulting interactions. A common design consists of a large volume of water (either in a tank or in the form of ice sheets) surrounded by optical sensors. Occasionally, neutrinos collide with a proton or neutron inside an atom of a water molecule, and the resulting interaction produces radiation that is detected by the sensors. The IceCube Neutrino Observatory, built in 2010 near the South Pole, the largest neutrino detector in the world, utilizes such a",
+            "start_char": 0,
+            "end_char": 2652,
+            "token_count": 512,
+            "heading_path": [],
+            "metadata": {
+              "url": "https://en.wikipedia.org/wiki/Neutrino_astronomy",
+              "title": "Neutrino astronomy",
+              "page_id": "633325",
+              "filename": "633325_Neutrino_astronomy.txt",
+              "word_count": 3598,
+              "downloaded_at": "2026-10-20T21:57:24.420011+00:00",
+              "character_count": 24160
+            },
+            "rerank_score": 0.5608787579652271,
+            "id": 2,
+            "truncated": false,
+            "excerpt_start_char": 0,
+            "excerpt_end_char": 2652
+          }
+        ],
+        "embedding_model": "qwen3-embedding:0.6b",
+        "chat_model": "custom_qwen",
+        "unsupported_claims_rejected": 0,
+        "invalid_claims_rejected": 0
+      },
+      "generation_seconds": 2.281749875000969,
+      "citations": {
+        "claims": 1,
+        "valid_source_and_quote": 1,
+        "expected_source_citations": 1
+      },
+      "verdict": {
+        "correct": true,
+        "faithful": [
+          true
+        ],
+        "reason": "The answer 'The weak nuclear force' matches the reference answer and is directly supported by the retrieved evidence's quote: 'Neutrinos rarely interact with matter (only via the weak nuclear force)'."
+      }
+    },
+    {
+      "id": "orion-stars",
+      "question": "Which are the two brightest stars in Orion?",
+      "unanswerable": false,
+      "expected_answer": "Rigel and Betelgeuse.",
+      "gold_quote": "Orion's two brightest stars, Rigel (β) and Betelgeuse (α)",
+      "expected_sources": [
+        "153797_Orion_constellation.txt"
+      ],
+      "answer": {
+        "question": "Which are the two brightest stars in Orion?",
+        "status": "answered",
+        "answer": "The two brightest stars in Orion are Rigel (β) and Betelgeuse (α). [1]",
+        "claims": [
+          {
+            "text": "The two brightest stars in Orion are Rigel (β) and Betelgeuse (α).",
+            "source_id": 1,
+            "quote": "Orion's two brightest stars, Rigel (β) and Betelgeuse (α), are both among the brightest stars in the night sky"
+          }
+        ],
+        "sources": [
+          {
+            "source": "/home/rafa/dev/study/lab-build-rag-model-from-scratch/astronomy_corpus/153797_Orion_constellation.txt",
+            "chunk_index": 0,
+            "similarity": 0.692455557605974,
+            "text": "Orion is a prominent set of stars visible during winter in the northern celestial hemisphere. It is one of the 88 modern constellations; it was among the 48 constellations listed by the 2nd-century AD astronomer Ptolemy. It is named after a hunter in Greek mythology.\nOrion is most prominent during winter evenings in the Northern Hemisphere, as are five other constellations that have stars in the Winter Hexagon asterism. Orion's two brightest stars, Rigel (β) and Betelgeuse (α), are both among the brightest stars in the night sky; both are supergiants and slightly variable. There are a further six stars brighter than magnitude 3.0, including three making the short straight line of the Orion's Belt asterism. Orion also hosts the radiant of the annual Orionids, the strongest meteor shower associated with Halley's Comet, and the Orion Nebula, one of the brightest nebulae in the sky.\n\n\n",
+            "start_char": 0,
+            "end_char": 894,
+            "token_count": 203,
+            "heading_path": [],
+            "metadata": {
+              "url": "https://en.wikipedia.org/wiki/Orion_(constellation)",
+              "title": "Orion (constellation)",
+              "page_id": "153797",
+              "filename": "153797_Orion_constellation.txt",
+              "word_count": 4329,
+              "downloaded_at": "2026-10-20T21:59:52.570557+00:00",
+              "character_count": 26029
+            },
+            "rerank_score": 0.7078327797256753,
+            "id": 1,
+            "truncated": false,
+            "excerpt_start_char": 0,
+            "excerpt_end_char": 894
+          }
+        ],
+        "embedding_model": "qwen3-embedding:0.6b",
+        "chat_model": "custom_qwen",
+        "unsupported_claims_rejected": 0,
+        "invalid_claims_rejected": 0
+      },
+      "generation_seconds": 2.568551871001546,
+      "citations": {
+        "claims": 1,
+        "valid_source_and_quote": 1,
+        "expected_source_citations": 1
+      },
+      "verdict": {
+        "correct": true,
+        "faithful": [
+          true
+        ],
+        "reason": "The answer matches the reference answer and is supported by the retrieved evidence which explicitly states 'Orion's two brightest stars, Rigel (β) and Betelgeuse (α), are both among the brightest stars in the night sky'."
+      }
+    },
+    {
+      "id": "pleiades-location",
+      "question": "In which constellation are the Pleiades?",
+      "unanswerable": false,
+      "expected_answer": "Taurus.",
+      "gold_quote": "in the northwest of the constellation Taurus",
+      "expected_sources": [
+        "56568_Pleiades.txt"
+      ],
+      "answer": {
+        "question": "In which constellation are the Pleiades?",
+        "status": "answered",
+        "answer": "The Pleiades are located in the constellation Taurus. [1]",
+        "claims": [
+          {
+            "text": "The Pleiades are located in the constellation Taurus.",
+            "source_id": 1,
+            "quote": "The Pleiades ( PLEE-ə-deez, PLAY-, PLY-), also known as Seven Sisters and Messier 45 (M45), is an asterism of an open star cluster containing young B-type stars in the northwest of the constellation Taurus."
+          }
+        ],
+        "sources": [
+          {
+            "source": "/home/rafa/dev/study/lab-build-rag-model-from-scratch/astronomy_corpus/56568_Pleiades.txt",
+            "chunk_index": 0,
+            "similarity": 0.6293030180768479,
+            "text": "The Pleiades ( PLEE-ə-deez, PLAY-, PLY-), also known as Seven Sisters and Messier 45 (M45), is an asterism of an open star cluster containing young B-type stars in the northwest of the constellation Taurus. At a distance of about 444 light-years, it is among the star clusters nearest to Earth and is the Messier object nearest to Earth, being the star cluster most obvious to the naked eye in the night sky. It contains over 1,000 stars, with the brightest six or seven being easily visible to the naked eye.\nThe Pleiades cluster contains the reflection nebulae NGC 1432, an HII region, and NGC 1435, known as the Merope Nebula. Around 2330 BC the Pleiades marked the vernal point. Due to the brightness of its stars, the Pleiades is viewable from most areas on Earth, even in locations with significant light pollution.\nThe cluster is dominated by hot blue luminous stars that have formed within the last 100 million years. Reflection nebulae around the brightest stars were once thought to be leftover material from their formation, but are now considered likely to be an unrelated dust cloud in the interstellar medium through which the stars are currently passing. This dust cloud is estimated to be moving at a speed of approximately 18 km/s (11 mi/s) relative to the stars in the cluster.\nComputer simulations have shown that the Pleiades were probably formed from a compact configuration that once resembled the Orion Nebula. Astronomers estimate that the cluster will survive for approximately another 250 million years, after which the clustering will be lost due to gravitational interactions with the galactic neighborhood.\nTogether with the open star cluster of the Hyades, the Pleiades form the Golden Gate of the Ecliptic. The Pleiades have been said to \"resemble a tiny dipper,\" and should not be confused with the \"Little Dipper,\" or Ursa Minor.\n\n\n",
+            "start_char": 0,
+            "end_char": 1865,
+            "token_count": 433,
+            "heading_path": [],
+            "metadata": {
+              "url": "https://en.wikipedia.org/wiki/Pleiades",
+              "title": "Pleiades",
+              "page_id": "56568",
+              "filename": "56568_Pleiades.txt",
+              "word_count": 3324,
+              "downloaded_at": "2026-10-20T21:58:06.609748+00:00",
+              "character_count": 20569
+            },
+            "rerank_score": 0.6434434229808355,
+            "id": 1,
+            "truncated": false,
+            "excerpt_start_char": 0,
+            "excerpt_end_char": 1865
+          }
+        ],
+        "embedding_model": "qwen3-embedding:0.6b",
+        "chat_model": "custom_qwen",
+        "unsupported_claims_rejected": 0,
+        "invalid_claims_rejected": 0
+      },
+      "generation_seconds": 2.9983705550002924,
+      "citations": {
+        "claims": 1,
+        "valid_source_and_quote": 1,
+        "expected_source_citations": 1
+      },
+      "verdict": {
+        "correct": true,
+        "faithful": [
+          true
+        ],
+        "reason": "The answer 'Taurus' matches the reference answer and is directly supported by the retrieved evidence stating the Pleiades are in the northwest of Taurus."
+      }
+    },
+    {
+      "id": "jupiter-storm",
+      "question": "Which planet has a storm called the Great Red Spot?",
+      "unanswerable": false,
+      "expected_answer": "Jupiter.",
+      "gold_quote": "the Great Red Spot, a giant storm that has been recorded since 1831",
+      "expected_sources": [
+        "38930_Jupiter.txt"
+      ],
+      "answer": {
+        "question": "Which planet has a storm called the Great Red Spot?",
+        "status": "answered",
+        "answer": "The planet with the Great Red Spot storm is Jupiter. [1]",
+        "claims": [
+          {
+            "text": "The planet with the Great Red Spot storm is Jupiter.",
+            "source_id": 1,
+            "quote": "A well-known feature of Jupiter is the Great Red Spot, a persistent anticyclonic storm located 22° south of the equator."
+          }
+        ],
+        "sources": [
+          {
+            "source": "/home/rafa/dev/study/lab-build-rag-model-from-scratch/astronomy_corpus/38930_Jupiter.txt",
+            "chunk_index": 14,
+            "similarity": 0.6029722217288453,
+            "text": "==== Great Red Spot and other vortices ====\n\nA well-known feature of Jupiter is the Great Red Spot, a persistent anticyclonic storm located 22° south of the equator. It was first observed in 1831, and possibly as early as 1665. Images by the Hubble Space Telescope have shown two more \"red spots\" adjacent to the Great Red Spot. The storm is visible through Earth-based telescopes with an aperture of 12 cm or larger. The storm rotates counterclockwise, with a period of about six days. The maximum altitude of this storm is about 8 kilometres (5 mi) above the surrounding cloud tops. The Spot's composition and the source of its red colour remain uncertain. However, photodissociated ammonia reacting with acetylene is a likely explanation.\nThe Great Red Spot is larger than the Earth. Mathematical models suggest that the storm is stable and will be a permanent feature of the planet. However, it has significantly decreased in size since its discovery. Initial observations in the late 1800s showed it to be approximately 41,000 km (25,500 mi) across. As of 2015, the storm was measured at approximately 16,500 by 10,940 kilometres (10,250 by 6,800 mi), and was decreasing in length by about 930 km (580 mi) per year. In October 2021, a Juno flyby mission measured the depth of the Great Red Spot, putting it at around 300–500 kilometres (190–310 mi).\nJuno missions found several cyclone groups at Jupiter's poles. The northern group contains nine cyclones, with a large one in the centre and eight others around it. At the same time, its southern counterpart also consists of a central vortex but is surrounded by five large storms and a single smaller one, for a total of seven storms.\n",
+            "start_char": 19053,
+            "end_char": 20744,
+            "token_count": 430,
+            "heading_path": [
+              "Physical characteristics",
+              "Atmosphere",
+              "Great Red Spot and other vortices"
+            ],
+            "metadata": {
+              "url": "https://en.wikipedia.org/wiki/Jupiter",
+              "title": "Jupiter",
+              "page_id": "38930",
+              "filename": "38930_Jupiter.txt",
+              "word_count": 7765,
+              "downloaded_at": "2026-10-20T21:59:07.745108+00:00",
+              "character_count": 48482
+            },
+            "rerank_score": 0.6228236106424031,
+            "id": 1,
+            "truncated": false,
+            "excerpt_start_char": 19053,
+            "excerpt_end_char": 20744
+          }
+        ],
+        "embedding_model": "qwen3-embedding:0.6b",
+        "chat_model": "custom_qwen",
+        "unsupported_claims_rejected": 0,
+        "invalid_claims_rejected": 0
+      },
+      "generation_seconds": 2.8101127600020845,
+      "citations": {
+        "claims": 1,
+        "valid_source_and_quote": 1,
+        "expected_source_citations": 1
+      },
+      "verdict": {
+        "correct": true,
+        "faithful": [
+          true
+        ],
+        "reason": "The answer 'Jupiter' matches the reference answer and is supported by the retrieved evidence which states 'A well-known feature of Jupiter is the Great Red Spot'. The claim 'The planet with the Great Red Spot storm is Jupiter' is directly confirmed by the evidence without contradiction."
+      }
+    },
+    {
+      "id": "mercury-size",
+      "question": "Which is the smallest planet in the Solar System?",
+      "unanswerable": false,
+      "expected_answer": "Mercury.",
+      "gold_quote": "Mercury is the first planet from the Sun and the smallest in the Solar System",
+      "expected_sources": [
+        "19694_Mercury_planet.txt"
+      ],
+      "answer": {
+        "question": "Which is the smallest planet in the Solar System?",
+        "status": "answered",
+        "answer": "Mercury is the smallest planet in the Solar System. [1]\n\nMercury is the smallest in the Solar System. [2]",
+        "claims": [
+          {
+            "text": "Mercury is the smallest planet in the Solar System.",
+            "source_id": 1,
+            "quote": "It is the smallest planet in the Solar System, with an equatorial radius of 2,439.7 kilometres (1,516.0 mi)."
+          },
+          {
+            "text": "Mercury is the smallest in the Solar System.",
+            "source_id": 2,
+            "quote": "Mercury is the first planet from the Sun and the smallest in the Solar System."
+          }
+        ],
+        "sources": [
+          {
+            "source": "/home/rafa/dev/study/lab-build-rag-model-from-scratch/astronomy_corpus/19694_Mercury_planet.txt",
+            "chunk_index": 3,
+            "similarity": 0.5417403728033445,
+            "text": "== Physical characteristics ==\nMercury is one of four terrestrial planets in the Solar System, which means it is a rocky body like Earth. It is the smallest planet in the Solar System, with an equatorial radius of 2,439.7 kilometres (1,516.0 mi). Mercury is also smaller—albeit more massive—than the largest natural satellites in the Solar System, Ganymede and Titan. Mercury consists of approximately 70% metallic and 30% silicate material.\n\n\n",
+            "start_char": 3945,
+            "end_char": 4389,
+            "token_count": 106,
+            "heading_path": [
+              "Physical characteristics"
+            ],
+            "metadata": {
+              "url": "https://en.wikipedia.org/wiki/Mercury_(planet)",
+              "title": "Mercury (planet)",
+              "page_id": "19694",
+              "filename": "19694_Mercury_planet.txt",
+              "word_count": 8270,
+              "downloaded_at": "2026-10-20T21:59:28.779851+00:00",
+              "character_count": 51257
+            },
+            "rerank_score": 0.5646533541631773,
+            "id": 1,
+            "truncated": false,
+            "excerpt_start_char": 3945,
+            "excerpt_end_char": 4389
+          },
+          {
+            "source": "/home/rafa/dev/study/lab-build-rag-model-from-scratch/astronomy_corpus/19694_Mercury_planet.txt",
+            "chunk_index": 0,
+            "similarity": 0.47533258207621487,
+            "text": "Mercury is the first planet from the Sun and the smallest in the Solar System. It is a rocky planet with a trace atmosphere and a surface gravity slightly lower than that of Mars. The surface of Mercury is similar to Earth's Moon, being cratered, with an expansive rupes system generated from thrust faults, and bright ray systems, formed by ejecta. Its largest crater, Caloris Planitia, has a diameter of 1,550 km (960 mi), which is about one-third the diameter of the planet (4,880 km or 3,030 mi). Being the most inferior orbiting planet, it always appears close to the Sun in Earth's sky, as either a \"morning star\" or an \"evening star\". It is the planet with the highest delta-v required for travel from Earth, as well as to and from the other planets in the Solar System.\nMercury's sidereal year (88.0 Earth days) and sidereal day (58.65 Earth days) are in a 3:2 ratio, in a spin–orbit resonance. Consequently, one solar day (sunrise to sunrise) on Mercury lasts for around 176 Earth days, or twice Mercury's sidereal year. This means that one side of Mercury will remain in sunlight for one Mercurian year of 88 Earth days; while during the next orbit, that side will be in darkness all the time until the next sunrise after another 88 Earth days. Above the planet's surface is an extremely tenuous exosphere and a faint magnetic field just strong enough to deflect solar winds. Combined with its high orbital eccentricity, the planet's surface has widely varying sunlight intensity and temperature, with the equatorial regions ranging from −170 °C (−270 °F) at night to 420 °C (790 °F) during sunlight. Despite being the closest planet to the sun, it is the second hottest after Venus, lacking an atmosphere to trap heat. Due to its very small axial tilt, the planet's poles are permanently shadowed. This strongly suggests that water ice could be present in the craters.\n",
+            "start_char": 0,
+            "end_char": 1880,
+            "token_count": 455,
+            "heading_path": [],
+            "metadata": {
+              "url": "https://en.wikipedia.org/wiki/Mercury_(planet)",
+              "title": "Mercury (planet)",
+              "page_id": "19694",
+              "filename": "19694_Mercury_planet.txt",
+              "word_count": 8270,
+              "downloaded_at": "2026-10-20T21:59:28.779851+00:00",
+              "character_count": 51257
+            },
+            "rerank_score": 0.48684833465054084,
+            "id": 2,
+            "truncated": false,
+            "excerpt_start_char": 0,
+            "excerpt_end_char": 1880
+          }
+        ],
+        "embedding_model": "qwen3-embedding:0.6b",
+        "chat_model": "custom_qwen",
+        "unsupported_claims_rejected": 0,
+        "invalid_claims_rejected": 0
+      },
+      "generation_seconds": 3.359978708002018,
+      "citations": {
+        "claims": 2,
+        "valid_source_and_quote": 2,
+        "expected_source_citations": 2
+      },
+      "verdict": {
+        "correct": true,
+        "faithful": [
+          true,
+          true
+        ],
+        "reason": "The answer 'Mercury' directly matches the reference answer and is supported by both retrieved excerpts. The first excerpt states 'Mercury is the smallest planet in the Solar System', and the second excerpt confirms 'Mercury is the first planet from the Sun and the smallest in the Solar System'. Both claims are fully supported by the evidence without adding unsupported assertions."
+      }
+    },
+    {
+      "id": "private-password",
+      "question": "What is the password to my bank account?",
+      "unanswerable": true,
+      "expected_answer": null,
+      "gold_quote": null,
+      "expected_sources": [],
+      "answer": {
+        "question": "What is the password to my bank account?",
+        "status": "abstained",
+        "answer": "I couldn't find enough support in the retrieved sources.",
+        "claims": [],
+        "sources": [],
+        "embedding_model": "qwen3-embedding:0.6b",
+        "chat_model": "custom_qwen",
+        "unsupported_claims_rejected": 0,
+        "invalid_claims_rejected": 0
+      },
+      "generation_seconds": 0.052584135002689436,
+      "citations": {
+        "claims": 0,
+        "valid_source_and_quote": 0,
+        "expected_source_citations": 0
+      },
+      "verdict": {
+        "correct": true,
+        "faithful": [],
+        "reason": "No claims: abstention."
+      }
+    },
+    {
+      "id": "private-package",
+      "question": "What is the tracking number of my package?",
+      "unanswerable": true,
+      "expected_answer": null,
+      "gold_quote": null,
+      "expected_sources": [],
+      "answer": {
+        "question": "What is the tracking number of my package?",
+        "status": "abstained",
+        "answer": "I couldn't find enough support in the retrieved sources.",
+        "claims": [],
+        "sources": [],
+        "embedding_model": "qwen3-embedding:0.6b",
+        "chat_model": "custom_qwen",
+        "unsupported_claims_rejected": 0,
+        "invalid_claims_rejected": 0
+      },
+      "generation_seconds": 0.5186233169988554,
+      "citations": {
+        "claims": 0,
+        "valid_source_and_quote": 0,
+        "expected_source_citations": 0
+      },
+      "verdict": {
+        "correct": true,
+        "faithful": [],
+        "reason": "No claims: abstention."
+      }
+    }
+  ],
+  "limitations": [
+    "Small hand-authored regression set also used during development; not held-out generalization evidence.",
+    "Correctness and faithfulness are fallible model judgments; the default judge is the same model as the generator, in a separate call.",
+    "Inspect per-case claims, retrieved excerpts, reference answers, and verdict reasons. This is not human or independent-model certification.",
+    "Accuracy includes every case: abstentions on answerable questions and errors are failures. Faithfulness excludes abstentions/errors and reports its judged denominator.",
+    "Citation validity checks supplied source IDs and normalized verbatim quotes; it does not prove truth. Expected-source citation rate is a separate document check."
+  ]
+}

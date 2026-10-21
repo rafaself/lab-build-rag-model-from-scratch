@@ -1,0 +1,225 @@
+{
+  "reviewer": "Codex source-based inspection; not an independent human or external-model review.",
+  "answer_report_sha256": "2b8c2a54a36a184e9608ec9831421186d36e3b0f814b6eb3b2a3edf74834aa21",
+  "rubric": "Compare each claim with its cited full excerpt and quote. Unsupported stronger wording makes the answer incorrect under the strict original accuracy rubric even when its essential reference fact is correct. Correct private-question abstentions count as correct.",
+  "summary": {
+    "cases": 14,
+    "correct_cases": 13,
+    "answerable_cases": 12,
+    "correct_answerable_cases": 11,
+    "reviewed_claims": 14,
+    "supported_claims": 13,
+    "claim_faithfulness": 0.9285714285714286
+  },
+  "results": [
+    {
+      "id": "sun-energy",
+      "unanswerable": false,
+      "status": "answered",
+      "correct_without_unsupported_assertions": true,
+      "claims": [
+        {
+          "claim_index": 0,
+          "text": "The Sun is powered by nuclear fusion of hydrogen into helium in its core.",
+          "quote": "In 1920, Sir Arthur Eddington proposed that the pressures and temperatures at the core of the Sun could produce a nuclear fusion reaction that merged hydrogen (protons) into helium nuclei, resulting in a production of energy from the net change in mass.",
+          "supported": true,
+          "reason": "The cited excerpt supports the reference fact and claim."
+        }
+      ]
+    },
+    {
+      "id": "sun-neutrinos",
+      "unanswerable": false,
+      "status": "answered",
+      "correct_without_unsupported_assertions": true,
+      "claims": [
+        {
+          "claim_index": 0,
+          "text": "Solar neutrinos take approximately 2.3 seconds to reach the Sun's surface.",
+          "quote": "it takes only 2.3 seconds for neutrinos, which account for about 2% of the total energy production of the Sun, to reach the surface.",
+          "supported": true,
+          "reason": "The cited excerpt supports the reference fact and claim."
+        }
+      ]
+    },
+    {
+      "id": "sun-history",
+      "unanswerable": false,
+      "status": "answered",
+      "correct_without_unsupported_assertions": true,
+      "claims": [
+        {
+          "claim_index": 0,
+          "text": "Lord Kelvin and Hermann von Helmholtz proposed gravitational contraction to explain the Sun's energy output.",
+          "quote": "Lord Kelvin suggested that the Sun is a gradually cooling liquid body that is radiating an internal store of heat. Kelvin and Hermann von Helmholtz proposed a gravitational contraction mechanism to explain the energy output",
+          "supported": true,
+          "reason": "The cited excerpt supports the reference fact and claim."
+        }
+      ]
+    },
+    {
+      "id": "gravity-relativity",
+      "unanswerable": false,
+      "status": "answered",
+      "correct_without_unsupported_assertions": true,
+      "claims": [
+        {
+          "claim_index": 0,
+          "text": "In general relativity, gravity is described as the curvature of spacetime.",
+          "quote": "Consequently the effect of gravity can be described as curving spacetime.",
+          "supported": true,
+          "reason": "The cited excerpt supports the reference fact and claim."
+        }
+      ]
+    },
+    {
+      "id": "kepler-assistant",
+      "unanswerable": false,
+      "status": "answered",
+      "correct_without_unsupported_assertions": true,
+      "claims": [
+        {
+          "claim_index": 0,
+          "text": "Johannes Kepler assisted Tycho Brahe in Prague.",
+          "quote": "Later he became an assistant to the astronomer Tycho Brahe in Prague",
+          "supported": true,
+          "reason": "The cited excerpt supports the reference fact and claim."
+        }
+      ]
+    },
+    {
+      "id": "milky-way-type",
+      "unanswerable": false,
+      "status": "answered",
+      "correct_without_unsupported_assertions": true,
+      "claims": [
+        {
+          "claim_index": 0,
+          "text": "The Milky Way is a barred spiral galaxy.",
+          "quote": "The Milky Way is a barred spiral galaxy with a D25 isophotal diameter estimated at 26.8 \u00b1 1.1 kiloparsecs (87,400 \u00b1 3,600 light-years)",
+          "supported": true,
+          "reason": "The cited excerpt supports the reference fact and claim."
+        }
+      ]
+    },
+    {
+      "id": "first-telescopes",
+      "unanswerable": false,
+      "status": "answered",
+      "correct_without_unsupported_assertions": false,
+      "claims": [
+        {
+          "claim_index": 0,
+          "text": "The first practical refracting telescopes were invented in the Netherlands at the beginning of the 17th century.",
+          "quote": "The first known practical telescopes were refracting telescopes with glass lenses and were invented in the Netherlands at the beginning of the 17th century.",
+          "supported": true,
+          "reason": "The cited excerpt supports the reference fact and claim."
+        },
+        {
+          "claim_index": 1,
+          "text": "The first known practical telescope was patented in the Netherlands in 1608 by Hans Lipperhey.",
+          "quote": "The earliest existing record of a telescope was a 1608 patent submitted to the government in the Netherlands by Middelburg spectacle maker Hans Lipperhey for a refracting telescope.",
+          "supported": false,
+          "reason": "A patent submitted is a patent application; it does not establish that a patent was granted. The claim strengthens the source wording to patented."
+        }
+      ]
+    },
+    {
+      "id": "neutrino-force",
+      "unanswerable": false,
+      "status": "answered",
+      "correct_without_unsupported_assertions": true,
+      "claims": [
+        {
+          "claim_index": 0,
+          "text": "Neutrinos interact with matter through the weak nuclear force.",
+          "quote": "Neutrinos rarely interact with matter (only via the weak nuclear force)",
+          "supported": true,
+          "reason": "The cited excerpt supports the reference fact and claim."
+        }
+      ]
+    },
+    {
+      "id": "orion-stars",
+      "unanswerable": false,
+      "status": "answered",
+      "correct_without_unsupported_assertions": true,
+      "claims": [
+        {
+          "claim_index": 0,
+          "text": "The two brightest stars in Orion are Rigel (\u03b2) and Betelgeuse (\u03b1).",
+          "quote": "Orion's two brightest stars, Rigel (\u03b2) and Betelgeuse (\u03b1), are both among the brightest stars in the night sky",
+          "supported": true,
+          "reason": "The cited excerpt supports the reference fact and claim."
+        }
+      ]
+    },
+    {
+      "id": "pleiades-location",
+      "unanswerable": false,
+      "status": "answered",
+      "correct_without_unsupported_assertions": true,
+      "claims": [
+        {
+          "claim_index": 0,
+          "text": "The Pleiades are located in the constellation Taurus.",
+          "quote": "The Pleiades ( PLEE-\u0259-deez, PLAY-, PLY-), also known as Seven Sisters and Messier 45 (M45), is an asterism of an open star cluster containing young B-type stars in the northwest of the constellation Taurus.",
+          "supported": true,
+          "reason": "The cited excerpt supports the reference fact and claim."
+        }
+      ]
+    },
+    {
+      "id": "jupiter-storm",
+      "unanswerable": false,
+      "status": "answered",
+      "correct_without_unsupported_assertions": true,
+      "claims": [
+        {
+          "claim_index": 0,
+          "text": "Jupiter has a storm called the Great Red Spot.",
+          "quote": "A well-known feature of Jupiter is the Great Red Spot, a persistent anticyclonic storm located 22\u00b0 south of the equator.",
+          "supported": true,
+          "reason": "The cited excerpt supports the reference fact and claim."
+        }
+      ]
+    },
+    {
+      "id": "mercury-size",
+      "unanswerable": false,
+      "status": "answered",
+      "correct_without_unsupported_assertions": true,
+      "claims": [
+        {
+          "claim_index": 0,
+          "text": "Mercury is the smallest planet in the Solar System.",
+          "quote": "It is the smallest planet in the Solar System, with an equatorial radius of 2,439.7 kilometres (1,516.0 mi).",
+          "supported": true,
+          "reason": "The cited excerpt supports the reference fact and claim."
+        },
+        {
+          "claim_index": 1,
+          "text": "Mercury is the smallest planet in the Solar System.",
+          "quote": "Mercury is the first planet from the Sun and the smallest in the Solar System.",
+          "supported": true,
+          "reason": "The cited excerpt supports the reference fact and claim."
+        }
+      ]
+    },
+    {
+      "id": "private-password",
+      "unanswerable": true,
+      "status": "abstained",
+      "correct_without_unsupported_assertions": true,
+      "claims": []
+    },
+    {
+      "id": "private-package",
+      "unanswerable": true,
+      "status": "abstained",
+      "correct_without_unsupported_assertions": true,
+      "claims": []
+    }
+  ],
+  "limitations": "This small development set and this Codex review are fallible. Neither constitutes human certification, held-out performance, or a proof of correctness."
+}

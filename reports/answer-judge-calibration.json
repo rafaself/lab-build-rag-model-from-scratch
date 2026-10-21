@@ -1,0 +1,18 @@
+{
+  "finding": "Both runtime grounding and the separate answer judge accepted a stronger claim than the source supports: a patent submission does not establish that a patent was granted. Preserve qualifiers, modality, chronology, and distinctions between proposals and completed events. This prompted an explicit grounding rule.",
+  "claim": {
+    "text": "The first known practical telescope was patented in the Netherlands in 1608 by Hans Lipperhey.",
+    "source_id": 2,
+    "quote": "The earliest existing record of a telescope was a 1608 patent submitted to the government in the Netherlands by Middelburg spectacle maker Hans Lipperhey for a refracting telescope."
+  },
+  "model_verdict": {
+    "correct": true,
+    "faithful": [
+      true,
+      true
+    ],
+    "reason": "The answer addresses the question by stating the first practical refracting telescopes were invented in the Netherlands at the beginning of the 17th century, matching the reference answer. Both claims are supported by the retrieved evidence: claim 1 is directly stated in evidence 1, and claim 2 is supported by evidence 2's mention of Hans Lipperhey's 1608 patent in the Netherlands."
+  },
+  "source_excerpt": "== History ==\n\nThe earliest existing record of a telescope was a 1608 patent submitted to the government in the Netherlands by Middelburg spectacle maker Hans Lipperhey for a refracting telescope. The actual inventor is unknown but word of it spread through Europe. Galileo heard about it and, in 1609, built his own version, and made his telescopic observations of celestial objects.\nThe idea that the objective, or light-gathering element, could be a mirror instead of a lens was being investigated soon after the invention of the refracting telescope. The potential advantages of using parabolic mirrors\u2014reduction of spherical aberration and no chromatic aberration\u2014led to many proposed designs and several attempts to build reflecting telescopes. In 1668, Isaac Newton built the first practical reflecting telescope, of a design which now bears his name, the Newtonian reflector. John Dobson invented the Dobsonian telescope in 1956.\nThe invention of the achromatic lens in 1733 partially corrected color aberrations present in the simple lens and enabled the construction of shorter, more functional refracting telescopes. Reflecting telescopes, though not limited by the color problems seen in refractors, were hampered by the use of fast tarnishing speculum metal mirrors employed during the 18th and early 19th century\u2014a problem alleviated by the introduction of silver coated glass mirrors in 1857, and aluminized mirrors in 1932. The maximum physical size limit for refracting telescopes is about 1 meter (39 inches), dictating that the vast majority of large optical research telescopes built since the turn of the 20th century have been reflectors. The largest reflecting telescopes currently have objectives larger than 10 meters (33 feet), and work is underway on several 30\u201340m designs.\nThe 20th century also saw the development of telescopes that worked in a wide range of wavelengths from radio to gamma-rays. The first purpose-built radio telescope went into operation in 1937. Since then, a large variety of complex astronomical instruments have been developed.\n\n\n",
+  "follow_up": "An isolated live grounding check with an explicit rule distinguishing submitted applications from approvals still accepted the overstatement. The ineffective extra prompt rule was discarded. A source-based audit records the limitation rather than changing the metric to hide it."
+}
