@@ -5,3 +5,5 @@ SQLAlchemy==2.1.5
 pgvector==0.5.1
 psycopg2-binary==2.9.13
 python-dotenv==1.2.4
+tokenizers==0.23.3
+huggingface-hub==1.33.0

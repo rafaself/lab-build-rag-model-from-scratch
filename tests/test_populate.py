@@ -13,7 +13,7 @@ from sqlalchemy.schema import CreateSchema, DropSchema
 from rag_lab.cli import build_parser
 from rag_lab.config import Settings
 from rag_lab.database import create_db_engine
-from rag_lab.populate import chunk_text, chunks, documents, embed_chunks, populate_database
+from rag_lab.populate import chunk_text, chunks, documents, embed_chunks, populate_database, ensure_population_schema
 
 
 class PopulationTests(unittest.TestCase):
@@ -46,12 +46,23 @@ class PopulationTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "No .txt"):
                 populate_database(Settings(), input_dir=Path(directory))
             with self.assertRaisesRegex(ValueError, "overlap"):
-                populate_database(Settings(), input_dir=Path(directory), overlap=300)
+                populate_database(Settings(), input_dir=Path(directory), chunk_size=300, overlap=300)
             engine.assert_not_called()
 
     def test_cli_population_options(self):
         args = build_parser().parse_args(["populate", "--limit", "1", "--overlap", "0", "--force"])
         self.assertEqual((args.limit, args.overlap, args.force), (1, 0, True))
+
+    def test_file_symlinks_are_not_sent_to_the_model(self):
+        with tempfile.TemporaryDirectory() as directory, tempfile.TemporaryDirectory() as outside:
+            secret = Path(outside) / "private.txt"
+            secret.write_text("private fixture")
+            (Path(directory) / "linked.txt").symlink_to(secret)
+            with patch("rag_lab.populate.create_db_engine") as engine, patch("rag_lab.populate.embed_texts") as embed:
+                with self.assertRaisesRegex(ValueError, "No .txt"):
+                    populate_database(Settings(), input_dir=Path(directory))
+            engine.assert_not_called()
+            embed.assert_not_called()
 
 
 @unittest.skipUnless(os.environ.get("RAG_TEST_POSTGRES") == "1", "Set RAG_TEST_POSTGRES=1 for isolated PostgreSQL tests.")
@@ -76,7 +87,7 @@ class PostgreSQLPopulationTests(unittest.TestCase):
             self.engine.dispose()
 
     def populate(self, **overrides):
-        options = dict(input_dir=Path(self.directory.name), chunk_size=4, overlap=1, batch_size=1, model="fixture")
+        options = dict(input_dir=Path(self.directory.name), chunk_size=4, overlap=1, batch_size=1, model="fixture", strategy="words")
         options.update(overrides)
         with patch("rag_lab.populate.create_db_engine", return_value=self.scoped_engine):
             return populate_database(Settings(), **options)
@@ -146,6 +157,69 @@ class PostgreSQLPopulationTests(unittest.TestCase):
             finally:
                 event.remove(self.scoped_engine, "before_cursor_execute", fail_chunk_insert)
             self.assertEqual(self.snapshot(), original)
+
+    def test_token_chunk_offsets_headings_and_source_metadata_round_trip(self):
+        from test_chunking import word_tokenizer
+        content = "# Stars\n\nFusion provides energy.\n## Core\n\nHydrogen turns into helium."
+        self.path.write_text(content, encoding="utf-8")
+        original_metadata = {"filename": "article.txt", "page_id": "42", "title": "Stellar physics",
+                             "url": "https://example.com/stars", "custom_field": {"edition": 2}}
+        (self.path.parent / "metadata.json").write_text(json.dumps([original_metadata]))
+        with self.fixture_embeddings() as embed:
+            self.populate(strategy="tokens", chunk_size=12, overlap=2, tokenizer=word_tokenizer())
+            with self.scoped_engine.connect() as connection:
+                stored = connection.execute(select(chunks).order_by(chunks.c.chunk_index)).mappings().all()
+                document = connection.execute(select(documents)).mappings().one()
+                self.assertEqual(document["source_metadata"], original_metadata)
+                self.assertEqual(document["chunking_config"]["strategy"], "tokens")
+                self.assertEqual(stored[-1]["heading_path"], ["Stars", "Core"])
+                for row in stored:
+                    self.assertEqual(row["content"], content[row["start_char"]:row["end_char"]])
+                    self.assertLessEqual(row["token_count"], 12)
+            embed.reset_mock()
+            self.assertEqual(self.populate(strategy="tokens", chunk_size=12, overlap=2, tokenizer=word_tokenizer())["skipped"], 1)
+            embed.assert_not_called()
+
+    def test_schema_upgrade_preserves_old_rows(self):
+        with self.fixture_embeddings():
+            self.populate()
+        before = self.snapshot()[1]
+        with self.scoped_engine.begin() as connection:
+            schema = self.engine.dialect.identifier_preparer.quote_schema(self.schema)
+            from sqlalchemy import text
+            connection.execute(text(f"ALTER TABLE {schema}.rag_documents DROP COLUMN chunking_config, DROP COLUMN source_metadata"))
+            connection.execute(text(f"ALTER TABLE {schema}.rag_chunks DROP COLUMN start_char, DROP COLUMN end_char, DROP COLUMN token_count, DROP COLUMN heading_path"))
+        ensure_population_schema(self.scoped_engine)
+        ensure_population_schema(self.scoped_engine)
+        self.assertEqual(self.snapshot()[1], before)
+        with self.scoped_engine.connect() as connection:
+            row = connection.execute(select(documents)).mappings().one()
+            self.assertEqual(row["chunking_config"], {})
+
+    def test_strategy_change_reembeds_an_unchanged_markdown_file(self):
+        from test_chunking import word_tokenizer
+        markdown = self.path.with_suffix(".md")
+        self.path.rename(markdown)
+        with self.fixture_embeddings() as embed:
+            self.populate()
+            embed.reset_mock()
+            result = self.populate(strategy="tokens", tokenizer=word_tokenizer())
+            self.assertEqual(result["populated"], 1)
+            self.assertTrue(embed.called)
+
+    def test_crlf_sources_keep_original_newlines_offsets_and_hash(self):
+        import hashlib
+        from test_chunking import word_tokenizer
+        original = b"# Stars\r\n\r\nFusion provides energy.\r\n"
+        self.path.write_bytes(original)
+        with self.fixture_embeddings():
+            self.populate(strategy="tokens", chunk_size=12, overlap=2, tokenizer=word_tokenizer())
+        with self.scoped_engine.connect() as connection:
+            document = connection.execute(select(documents)).mappings().one()
+            row = connection.execute(select(chunks)).mappings().one()
+        self.assertEqual(document["content_sha256"], hashlib.sha256(original).hexdigest())
+        self.assertEqual(row["content"], original.decode()[row["start_char"]:row["end_char"]])
+        self.assertIn("\r\n\r\n", row["content"])
 
 
 if __name__ == "__main__":

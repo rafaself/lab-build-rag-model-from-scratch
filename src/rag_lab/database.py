@@ -27,7 +27,7 @@ def create_db_engine(settings: Settings) -> Engine:
     def register_types(connection, _connection_record):
         register_vector(connection)
 
-    return engine
+    return engine.execution_options(schema_translate_map={None: settings.postgres_schema}) if settings.postgres_schema else engine
 
 
 @contextmanager

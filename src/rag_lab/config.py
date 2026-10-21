@@ -15,6 +15,7 @@ class Settings:
     postgres_db: str = "rag_lab"
     postgres_user: str = "postgres"
     postgres_password: str = field(default="", repr=False)
+    postgres_schema: str | None = None  # Internal isolation for benchmark schemas.
     ollama_host: str = "http://127.0.0.1:11434"
     chat_model: str = "custom_qwen"
     embedding_model: str = "qwen3-embedding:0.6b"

@@ -68,6 +68,11 @@ class ModelTests(unittest.TestCase):
 
 
 class ExtractionTests(unittest.TestCase):
+    def test_markdown_export_preserves_headings_and_document_structure(self):
+        markdown = "# Heading\n\nParagraph.\n\n- List item"
+        with patch("rag_lab.extraction.convert_document", return_value={"markdown": markdown}):
+            self.assertEqual(extract_text("example.docx"), markdown)
+
     def test_text_order_is_preserved_and_non_text_blocks_are_skipped(self):
         with patch("rag_lab.extraction.convert_document", return_value={"texts": [
             {"orig": "First paragraph"}, {}, {"orig": "Second paragraph"}, {"orig": ""},

@@ -1,0 +1,3779 @@
+{
+  "generated_at": "2026-10-21T14:14:37.640247+00:00",
+  "tokenizer": {
+    "repo": "Qwen/Qwen3-Embedding-0.6B",
+    "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3"
+  },
+  "chunker_sha256": "95c66babc6b1ebc0239c9b8af6c241f136d0400358096037fa7bca2508228aad",
+  "baseline_chunking_configs": [
+    {
+      "chunk_size": 300,
+      "overlap": 50,
+      "chunking_config": {}
+    }
+  ],
+  "baseline": {
+    "generated_at": "2026-10-21T14:12:20.035832+00:00",
+    "dataset_sha256": "48bb65a5a0fa211945b395aff6690a3cbe352286e509cd28198093ed98f87c51",
+    "source_sha256": {
+      "26751_Sun.txt": "3bfc892871f1dcfe740daa46efd396d0f3332e03c226041ff51340c70309dd07",
+      "38579_Gravity.txt": "08ea0ec3cf0ebfb54191aea303ca8c033a2efb763995e4417be90b53ce9ce479",
+      "15736_Johannes_Kepler.txt": "e1f18597edfdf89333a5a859f206495616ddced84ce393e7e4b4144df772525b",
+      "2589714_Milky_Way.txt": "b2f475653715e318276798e69b6db0e36731b5a1c466bc8bddde2e7f5efba3f1",
+      "7070301_Telescope.txt": "71d75c71c03006d82c9d4fb5b1044a137760df329231898220abfad71fddbc0b",
+      "633325_Neutrino_astronomy.txt": "5c9407655cefc67c8d5c6ce891cc038993b7990434ece0c0efec6c66fa96fd9b",
+      "153797_Orion_constellation.txt": "7e47f7a619ce893b36479fca8e987f74648a67ed7c7656598da6b4d0a11e7848",
+      "56568_Pleiades.txt": "87c46480fcbf0c08b8508ac0a8cd188c33c9df5a63d5a750d204fc33f9bbb74c",
+      "38930_Jupiter.txt": "044fccbd38c9baeb7e3e7ef0a95806e70dde4dad780bf5e0679a6b435ce70050",
+      "19694_Mercury_planet.txt": "f5f970645d44c4f2556bc7c9a680057b6768317c7094c291811cf1e6585f22fc"
+    },
+    "embedding_model": "qwen3-embedding:0.6b",
+    "embedding_model_digest": "ac6da0dfba84a81fdbfbaf330198c33cd77c4cdfc53e8bc50eb581914a15621d",
+    "indexed_documents": 99,
+    "indexed_chunks": 1104,
+    "candidate_k": 40,
+    "min_similarity": 0.3,
+    "rerank_weight": 0.05,
+    "cases": 14,
+    "answerable_cases": 12,
+    "baseline": {
+      "document_recall@1": 1.0,
+      "evidence_hit@1": 0.3333333333333333,
+      "document_recall@3": 1.0,
+      "evidence_hit@3": 0.9166666666666666,
+      "document_recall@5": 1.0,
+      "evidence_hit@5": 0.9166666666666666,
+      "unanswerable_returned_match_rate": 1
+    },
+    "improved": {
+      "document_recall@1": 1.0,
+      "evidence_hit@1": 0.4166666666666667,
+      "document_recall@3": 1.0,
+      "evidence_hit@3": 0.9166666666666666,
+      "document_recall@5": 1.0,
+      "evidence_hit@5": 0.9166666666666666,
+      "unanswerable_returned_match_rate": 0.5
+    },
+    "mean_postprocessing_ms": 4.444216857077014,
+    "results": [
+      {
+        "id": "sun-energy",
+        "unanswerable": false,
+        "baseline": {
+          "1": {
+            "document_recall": 1.0,
+            "evidence_hit": false,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "3": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 1,
+            "returned_chunks": 3
+          },
+          "5": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 1,
+            "returned_chunks": 5
+          }
+        },
+        "improved": {
+          "1": {
+            "document_recall": 1.0,
+            "evidence_hit": false,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "3": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 1,
+            "returned_chunks": 3
+          },
+          "5": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 1,
+            "returned_chunks": 5
+          }
+        },
+        "baseline_sources": [
+          "26751_Sun.txt",
+          "26751_Sun.txt",
+          "26751_Sun.txt",
+          "26751_Sun.txt",
+          "26751_Sun.txt"
+        ],
+        "improved_sources": [
+          "26751_Sun.txt",
+          "26751_Sun.txt",
+          "26751_Sun.txt",
+          "26751_Sun.txt",
+          "26751_Sun.txt"
+        ]
+      },
+      {
+        "id": "sun-neutrinos",
+        "unanswerable": false,
+        "baseline": {
+          "1": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "3": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 2,
+            "returned_chunks": 3
+          },
+          "5": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 2,
+            "returned_chunks": 5
+          }
+        },
+        "improved": {
+          "1": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "3": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 2,
+            "returned_chunks": 3
+          },
+          "5": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 2,
+            "returned_chunks": 5
+          }
+        },
+        "baseline_sources": [
+          "26751_Sun.txt",
+          "633325_Neutrino_astronomy.txt",
+          "633325_Neutrino_astronomy.txt",
+          "26751_Sun.txt",
+          "633325_Neutrino_astronomy.txt"
+        ],
+        "improved_sources": [
+          "26751_Sun.txt",
+          "633325_Neutrino_astronomy.txt",
+          "633325_Neutrino_astronomy.txt",
+          "26751_Sun.txt",
+          "633325_Neutrino_astronomy.txt"
+        ]
+      },
+      {
+        "id": "sun-history",
+        "unanswerable": false,
+        "baseline": {
+          "1": {
+            "document_recall": 1.0,
+            "evidence_hit": false,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "3": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 1,
+            "returned_chunks": 3
+          },
+          "5": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 2,
+            "returned_chunks": 5
+          }
+        },
+        "improved": {
+          "1": {
+            "document_recall": 1.0,
+            "evidence_hit": false,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "3": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 1,
+            "returned_chunks": 3
+          },
+          "5": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 2,
+            "returned_chunks": 5
+          }
+        },
+        "baseline_sources": [
+          "26751_Sun.txt",
+          "26751_Sun.txt",
+          "26751_Sun.txt",
+          "38579_Gravity.txt",
+          "26751_Sun.txt"
+        ],
+        "improved_sources": [
+          "26751_Sun.txt",
+          "26751_Sun.txt",
+          "26751_Sun.txt",
+          "38579_Gravity.txt",
+          "26751_Sun.txt"
+        ]
+      },
+      {
+        "id": "gravity-relativity",
+        "unanswerable": false,
+        "baseline": {
+          "1": {
+            "document_recall": 1.0,
+            "evidence_hit": false,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "3": {
+            "document_recall": 1.0,
+            "evidence_hit": false,
+            "unique_documents": 1,
+            "returned_chunks": 3
+          },
+          "5": {
+            "document_recall": 1.0,
+            "evidence_hit": false,
+            "unique_documents": 1,
+            "returned_chunks": 5
+          }
+        },
+        "improved": {
+          "1": {
+            "document_recall": 1.0,
+            "evidence_hit": false,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "3": {
+            "document_recall": 1.0,
+            "evidence_hit": false,
+            "unique_documents": 1,
+            "returned_chunks": 3
+          },
+          "5": {
+            "document_recall": 1.0,
+            "evidence_hit": false,
+            "unique_documents": 1,
+            "returned_chunks": 5
+          }
+        },
+        "baseline_sources": [
+          "38579_Gravity.txt",
+          "38579_Gravity.txt",
+          "38579_Gravity.txt",
+          "38579_Gravity.txt",
+          "38579_Gravity.txt"
+        ],
+        "improved_sources": [
+          "38579_Gravity.txt",
+          "38579_Gravity.txt",
+          "38579_Gravity.txt",
+          "38579_Gravity.txt",
+          "38579_Gravity.txt"
+        ]
+      },
+      {
+        "id": "kepler-assistant",
+        "unanswerable": false,
+        "baseline": {
+          "1": {
+            "document_recall": 1.0,
+            "evidence_hit": false,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "3": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 2,
+            "returned_chunks": 3
+          },
+          "5": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 2,
+            "returned_chunks": 5
+          }
+        },
+        "improved": {
+          "1": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "3": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 1,
+            "returned_chunks": 3
+          },
+          "5": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 1,
+            "returned_chunks": 5
+          }
+        },
+        "baseline_sources": [
+          "15736_Johannes_Kepler.txt",
+          "15736_Johannes_Kepler.txt",
+          "2408446_Hebrew_astronomy.txt",
+          "15736_Johannes_Kepler.txt",
+          "15736_Johannes_Kepler.txt"
+        ],
+        "improved_sources": [
+          "15736_Johannes_Kepler.txt",
+          "15736_Johannes_Kepler.txt",
+          "15736_Johannes_Kepler.txt",
+          "15736_Johannes_Kepler.txt",
+          "15736_Johannes_Kepler.txt"
+        ]
+      },
+      {
+        "id": "milky-way-type",
+        "unanswerable": false,
+        "baseline": {
+          "1": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "3": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 2,
+            "returned_chunks": 3
+          },
+          "5": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 3,
+            "returned_chunks": 5
+          }
+        },
+        "improved": {
+          "1": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "3": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 2,
+            "returned_chunks": 3
+          },
+          "5": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 2,
+            "returned_chunks": 5
+          }
+        },
+        "baseline_sources": [
+          "2589714_Milky_Way.txt",
+          "2589714_Milky_Way.txt",
+          "34809573_Glossary_of_astronomy.txt",
+          "50650_Astronomy.txt",
+          "2589714_Milky_Way.txt"
+        ],
+        "improved_sources": [
+          "2589714_Milky_Way.txt",
+          "2589714_Milky_Way.txt",
+          "34809573_Glossary_of_astronomy.txt",
+          "2589714_Milky_Way.txt",
+          "2589714_Milky_Way.txt"
+        ]
+      },
+      {
+        "id": "first-telescopes",
+        "unanswerable": false,
+        "baseline": {
+          "1": {
+            "document_recall": 1.0,
+            "evidence_hit": false,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "3": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 2,
+            "returned_chunks": 3
+          },
+          "5": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 3,
+            "returned_chunks": 5
+          }
+        },
+        "improved": {
+          "1": {
+            "document_recall": 1.0,
+            "evidence_hit": false,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "3": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 2,
+            "returned_chunks": 3
+          },
+          "5": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 3,
+            "returned_chunks": 5
+          }
+        },
+        "baseline_sources": [
+          "7070301_Telescope.txt",
+          "7070301_Telescope.txt",
+          "29688374_Galileo_Galilei.txt",
+          "748_Amateur_astronomy.txt",
+          "748_Amateur_astronomy.txt"
+        ],
+        "improved_sources": [
+          "7070301_Telescope.txt",
+          "7070301_Telescope.txt",
+          "29688374_Galileo_Galilei.txt",
+          "748_Amateur_astronomy.txt",
+          "29688374_Galileo_Galilei.txt"
+        ]
+      },
+      {
+        "id": "neutrino-force",
+        "unanswerable": false,
+        "baseline": {
+          "1": {
+            "document_recall": 1.0,
+            "evidence_hit": false,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "3": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 1,
+            "returned_chunks": 3
+          },
+          "5": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 2,
+            "returned_chunks": 5
+          }
+        },
+        "improved": {
+          "1": {
+            "document_recall": 1.0,
+            "evidence_hit": false,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "3": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 1,
+            "returned_chunks": 3
+          },
+          "5": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 2,
+            "returned_chunks": 5
+          }
+        },
+        "baseline_sources": [
+          "633325_Neutrino_astronomy.txt",
+          "633325_Neutrino_astronomy.txt",
+          "633325_Neutrino_astronomy.txt",
+          "633325_Neutrino_astronomy.txt",
+          "26751_Sun.txt"
+        ],
+        "improved_sources": [
+          "633325_Neutrino_astronomy.txt",
+          "633325_Neutrino_astronomy.txt",
+          "633325_Neutrino_astronomy.txt",
+          "26751_Sun.txt",
+          "633325_Neutrino_astronomy.txt"
+        ]
+      },
+      {
+        "id": "orion-stars",
+        "unanswerable": false,
+        "baseline": {
+          "1": {
+            "document_recall": 1.0,
+            "evidence_hit": false,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "3": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 1,
+            "returned_chunks": 3
+          },
+          "5": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 1,
+            "returned_chunks": 5
+          }
+        },
+        "improved": {
+          "1": {
+            "document_recall": 1.0,
+            "evidence_hit": false,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "3": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 1,
+            "returned_chunks": 3
+          },
+          "5": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 1,
+            "returned_chunks": 5
+          }
+        },
+        "baseline_sources": [
+          "153797_Orion_constellation.txt",
+          "153797_Orion_constellation.txt",
+          "153797_Orion_constellation.txt",
+          "153797_Orion_constellation.txt",
+          "153797_Orion_constellation.txt"
+        ],
+        "improved_sources": [
+          "153797_Orion_constellation.txt",
+          "153797_Orion_constellation.txt",
+          "153797_Orion_constellation.txt",
+          "153797_Orion_constellation.txt",
+          "153797_Orion_constellation.txt"
+        ]
+      },
+      {
+        "id": "pleiades-location",
+        "unanswerable": false,
+        "baseline": {
+          "1": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "3": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 2,
+            "returned_chunks": 3
+          },
+          "5": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 3,
+            "returned_chunks": 5
+          }
+        },
+        "improved": {
+          "1": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "3": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 2,
+            "returned_chunks": 3
+          },
+          "5": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 2,
+            "returned_chunks": 5
+          }
+        },
+        "baseline_sources": [
+          "56568_Pleiades.txt",
+          "5267_Constellation.txt",
+          "5267_Constellation.txt",
+          "56568_Pleiades.txt",
+          "1028265_Asterism_astronomy.txt"
+        ],
+        "improved_sources": [
+          "56568_Pleiades.txt",
+          "56568_Pleiades.txt",
+          "5267_Constellation.txt",
+          "56568_Pleiades.txt",
+          "5267_Constellation.txt"
+        ]
+      },
+      {
+        "id": "jupiter-storm",
+        "unanswerable": false,
+        "baseline": {
+          "1": {
+            "document_recall": 1.0,
+            "evidence_hit": false,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "3": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 1,
+            "returned_chunks": 3
+          },
+          "5": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 2,
+            "returned_chunks": 5
+          }
+        },
+        "improved": {
+          "1": {
+            "document_recall": 1.0,
+            "evidence_hit": false,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "3": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 1,
+            "returned_chunks": 3
+          },
+          "5": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 2,
+            "returned_chunks": 5
+          }
+        },
+        "baseline_sources": [
+          "38930_Jupiter.txt",
+          "38930_Jupiter.txt",
+          "38930_Jupiter.txt",
+          "19694_Mercury_planet.txt",
+          "19694_Mercury_planet.txt"
+        ],
+        "improved_sources": [
+          "38930_Jupiter.txt",
+          "38930_Jupiter.txt",
+          "38930_Jupiter.txt",
+          "38930_Jupiter.txt",
+          "19694_Mercury_planet.txt"
+        ]
+      },
+      {
+        "id": "mercury-size",
+        "unanswerable": false,
+        "baseline": {
+          "1": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "3": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 3,
+            "returned_chunks": 3
+          },
+          "5": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 5,
+            "returned_chunks": 5
+          }
+        },
+        "improved": {
+          "1": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "3": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 2,
+            "returned_chunks": 3
+          },
+          "5": {
+            "document_recall": 1.0,
+            "evidence_hit": true,
+            "unique_documents": 4,
+            "returned_chunks": 5
+          }
+        },
+        "baseline_sources": [
+          "19694_Mercury_planet.txt",
+          "38930_Jupiter.txt",
+          "34809573_Glossary_of_astronomy.txt",
+          "26751_Sun.txt",
+          "26808_Star.txt"
+        ],
+        "improved_sources": [
+          "19694_Mercury_planet.txt",
+          "19694_Mercury_planet.txt",
+          "38930_Jupiter.txt",
+          "34809573_Glossary_of_astronomy.txt",
+          "26808_Star.txt"
+        ]
+      },
+      {
+        "id": "private-password",
+        "unanswerable": true,
+        "baseline": {
+          "1": {
+            "document_recall": null,
+            "evidence_hit": null,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "3": {
+            "document_recall": null,
+            "evidence_hit": null,
+            "unique_documents": 3,
+            "returned_chunks": 3
+          },
+          "5": {
+            "document_recall": null,
+            "evidence_hit": null,
+            "unique_documents": 4,
+            "returned_chunks": 5
+          }
+        },
+        "improved": {
+          "1": {
+            "document_recall": null,
+            "evidence_hit": null,
+            "unique_documents": 0,
+            "returned_chunks": 0
+          },
+          "3": {
+            "document_recall": null,
+            "evidence_hit": null,
+            "unique_documents": 0,
+            "returned_chunks": 0
+          },
+          "5": {
+            "document_recall": null,
+            "evidence_hit": null,
+            "unique_documents": 0,
+            "returned_chunks": 0
+          }
+        },
+        "baseline_sources": [
+          "27582693_Forensic_astronomy.txt",
+          "43819148_Maya_astronomy.txt",
+          "26751_Sun.txt",
+          "2589714_Milky_Way.txt",
+          "43819148_Maya_astronomy.txt"
+        ],
+        "improved_sources": []
+      },
+      {
+        "id": "private-package",
+        "unanswerable": true,
+        "baseline": {
+          "1": {
+            "document_recall": null,
+            "evidence_hit": null,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "3": {
+            "document_recall": null,
+            "evidence_hit": null,
+            "unique_documents": 3,
+            "returned_chunks": 3
+          },
+          "5": {
+            "document_recall": null,
+            "evidence_hit": null,
+            "unique_documents": 5,
+            "returned_chunks": 5
+          }
+        },
+        "improved": {
+          "1": {
+            "document_recall": null,
+            "evidence_hit": null,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "3": {
+            "document_recall": null,
+            "evidence_hit": null,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          },
+          "5": {
+            "document_recall": null,
+            "evidence_hit": null,
+            "unique_documents": 1,
+            "returned_chunks": 1
+          }
+        },
+        "baseline_sources": [
+          "2039039_Spherical_astronomy.txt",
+          "748_Amateur_astronomy.txt",
+          "264337_Radar_astronomy.txt",
+          "2589714_Milky_Way.txt",
+          "200006_Epoch_astronomy.txt"
+        ],
+        "improved_sources": [
+          "2039039_Spherical_astronomy.txt"
+        ]
+      }
+    ],
+    "weight_sweep": {
+      "0": {
+        "document_recall@1": 1.0,
+        "evidence_hit@1": 0.3333333333333333,
+        "document_recall@3": 1.0,
+        "evidence_hit@3": 0.9166666666666666,
+        "document_recall@5": 1.0,
+        "evidence_hit@5": 0.9166666666666666,
+        "unanswerable_returned_match_rate": 0.5
+      },
+      "0.01": {
+        "document_recall@1": 1.0,
+        "evidence_hit@1": 0.3333333333333333,
+        "document_recall@3": 1.0,
+        "evidence_hit@3": 0.9166666666666666,
+        "document_recall@5": 1.0,
+        "evidence_hit@5": 0.9166666666666666,
+        "unanswerable_returned_match_rate": 0.5
+      },
+      "0.02": {
+        "document_recall@1": 1.0,
+        "evidence_hit@1": 0.3333333333333333,
+        "document_recall@3": 1.0,
+        "evidence_hit@3": 0.9166666666666666,
+        "document_recall@5": 1.0,
+        "evidence_hit@5": 0.9166666666666666,
+        "unanswerable_returned_match_rate": 0.5
+      },
+      "0.03": {
+        "document_recall@1": 1.0,
+        "evidence_hit@1": 0.3333333333333333,
+        "document_recall@3": 1.0,
+        "evidence_hit@3": 0.9166666666666666,
+        "document_recall@5": 1.0,
+        "evidence_hit@5": 0.9166666666666666,
+        "unanswerable_returned_match_rate": 0.5
+      },
+      "0.05": {
+        "document_recall@1": 1.0,
+        "evidence_hit@1": 0.4166666666666667,
+        "document_recall@3": 1.0,
+        "evidence_hit@3": 0.9166666666666666,
+        "document_recall@5": 1.0,
+        "evidence_hit@5": 0.9166666666666666,
+        "unanswerable_returned_match_rate": 0.5
+      },
+      "0.075": {
+        "document_recall@1": 1.0,
+        "evidence_hit@1": 0.4166666666666667,
+        "document_recall@3": 1.0,
+        "evidence_hit@3": 0.9166666666666666,
+        "document_recall@5": 1.0,
+        "evidence_hit@5": 0.9166666666666666,
+        "unanswerable_returned_match_rate": 0.5
+      },
+      "0.1": {
+        "document_recall@1": 1.0,
+        "evidence_hit@1": 0.4166666666666667,
+        "document_recall@3": 1.0,
+        "evidence_hit@3": 0.9166666666666666,
+        "document_recall@5": 1.0,
+        "evidence_hit@5": 0.9166666666666666,
+        "unanswerable_returned_match_rate": 0.5
+      },
+      "0.15": {
+        "document_recall@1": 1.0,
+        "evidence_hit@1": 0.4166666666666667,
+        "document_recall@3": 1.0,
+        "evidence_hit@3": 0.8333333333333334,
+        "document_recall@5": 1.0,
+        "evidence_hit@5": 0.9166666666666666,
+        "unanswerable_returned_match_rate": 0.5
+      }
+    },
+    "limitations": "Small hand-authored regression set, not a held-out generalization study. Source-document recall and gold-quote hit rate are distinct. Timings exclude embedding and database search."
+  },
+  "variants": [
+    {
+      "chunk_size": 256,
+      "overlap": 32,
+      "population": {
+        "files": 99,
+        "populated": 99,
+        "skipped": 0,
+        "empty": 0,
+        "chunks": 2340,
+        "model": "qwen3-embedding:0.6b"
+      },
+      "ingest_seconds": 48.40470649399958,
+      "evaluation": {
+        "generated_at": "2026-10-21T14:13:09.483805+00:00",
+        "dataset_sha256": "48bb65a5a0fa211945b395aff6690a3cbe352286e509cd28198093ed98f87c51",
+        "source_sha256": {
+          "26751_Sun.txt": "3bfc892871f1dcfe740daa46efd396d0f3332e03c226041ff51340c70309dd07",
+          "38579_Gravity.txt": "08ea0ec3cf0ebfb54191aea303ca8c033a2efb763995e4417be90b53ce9ce479",
+          "15736_Johannes_Kepler.txt": "e1f18597edfdf89333a5a859f206495616ddced84ce393e7e4b4144df772525b",
+          "2589714_Milky_Way.txt": "b2f475653715e318276798e69b6db0e36731b5a1c466bc8bddde2e7f5efba3f1",
+          "7070301_Telescope.txt": "71d75c71c03006d82c9d4fb5b1044a137760df329231898220abfad71fddbc0b",
+          "633325_Neutrino_astronomy.txt": "5c9407655cefc67c8d5c6ce891cc038993b7990434ece0c0efec6c66fa96fd9b",
+          "153797_Orion_constellation.txt": "7e47f7a619ce893b36479fca8e987f74648a67ed7c7656598da6b4d0a11e7848",
+          "56568_Pleiades.txt": "87c46480fcbf0c08b8508ac0a8cd188c33c9df5a63d5a750d204fc33f9bbb74c",
+          "38930_Jupiter.txt": "044fccbd38c9baeb7e3e7ef0a95806e70dde4dad780bf5e0679a6b435ce70050",
+          "19694_Mercury_planet.txt": "f5f970645d44c4f2556bc7c9a680057b6768317c7094c291811cf1e6585f22fc"
+        },
+        "embedding_model": "qwen3-embedding:0.6b",
+        "embedding_model_digest": "ac6da0dfba84a81fdbfbaf330198c33cd77c4cdfc53e8bc50eb581914a15621d",
+        "indexed_documents": 99,
+        "indexed_chunks": 2340,
+        "candidate_k": 40,
+        "min_similarity": 0.3,
+        "rerank_weight": 0.05,
+        "cases": 14,
+        "answerable_cases": 12,
+        "baseline": {
+          "document_recall@1": 0.8333333333333334,
+          "evidence_hit@1": 0.4166666666666667,
+          "document_recall@3": 1.0,
+          "evidence_hit@3": 0.6666666666666666,
+          "document_recall@5": 1.0,
+          "evidence_hit@5": 0.6666666666666666,
+          "unanswerable_returned_match_rate": 1
+        },
+        "improved": {
+          "document_recall@1": 0.8333333333333334,
+          "evidence_hit@1": 0.5,
+          "document_recall@3": 1.0,
+          "evidence_hit@3": 0.6666666666666666,
+          "document_recall@5": 1.0,
+          "evidence_hit@5": 0.6666666666666666,
+          "unanswerable_returned_match_rate": 0.5
+        },
+        "mean_postprocessing_ms": 2.1863958572144577,
+        "results": [
+          {
+            "id": "sun-energy",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 0.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 3,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 0.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 3,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "44790_Luminosity.txt",
+              "26751_Sun.txt",
+              "26751_Sun.txt",
+              "26751_Sun.txt",
+              "633325_Neutrino_astronomy.txt"
+            ],
+            "improved_sources": [
+              "44790_Luminosity.txt",
+              "26751_Sun.txt",
+              "26751_Sun.txt",
+              "633325_Neutrino_astronomy.txt",
+              "26751_Sun.txt"
+            ]
+          },
+          {
+            "id": "sun-neutrinos",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "26751_Sun.txt",
+              "633325_Neutrino_astronomy.txt",
+              "633325_Neutrino_astronomy.txt",
+              "26751_Sun.txt",
+              "633325_Neutrino_astronomy.txt"
+            ],
+            "improved_sources": [
+              "26751_Sun.txt",
+              "26751_Sun.txt",
+              "633325_Neutrino_astronomy.txt",
+              "633325_Neutrino_astronomy.txt",
+              "633325_Neutrino_astronomy.txt"
+            ]
+          },
+          {
+            "id": "sun-history",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "26751_Sun.txt",
+              "26751_Sun.txt",
+              "26751_Sun.txt",
+              "26751_Sun.txt",
+              "38579_Gravity.txt"
+            ],
+            "improved_sources": [
+              "26751_Sun.txt",
+              "26751_Sun.txt",
+              "26751_Sun.txt",
+              "26751_Sun.txt",
+              "34809573_Glossary_of_astronomy.txt"
+            ]
+          },
+          {
+            "id": "gravity-relativity",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "38579_Gravity.txt",
+              "38579_Gravity.txt",
+              "38579_Gravity.txt",
+              "38579_Gravity.txt",
+              "38579_Gravity.txt"
+            ],
+            "improved_sources": [
+              "38579_Gravity.txt",
+              "38579_Gravity.txt",
+              "38579_Gravity.txt",
+              "38579_Gravity.txt",
+              "38579_Gravity.txt"
+            ]
+          },
+          {
+            "id": "kepler-assistant",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "15736_Johannes_Kepler.txt",
+              "15736_Johannes_Kepler.txt",
+              "15736_Johannes_Kepler.txt",
+              "15736_Johannes_Kepler.txt",
+              "15736_Johannes_Kepler.txt"
+            ],
+            "improved_sources": [
+              "15736_Johannes_Kepler.txt",
+              "15736_Johannes_Kepler.txt",
+              "15736_Johannes_Kepler.txt",
+              "15736_Johannes_Kepler.txt",
+              "15736_Johannes_Kepler.txt"
+            ]
+          },
+          {
+            "id": "milky-way-type",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 0.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 3,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 3,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 0.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 3,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 3,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "34809573_Glossary_of_astronomy.txt",
+              "50650_Astronomy.txt",
+              "2589714_Milky_Way.txt",
+              "2589714_Milky_Way.txt",
+              "34809573_Glossary_of_astronomy.txt"
+            ],
+            "improved_sources": [
+              "34809573_Glossary_of_astronomy.txt",
+              "2589714_Milky_Way.txt",
+              "50650_Astronomy.txt",
+              "2589714_Milky_Way.txt",
+              "34809573_Glossary_of_astronomy.txt"
+            ]
+          },
+          {
+            "id": "first-telescopes",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "7070301_Telescope.txt",
+              "7070301_Telescope.txt",
+              "29688374_Galileo_Galilei.txt",
+              "29688374_Galileo_Galilei.txt",
+              "7070301_Telescope.txt"
+            ],
+            "improved_sources": [
+              "7070301_Telescope.txt",
+              "7070301_Telescope.txt",
+              "29688374_Galileo_Galilei.txt",
+              "7070301_Telescope.txt",
+              "29688374_Galileo_Galilei.txt"
+            ]
+          },
+          {
+            "id": "neutrino-force",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 3,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 4,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "633325_Neutrino_astronomy.txt",
+              "42644968_Void_astronomy.txt",
+              "633325_Neutrino_astronomy.txt",
+              "633325_Neutrino_astronomy.txt",
+              "34809573_Glossary_of_astronomy.txt"
+            ],
+            "improved_sources": [
+              "633325_Neutrino_astronomy.txt",
+              "633325_Neutrino_astronomy.txt",
+              "42644968_Void_astronomy.txt",
+              "34809573_Glossary_of_astronomy.txt",
+              "26751_Sun.txt"
+            ]
+          },
+          {
+            "id": "orion-stars",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "153797_Orion_constellation.txt",
+              "153797_Orion_constellation.txt",
+              "153797_Orion_constellation.txt",
+              "153797_Orion_constellation.txt",
+              "153797_Orion_constellation.txt"
+            ],
+            "improved_sources": [
+              "153797_Orion_constellation.txt",
+              "153797_Orion_constellation.txt",
+              "153797_Orion_constellation.txt",
+              "153797_Orion_constellation.txt",
+              "153797_Orion_constellation.txt"
+            ]
+          },
+          {
+            "id": "pleiades-location",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 3,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "56568_Pleiades.txt",
+              "1028265_Asterism_astronomy.txt",
+              "56568_Pleiades.txt",
+              "1028265_Asterism_astronomy.txt",
+              "56568_Pleiades.txt"
+            ],
+            "improved_sources": [
+              "56568_Pleiades.txt",
+              "56568_Pleiades.txt",
+              "1028265_Asterism_astronomy.txt",
+              "1028265_Asterism_astronomy.txt",
+              "3400190_Outline_of_astronomy.txt"
+            ]
+          },
+          {
+            "id": "jupiter-storm",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "38930_Jupiter.txt",
+              "38930_Jupiter.txt",
+              "19694_Mercury_planet.txt",
+              "38930_Jupiter.txt",
+              "19694_Mercury_planet.txt"
+            ],
+            "improved_sources": [
+              "38930_Jupiter.txt",
+              "38930_Jupiter.txt",
+              "38930_Jupiter.txt",
+              "19694_Mercury_planet.txt",
+              "19694_Mercury_planet.txt"
+            ]
+          },
+          {
+            "id": "mercury-size",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 4,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 3,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "19694_Mercury_planet.txt",
+              "19694_Mercury_planet.txt",
+              "3400190_Outline_of_astronomy.txt",
+              "34809573_Glossary_of_astronomy.txt",
+              "38930_Jupiter.txt"
+            ],
+            "improved_sources": [
+              "19694_Mercury_planet.txt",
+              "19694_Mercury_planet.txt",
+              "3400190_Outline_of_astronomy.txt",
+              "34809573_Glossary_of_astronomy.txt",
+              "3400190_Outline_of_astronomy.txt"
+            ]
+          },
+          {
+            "id": "private-password",
+            "unanswerable": true,
+            "baseline": {
+              "1": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 3,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 5,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 0,
+                "returned_chunks": 0
+              },
+              "3": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 0,
+                "returned_chunks": 0
+              },
+              "5": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 0,
+                "returned_chunks": 0
+              }
+            },
+            "baseline_sources": [
+              "43819148_Maya_astronomy.txt",
+              "1524517_Chinese_astronomy.txt",
+              "2781944_Indian_astronomy.txt",
+              "2589714_Milky_Way.txt",
+              "153797_Orion_constellation.txt"
+            ],
+            "improved_sources": []
+          },
+          {
+            "id": "private-package",
+            "unanswerable": true,
+            "baseline": {
+              "1": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 3,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 5,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 3,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 5,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "264337_Radar_astronomy.txt",
+              "748_Amateur_astronomy.txt",
+              "153797_Orion_constellation.txt",
+              "2039039_Spherical_astronomy.txt",
+              "11223000_Astronomy_for_Dogs.txt"
+            ],
+            "improved_sources": [
+              "748_Amateur_astronomy.txt",
+              "2039039_Spherical_astronomy.txt",
+              "264337_Radar_astronomy.txt",
+              "153797_Orion_constellation.txt",
+              "11223000_Astronomy_for_Dogs.txt"
+            ]
+          }
+        ],
+        "weight_sweep": {
+          "0": {
+            "document_recall@1": 0.8333333333333334,
+            "evidence_hit@1": 0.4166666666666667,
+            "document_recall@3": 1.0,
+            "evidence_hit@3": 0.6666666666666666,
+            "document_recall@5": 1.0,
+            "evidence_hit@5": 0.6666666666666666,
+            "unanswerable_returned_match_rate": 0.5
+          },
+          "0.01": {
+            "document_recall@1": 0.8333333333333334,
+            "evidence_hit@1": 0.4166666666666667,
+            "document_recall@3": 1.0,
+            "evidence_hit@3": 0.6666666666666666,
+            "document_recall@5": 1.0,
+            "evidence_hit@5": 0.6666666666666666,
+            "unanswerable_returned_match_rate": 0.5
+          },
+          "0.02": {
+            "document_recall@1": 0.8333333333333334,
+            "evidence_hit@1": 0.4166666666666667,
+            "document_recall@3": 1.0,
+            "evidence_hit@3": 0.6666666666666666,
+            "document_recall@5": 1.0,
+            "evidence_hit@5": 0.6666666666666666,
+            "unanswerable_returned_match_rate": 0.5
+          },
+          "0.03": {
+            "document_recall@1": 0.8333333333333334,
+            "evidence_hit@1": 0.4166666666666667,
+            "document_recall@3": 1.0,
+            "evidence_hit@3": 0.6666666666666666,
+            "document_recall@5": 1.0,
+            "evidence_hit@5": 0.6666666666666666,
+            "unanswerable_returned_match_rate": 0.5
+          },
+          "0.05": {
+            "document_recall@1": 0.8333333333333334,
+            "evidence_hit@1": 0.5,
+            "document_recall@3": 1.0,
+            "evidence_hit@3": 0.6666666666666666,
+            "document_recall@5": 1.0,
+            "evidence_hit@5": 0.6666666666666666,
+            "unanswerable_returned_match_rate": 0.5
+          },
+          "0.075": {
+            "document_recall@1": 0.8333333333333334,
+            "evidence_hit@1": 0.5,
+            "document_recall@3": 1.0,
+            "evidence_hit@3": 0.6666666666666666,
+            "document_recall@5": 1.0,
+            "evidence_hit@5": 0.6666666666666666,
+            "unanswerable_returned_match_rate": 0.5
+          },
+          "0.1": {
+            "document_recall@1": 0.8333333333333334,
+            "evidence_hit@1": 0.5,
+            "document_recall@3": 1.0,
+            "evidence_hit@3": 0.6666666666666666,
+            "document_recall@5": 1.0,
+            "evidence_hit@5": 0.6666666666666666,
+            "unanswerable_returned_match_rate": 0.5
+          },
+          "0.15": {
+            "document_recall@1": 0.9166666666666666,
+            "evidence_hit@1": 0.5,
+            "document_recall@3": 1.0,
+            "evidence_hit@3": 0.6666666666666666,
+            "document_recall@5": 1.0,
+            "evidence_hit@5": 0.6666666666666666,
+            "unanswerable_returned_match_rate": 0.5
+          }
+        },
+        "limitations": "Small hand-authored regression set, not a held-out generalization study. Source-document recall and gold-quote hit rate are distinct. Timings exclude embedding and database search."
+      }
+    },
+    {
+      "chunk_size": 384,
+      "overlap": 64,
+      "population": {
+        "files": 99,
+        "populated": 99,
+        "skipped": 0,
+        "empty": 0,
+        "chunks": 1835,
+        "model": "qwen3-embedding:0.6b"
+      },
+      "ingest_seconds": 44.73121514600007,
+      "evaluation": {
+        "generated_at": "2026-10-21T14:13:55.411788+00:00",
+        "dataset_sha256": "48bb65a5a0fa211945b395aff6690a3cbe352286e509cd28198093ed98f87c51",
+        "source_sha256": {
+          "26751_Sun.txt": "3bfc892871f1dcfe740daa46efd396d0f3332e03c226041ff51340c70309dd07",
+          "38579_Gravity.txt": "08ea0ec3cf0ebfb54191aea303ca8c033a2efb763995e4417be90b53ce9ce479",
+          "15736_Johannes_Kepler.txt": "e1f18597edfdf89333a5a859f206495616ddced84ce393e7e4b4144df772525b",
+          "2589714_Milky_Way.txt": "b2f475653715e318276798e69b6db0e36731b5a1c466bc8bddde2e7f5efba3f1",
+          "7070301_Telescope.txt": "71d75c71c03006d82c9d4fb5b1044a137760df329231898220abfad71fddbc0b",
+          "633325_Neutrino_astronomy.txt": "5c9407655cefc67c8d5c6ce891cc038993b7990434ece0c0efec6c66fa96fd9b",
+          "153797_Orion_constellation.txt": "7e47f7a619ce893b36479fca8e987f74648a67ed7c7656598da6b4d0a11e7848",
+          "56568_Pleiades.txt": "87c46480fcbf0c08b8508ac0a8cd188c33c9df5a63d5a750d204fc33f9bbb74c",
+          "38930_Jupiter.txt": "044fccbd38c9baeb7e3e7ef0a95806e70dde4dad780bf5e0679a6b435ce70050",
+          "19694_Mercury_planet.txt": "f5f970645d44c4f2556bc7c9a680057b6768317c7094c291811cf1e6585f22fc"
+        },
+        "embedding_model": "qwen3-embedding:0.6b",
+        "embedding_model_digest": "ac6da0dfba84a81fdbfbaf330198c33cd77c4cdfc53e8bc50eb581914a15621d",
+        "indexed_documents": 99,
+        "indexed_chunks": 1835,
+        "candidate_k": 40,
+        "min_similarity": 0.3,
+        "rerank_weight": 0.05,
+        "cases": 14,
+        "answerable_cases": 12,
+        "baseline": {
+          "document_recall@1": 0.8333333333333334,
+          "evidence_hit@1": 0.16666666666666666,
+          "document_recall@3": 1.0,
+          "evidence_hit@3": 0.75,
+          "document_recall@5": 1.0,
+          "evidence_hit@5": 0.9166666666666666,
+          "unanswerable_returned_match_rate": 1
+        },
+        "improved": {
+          "document_recall@1": 0.8333333333333334,
+          "evidence_hit@1": 0.3333333333333333,
+          "document_recall@3": 1.0,
+          "evidence_hit@3": 0.75,
+          "document_recall@5": 1.0,
+          "evidence_hit@5": 0.9166666666666666,
+          "unanswerable_returned_match_rate": 0.5
+        },
+        "mean_postprocessing_ms": 3.5412374997706917,
+        "results": [
+          {
+            "id": "sun-energy",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "26751_Sun.txt",
+              "26751_Sun.txt",
+              "633325_Neutrino_astronomy.txt",
+              "26751_Sun.txt",
+              "26751_Sun.txt"
+            ],
+            "improved_sources": [
+              "26751_Sun.txt",
+              "26751_Sun.txt",
+              "633325_Neutrino_astronomy.txt",
+              "26751_Sun.txt",
+              "26751_Sun.txt"
+            ]
+          },
+          {
+            "id": "sun-neutrinos",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "26751_Sun.txt",
+              "26751_Sun.txt",
+              "633325_Neutrino_astronomy.txt",
+              "633325_Neutrino_astronomy.txt",
+              "633325_Neutrino_astronomy.txt"
+            ],
+            "improved_sources": [
+              "26751_Sun.txt",
+              "26751_Sun.txt",
+              "633325_Neutrino_astronomy.txt",
+              "633325_Neutrino_astronomy.txt",
+              "633325_Neutrino_astronomy.txt"
+            ]
+          },
+          {
+            "id": "sun-history",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "26751_Sun.txt",
+              "26751_Sun.txt",
+              "38579_Gravity.txt",
+              "26751_Sun.txt",
+              "26751_Sun.txt"
+            ],
+            "improved_sources": [
+              "26751_Sun.txt",
+              "26751_Sun.txt",
+              "38579_Gravity.txt",
+              "26751_Sun.txt",
+              "26751_Sun.txt"
+            ]
+          },
+          {
+            "id": "gravity-relativity",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "38579_Gravity.txt",
+              "38579_Gravity.txt",
+              "38579_Gravity.txt",
+              "38579_Gravity.txt",
+              "38579_Gravity.txt"
+            ],
+            "improved_sources": [
+              "38579_Gravity.txt",
+              "38579_Gravity.txt",
+              "38579_Gravity.txt",
+              "38579_Gravity.txt",
+              "38579_Gravity.txt"
+            ]
+          },
+          {
+            "id": "kepler-assistant",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "15736_Johannes_Kepler.txt",
+              "15736_Johannes_Kepler.txt",
+              "15736_Johannes_Kepler.txt",
+              "2408446_Hebrew_astronomy.txt",
+              "15736_Johannes_Kepler.txt"
+            ],
+            "improved_sources": [
+              "15736_Johannes_Kepler.txt",
+              "15736_Johannes_Kepler.txt",
+              "15736_Johannes_Kepler.txt",
+              "2408446_Hebrew_astronomy.txt",
+              "15736_Johannes_Kepler.txt"
+            ]
+          },
+          {
+            "id": "milky-way-type",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 0.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 3,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 3,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 0.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 3,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 3,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "50650_Astronomy.txt",
+              "2589714_Milky_Way.txt",
+              "34809573_Glossary_of_astronomy.txt",
+              "2589714_Milky_Way.txt",
+              "2589714_Milky_Way.txt"
+            ],
+            "improved_sources": [
+              "34809573_Glossary_of_astronomy.txt",
+              "2589714_Milky_Way.txt",
+              "50650_Astronomy.txt",
+              "2589714_Milky_Way.txt",
+              "2589714_Milky_Way.txt"
+            ]
+          },
+          {
+            "id": "first-telescopes",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 4,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 4,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "7070301_Telescope.txt",
+              "7070301_Telescope.txt",
+              "29688374_Galileo_Galilei.txt",
+              "748_Amateur_astronomy.txt",
+              "30027_Tycho_Brahe.txt"
+            ],
+            "improved_sources": [
+              "7070301_Telescope.txt",
+              "7070301_Telescope.txt",
+              "29688374_Galileo_Galilei.txt",
+              "748_Amateur_astronomy.txt",
+              "30027_Tycho_Brahe.txt"
+            ]
+          },
+          {
+            "id": "neutrino-force",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 3,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 3,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "633325_Neutrino_astronomy.txt",
+              "42644968_Void_astronomy.txt",
+              "633325_Neutrino_astronomy.txt",
+              "633325_Neutrino_astronomy.txt",
+              "26751_Sun.txt"
+            ],
+            "improved_sources": [
+              "633325_Neutrino_astronomy.txt",
+              "633325_Neutrino_astronomy.txt",
+              "42644968_Void_astronomy.txt",
+              "26751_Sun.txt",
+              "633325_Neutrino_astronomy.txt"
+            ]
+          },
+          {
+            "id": "orion-stars",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "153797_Orion_constellation.txt",
+              "153797_Orion_constellation.txt",
+              "153797_Orion_constellation.txt",
+              "153797_Orion_constellation.txt",
+              "153797_Orion_constellation.txt"
+            ],
+            "improved_sources": [
+              "153797_Orion_constellation.txt",
+              "153797_Orion_constellation.txt",
+              "153797_Orion_constellation.txt",
+              "153797_Orion_constellation.txt",
+              "153797_Orion_constellation.txt"
+            ]
+          },
+          {
+            "id": "pleiades-location",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 0.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 3,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 0.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 3,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "1028265_Asterism_astronomy.txt",
+              "56568_Pleiades.txt",
+              "56568_Pleiades.txt",
+              "1028265_Asterism_astronomy.txt",
+              "3400190_Outline_of_astronomy.txt"
+            ],
+            "improved_sources": [
+              "1028265_Asterism_astronomy.txt",
+              "56568_Pleiades.txt",
+              "56568_Pleiades.txt",
+              "56568_Pleiades.txt",
+              "3400190_Outline_of_astronomy.txt"
+            ]
+          },
+          {
+            "id": "jupiter-storm",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "38930_Jupiter.txt",
+              "38930_Jupiter.txt",
+              "38930_Jupiter.txt",
+              "19694_Mercury_planet.txt",
+              "38930_Jupiter.txt"
+            ],
+            "improved_sources": [
+              "38930_Jupiter.txt",
+              "38930_Jupiter.txt",
+              "38930_Jupiter.txt",
+              "38930_Jupiter.txt",
+              "19694_Mercury_planet.txt"
+            ]
+          },
+          {
+            "id": "mercury-size",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 3,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 3,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "19694_Mercury_planet.txt",
+              "19694_Mercury_planet.txt",
+              "3400190_Outline_of_astronomy.txt",
+              "34809573_Glossary_of_astronomy.txt",
+              "34809573_Glossary_of_astronomy.txt"
+            ],
+            "improved_sources": [
+              "19694_Mercury_planet.txt",
+              "19694_Mercury_planet.txt",
+              "3400190_Outline_of_astronomy.txt",
+              "34809573_Glossary_of_astronomy.txt",
+              "34809573_Glossary_of_astronomy.txt"
+            ]
+          },
+          {
+            "id": "private-password",
+            "unanswerable": true,
+            "baseline": {
+              "1": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 3,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 4,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 0,
+                "returned_chunks": 0
+              },
+              "3": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 0,
+                "returned_chunks": 0
+              },
+              "5": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 0,
+                "returned_chunks": 0
+              }
+            },
+            "baseline_sources": [
+              "27582693_Forensic_astronomy.txt",
+              "4536514_Babylonian_astronomy.txt",
+              "200006_Epoch_astronomy.txt",
+              "153797_Orion_constellation.txt",
+              "27582693_Forensic_astronomy.txt"
+            ],
+            "improved_sources": []
+          },
+          {
+            "id": "private-package",
+            "unanswerable": true,
+            "baseline": {
+              "1": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 3,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 5,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 3,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 5,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "264337_Radar_astronomy.txt",
+              "153797_Orion_constellation.txt",
+              "2624555_Astronomy_magazine.txt",
+              "2039039_Spherical_astronomy.txt",
+              "11223000_Astronomy_for_Dogs.txt"
+            ],
+            "improved_sources": [
+              "2039039_Spherical_astronomy.txt",
+              "66111_Saros_astronomy.txt",
+              "264337_Radar_astronomy.txt",
+              "153797_Orion_constellation.txt",
+              "2624555_Astronomy_magazine.txt"
+            ]
+          }
+        ],
+        "weight_sweep": {
+          "0": {
+            "document_recall@1": 0.8333333333333334,
+            "evidence_hit@1": 0.16666666666666666,
+            "document_recall@3": 1.0,
+            "evidence_hit@3": 0.75,
+            "document_recall@5": 1.0,
+            "evidence_hit@5": 0.9166666666666666,
+            "unanswerable_returned_match_rate": 0.5
+          },
+          "0.01": {
+            "document_recall@1": 0.8333333333333334,
+            "evidence_hit@1": 0.16666666666666666,
+            "document_recall@3": 1.0,
+            "evidence_hit@3": 0.75,
+            "document_recall@5": 1.0,
+            "evidence_hit@5": 0.9166666666666666,
+            "unanswerable_returned_match_rate": 0.5
+          },
+          "0.02": {
+            "document_recall@1": 0.8333333333333334,
+            "evidence_hit@1": 0.16666666666666666,
+            "document_recall@3": 1.0,
+            "evidence_hit@3": 0.75,
+            "document_recall@5": 1.0,
+            "evidence_hit@5": 0.9166666666666666,
+            "unanswerable_returned_match_rate": 0.5
+          },
+          "0.03": {
+            "document_recall@1": 0.8333333333333334,
+            "evidence_hit@1": 0.16666666666666666,
+            "document_recall@3": 1.0,
+            "evidence_hit@3": 0.75,
+            "document_recall@5": 1.0,
+            "evidence_hit@5": 0.9166666666666666,
+            "unanswerable_returned_match_rate": 0.5
+          },
+          "0.05": {
+            "document_recall@1": 0.8333333333333334,
+            "evidence_hit@1": 0.3333333333333333,
+            "document_recall@3": 1.0,
+            "evidence_hit@3": 0.75,
+            "document_recall@5": 1.0,
+            "evidence_hit@5": 0.9166666666666666,
+            "unanswerable_returned_match_rate": 0.5
+          },
+          "0.075": {
+            "document_recall@1": 0.8333333333333334,
+            "evidence_hit@1": 0.3333333333333333,
+            "document_recall@3": 1.0,
+            "evidence_hit@3": 0.75,
+            "document_recall@5": 1.0,
+            "evidence_hit@5": 0.9166666666666666,
+            "unanswerable_returned_match_rate": 0.5
+          },
+          "0.1": {
+            "document_recall@1": 0.8333333333333334,
+            "evidence_hit@1": 0.3333333333333333,
+            "document_recall@3": 1.0,
+            "evidence_hit@3": 0.75,
+            "document_recall@5": 1.0,
+            "evidence_hit@5": 0.8333333333333334,
+            "unanswerable_returned_match_rate": 0.5
+          },
+          "0.15": {
+            "document_recall@1": 0.8333333333333334,
+            "evidence_hit@1": 0.4166666666666667,
+            "document_recall@3": 1.0,
+            "evidence_hit@3": 0.75,
+            "document_recall@5": 1.0,
+            "evidence_hit@5": 0.8333333333333334,
+            "unanswerable_returned_match_rate": 0.5
+          }
+        },
+        "limitations": "Small hand-authored regression set, not a held-out generalization study. Source-document recall and gold-quote hit rate are distinct. Timings exclude embedding and database search."
+      }
+    },
+    {
+      "chunk_size": 512,
+      "overlap": 64,
+      "population": {
+        "files": 99,
+        "populated": 99,
+        "skipped": 0,
+        "empty": 0,
+        "chunks": 1548,
+        "model": "qwen3-embedding:0.6b"
+      },
+      "ingest_seconds": 40.91707146000044,
+      "evaluation": {
+        "generated_at": "2026-10-21T14:14:37.629215+00:00",
+        "dataset_sha256": "48bb65a5a0fa211945b395aff6690a3cbe352286e509cd28198093ed98f87c51",
+        "source_sha256": {
+          "26751_Sun.txt": "3bfc892871f1dcfe740daa46efd396d0f3332e03c226041ff51340c70309dd07",
+          "38579_Gravity.txt": "08ea0ec3cf0ebfb54191aea303ca8c033a2efb763995e4417be90b53ce9ce479",
+          "15736_Johannes_Kepler.txt": "e1f18597edfdf89333a5a859f206495616ddced84ce393e7e4b4144df772525b",
+          "2589714_Milky_Way.txt": "b2f475653715e318276798e69b6db0e36731b5a1c466bc8bddde2e7f5efba3f1",
+          "7070301_Telescope.txt": "71d75c71c03006d82c9d4fb5b1044a137760df329231898220abfad71fddbc0b",
+          "633325_Neutrino_astronomy.txt": "5c9407655cefc67c8d5c6ce891cc038993b7990434ece0c0efec6c66fa96fd9b",
+          "153797_Orion_constellation.txt": "7e47f7a619ce893b36479fca8e987f74648a67ed7c7656598da6b4d0a11e7848",
+          "56568_Pleiades.txt": "87c46480fcbf0c08b8508ac0a8cd188c33c9df5a63d5a750d204fc33f9bbb74c",
+          "38930_Jupiter.txt": "044fccbd38c9baeb7e3e7ef0a95806e70dde4dad780bf5e0679a6b435ce70050",
+          "19694_Mercury_planet.txt": "f5f970645d44c4f2556bc7c9a680057b6768317c7094c291811cf1e6585f22fc"
+        },
+        "embedding_model": "qwen3-embedding:0.6b",
+        "embedding_model_digest": "ac6da0dfba84a81fdbfbaf330198c33cd77c4cdfc53e8bc50eb581914a15621d",
+        "indexed_documents": 99,
+        "indexed_chunks": 1548,
+        "candidate_k": 40,
+        "min_similarity": 0.3,
+        "rerank_weight": 0.05,
+        "cases": 14,
+        "answerable_cases": 12,
+        "baseline": {
+          "document_recall@1": 1.0,
+          "evidence_hit@1": 0.5,
+          "document_recall@3": 1.0,
+          "evidence_hit@3": 0.8333333333333334,
+          "document_recall@5": 1.0,
+          "evidence_hit@5": 0.9166666666666666,
+          "unanswerable_returned_match_rate": 1
+        },
+        "improved": {
+          "document_recall@1": 1.0,
+          "evidence_hit@1": 0.5833333333333334,
+          "document_recall@3": 1.0,
+          "evidence_hit@3": 0.8333333333333334,
+          "document_recall@5": 1.0,
+          "evidence_hit@5": 0.9166666666666666,
+          "unanswerable_returned_match_rate": 0.5
+        },
+        "mean_postprocessing_ms": 4.00231771430169,
+        "results": [
+          {
+            "id": "sun-energy",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "26751_Sun.txt",
+              "26751_Sun.txt",
+              "26751_Sun.txt",
+              "633325_Neutrino_astronomy.txt",
+              "26751_Sun.txt"
+            ],
+            "improved_sources": [
+              "26751_Sun.txt",
+              "26751_Sun.txt",
+              "26751_Sun.txt",
+              "633325_Neutrino_astronomy.txt",
+              "26751_Sun.txt"
+            ]
+          },
+          {
+            "id": "sun-neutrinos",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "26751_Sun.txt",
+              "633325_Neutrino_astronomy.txt",
+              "633325_Neutrino_astronomy.txt",
+              "633325_Neutrino_astronomy.txt",
+              "633325_Neutrino_astronomy.txt"
+            ],
+            "improved_sources": [
+              "26751_Sun.txt",
+              "633325_Neutrino_astronomy.txt",
+              "633325_Neutrino_astronomy.txt",
+              "633325_Neutrino_astronomy.txt",
+              "633325_Neutrino_astronomy.txt"
+            ]
+          },
+          {
+            "id": "sun-history",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 3,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "26751_Sun.txt",
+              "26751_Sun.txt",
+              "26751_Sun.txt",
+              "15736_Johannes_Kepler.txt",
+              "26751_Sun.txt"
+            ],
+            "improved_sources": [
+              "26751_Sun.txt",
+              "26751_Sun.txt",
+              "26751_Sun.txt",
+              "38579_Gravity.txt",
+              "15736_Johannes_Kepler.txt"
+            ]
+          },
+          {
+            "id": "gravity-relativity",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "38579_Gravity.txt",
+              "38579_Gravity.txt",
+              "38579_Gravity.txt",
+              "38579_Gravity.txt",
+              "38579_Gravity.txt"
+            ],
+            "improved_sources": [
+              "38579_Gravity.txt",
+              "38579_Gravity.txt",
+              "38579_Gravity.txt",
+              "38579_Gravity.txt",
+              "38579_Gravity.txt"
+            ]
+          },
+          {
+            "id": "kepler-assistant",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "15736_Johannes_Kepler.txt",
+              "15736_Johannes_Kepler.txt",
+              "15736_Johannes_Kepler.txt",
+              "15736_Johannes_Kepler.txt",
+              "15736_Johannes_Kepler.txt"
+            ],
+            "improved_sources": [
+              "15736_Johannes_Kepler.txt",
+              "15736_Johannes_Kepler.txt",
+              "15736_Johannes_Kepler.txt",
+              "15736_Johannes_Kepler.txt",
+              "15736_Johannes_Kepler.txt"
+            ]
+          },
+          {
+            "id": "milky-way-type",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 3,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 3,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 3,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "2589714_Milky_Way.txt",
+              "50650_Astronomy.txt",
+              "34809573_Glossary_of_astronomy.txt",
+              "2589714_Milky_Way.txt",
+              "2589714_Milky_Way.txt"
+            ],
+            "improved_sources": [
+              "2589714_Milky_Way.txt",
+              "34809573_Glossary_of_astronomy.txt",
+              "2589714_Milky_Way.txt",
+              "50650_Astronomy.txt",
+              "2589714_Milky_Way.txt"
+            ]
+          },
+          {
+            "id": "first-telescopes",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 4,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 4,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "7070301_Telescope.txt",
+              "7070301_Telescope.txt",
+              "29688374_Galileo_Galilei.txt",
+              "748_Amateur_astronomy.txt",
+              "50650_Astronomy.txt"
+            ],
+            "improved_sources": [
+              "7070301_Telescope.txt",
+              "7070301_Telescope.txt",
+              "29688374_Galileo_Galilei.txt",
+              "748_Amateur_astronomy.txt",
+              "50650_Astronomy.txt"
+            ]
+          },
+          {
+            "id": "neutrino-force",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "633325_Neutrino_astronomy.txt",
+              "42644968_Void_astronomy.txt",
+              "633325_Neutrino_astronomy.txt",
+              "633325_Neutrino_astronomy.txt",
+              "633325_Neutrino_astronomy.txt"
+            ],
+            "improved_sources": [
+              "633325_Neutrino_astronomy.txt",
+              "633325_Neutrino_astronomy.txt",
+              "42644968_Void_astronomy.txt",
+              "633325_Neutrino_astronomy.txt",
+              "633325_Neutrino_astronomy.txt"
+            ]
+          },
+          {
+            "id": "orion-stars",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "153797_Orion_constellation.txt",
+              "153797_Orion_constellation.txt",
+              "153797_Orion_constellation.txt",
+              "153797_Orion_constellation.txt",
+              "153797_Orion_constellation.txt"
+            ],
+            "improved_sources": [
+              "153797_Orion_constellation.txt",
+              "153797_Orion_constellation.txt",
+              "153797_Orion_constellation.txt",
+              "153797_Orion_constellation.txt",
+              "153797_Orion_constellation.txt"
+            ]
+          },
+          {
+            "id": "pleiades-location",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 3,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 3,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "56568_Pleiades.txt",
+              "56568_Pleiades.txt",
+              "1028265_Asterism_astronomy.txt",
+              "5267_Constellation.txt",
+              "56568_Pleiades.txt"
+            ],
+            "improved_sources": [
+              "56568_Pleiades.txt",
+              "56568_Pleiades.txt",
+              "5267_Constellation.txt",
+              "56568_Pleiades.txt",
+              "1028265_Asterism_astronomy.txt"
+            ]
+          },
+          {
+            "id": "jupiter-storm",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 1,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "38930_Jupiter.txt",
+              "38930_Jupiter.txt",
+              "38930_Jupiter.txt",
+              "19694_Mercury_planet.txt",
+              "38930_Jupiter.txt"
+            ],
+            "improved_sources": [
+              "38930_Jupiter.txt",
+              "38930_Jupiter.txt",
+              "38930_Jupiter.txt",
+              "19694_Mercury_planet.txt",
+              "38930_Jupiter.txt"
+            ]
+          },
+          {
+            "id": "mercury-size",
+            "unanswerable": false,
+            "baseline": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 4,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": 1.0,
+                "evidence_hit": false,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 2,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": 1.0,
+                "evidence_hit": true,
+                "unique_documents": 4,
+                "returned_chunks": 5
+              }
+            },
+            "baseline_sources": [
+              "19694_Mercury_planet.txt",
+              "3400190_Outline_of_astronomy.txt",
+              "19694_Mercury_planet.txt",
+              "1490148_Perturbation_astronomy.txt",
+              "34809573_Glossary_of_astronomy.txt"
+            ],
+            "improved_sources": [
+              "19694_Mercury_planet.txt",
+              "19694_Mercury_planet.txt",
+              "3400190_Outline_of_astronomy.txt",
+              "1490148_Perturbation_astronomy.txt",
+              "34809573_Glossary_of_astronomy.txt"
+            ]
+          },
+          {
+            "id": "private-password",
+            "unanswerable": true,
+            "baseline": {
+              "1": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 3,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 4,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 0,
+                "returned_chunks": 0
+              },
+              "3": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 0,
+                "returned_chunks": 0
+              },
+              "5": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 0,
+                "returned_chunks": 0
+              }
+            },
+            "baseline_sources": [
+              "27582693_Forensic_astronomy.txt",
+              "2781944_Indian_astronomy.txt",
+              "153797_Orion_constellation.txt",
+              "79872883_Little_Astronomy.txt",
+              "27582693_Forensic_astronomy.txt"
+            ],
+            "improved_sources": []
+          },
+          {
+            "id": "private-package",
+            "unanswerable": true,
+            "baseline": {
+              "1": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 3,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 5,
+                "returned_chunks": 5
+              }
+            },
+            "improved": {
+              "1": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 1,
+                "returned_chunks": 1
+              },
+              "3": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 3,
+                "returned_chunks": 3
+              },
+              "5": {
+                "document_recall": null,
+                "evidence_hit": null,
+                "unique_documents": 4,
+                "returned_chunks": 4
+              }
+            },
+            "baseline_sources": [
+              "264337_Radar_astronomy.txt",
+              "153797_Orion_constellation.txt",
+              "2039039_Spherical_astronomy.txt",
+              "11223000_Astronomy_for_Dogs.txt",
+              "1731800_Triquetrum_astronomy.txt"
+            ],
+            "improved_sources": [
+              "2039039_Spherical_astronomy.txt",
+              "264337_Radar_astronomy.txt",
+              "153797_Orion_constellation.txt",
+              "11223000_Astronomy_for_Dogs.txt"
+            ]
+          }
+        ],
+        "weight_sweep": {
+          "0": {
+            "document_recall@1": 1.0,
+            "evidence_hit@1": 0.5,
+            "document_recall@3": 1.0,
+            "evidence_hit@3": 0.8333333333333334,
+            "document_recall@5": 1.0,
+            "evidence_hit@5": 0.9166666666666666,
+            "unanswerable_returned_match_rate": 0.5
+          },
+          "0.01": {
+            "document_recall@1": 1.0,
+            "evidence_hit@1": 0.5,
+            "document_recall@3": 1.0,
+            "evidence_hit@3": 0.8333333333333334,
+            "document_recall@5": 1.0,
+            "evidence_hit@5": 0.9166666666666666,
+            "unanswerable_returned_match_rate": 0.5
+          },
+          "0.02": {
+            "document_recall@1": 1.0,
+            "evidence_hit@1": 0.5,
+            "document_recall@3": 1.0,
+            "evidence_hit@3": 0.8333333333333334,
+            "document_recall@5": 1.0,
+            "evidence_hit@5": 0.9166666666666666,
+            "unanswerable_returned_match_rate": 0.5
+          },
+          "0.03": {
+            "document_recall@1": 1.0,
+            "evidence_hit@1": 0.5833333333333334,
+            "document_recall@3": 1.0,
+            "evidence_hit@3": 0.8333333333333334,
+            "document_recall@5": 1.0,
+            "evidence_hit@5": 0.9166666666666666,
+            "unanswerable_returned_match_rate": 0.5
+          },
+          "0.05": {
+            "document_recall@1": 1.0,
+            "evidence_hit@1": 0.5833333333333334,
+            "document_recall@3": 1.0,
+            "evidence_hit@3": 0.8333333333333334,
+            "document_recall@5": 1.0,
+            "evidence_hit@5": 0.9166666666666666,
+            "unanswerable_returned_match_rate": 0.5
+          },
+          "0.075": {
+            "document_recall@1": 0.9166666666666666,
+            "evidence_hit@1": 0.5,
+            "document_recall@3": 1.0,
+            "evidence_hit@3": 0.8333333333333334,
+            "document_recall@5": 1.0,
+            "evidence_hit@5": 0.8333333333333334,
+            "unanswerable_returned_match_rate": 0.5
+          },
+          "0.1": {
+            "document_recall@1": 0.9166666666666666,
+            "evidence_hit@1": 0.5,
+            "document_recall@3": 1.0,
+            "evidence_hit@3": 0.8333333333333334,
+            "document_recall@5": 1.0,
+            "evidence_hit@5": 0.8333333333333334,
+            "unanswerable_returned_match_rate": 0.5
+          },
+          "0.15": {
+            "document_recall@1": 0.9166666666666666,
+            "evidence_hit@1": 0.5,
+            "document_recall@3": 1.0,
+            "evidence_hit@3": 0.8333333333333334,
+            "document_recall@5": 1.0,
+            "evidence_hit@5": 0.8333333333333334,
+            "unanswerable_returned_match_rate": 0.5
+          }
+        },
+        "limitations": "Small hand-authored regression set, not a held-out generalization study. Source-document recall and gold-quote hit rate are distinct. Timings exclude embedding and database search."
+      }
+    }
+  ],
+  "selected": {
+    "chunk_size": 512,
+    "overlap": 64
+  },
+  "selection_rule": "Maximize gold evidence hit@3; break ties by fewer unanswerable false matches, then evidence hit@1, then fewer chunks.",
+  "limitations": "Exploratory optimization on the same small regression set; no held-out claim. Timings include actual embedding and storage, and can vary with cache/model residency. Public corpus is unchanged by tuning.",
+  "applied_validation": {
+    "documents": 99,
+    "chunks": 1548,
+    "max_tokens": 512,
+    "mean_tokens": 260.99289405684755,
+    "chunks_with_headings": 1442,
+    "metadata_records_verified": 99,
+    "source_slices_and_coverage_verified": true,
+    "rerun_skipped": 99,
+    "chunker_sha256": "5a15af52f8964d75d5500becfffb135d972e98cd1bfc589cb983560dba541bea",
+    "note": "Explicitly compared settings were applied as the new defaults after calibration; this records the final default-bearing source file.",
+    "source_files_unchanged": 101,
+    "stored_records_match_current_chunker": true
+  }
+}

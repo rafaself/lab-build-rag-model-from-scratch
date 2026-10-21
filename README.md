@@ -13,6 +13,8 @@ A local study project using Ollama, PostgreSQL, and pgvector. The commands cover
 | `src/rag_lab/extraction.py` | Optional Docling document extraction |
 | `src/rag_lab/corpus.py` | Resumable Wikipedia corpus collection |
 | `src/rag_lab/populate.py` | Chunk text files, generate embeddings, and populate pgvector |
+| `src/rag_lab/chunking.py` | Pinned Qwen tokenization, structural boundaries, and source offsets |
+| `src/rag_lab/tune_chunking.py` | Real chunk-size/overlap comparison in temporary schemas |
 | `src/rag_lab/pull.py` | Retrieve stored chunks by semantic similarity |
 | `src/rag_lab/retrieval.py` | Similarity filtering, duplicate removal, and lexical reranking |
 | `src/rag_lab/evaluate.py` | Source-checked retrieval benchmark and calibration |
@@ -42,7 +44,7 @@ Document extraction is optional and has larger dependencies:
 python -m pip install -e ".[documents]"
 ```
 
-Docling is loaded only for extraction. Some document formats may download conversion models on first use.
+Docling is loaded only for extraction. It exports Markdown so headings, paragraphs, lists, and tables survive into chunking. Some document formats may download conversion models on first use.
 
 ## Configuration
 
@@ -81,6 +83,7 @@ Commands read `.env` from the project root automatically. Exported shell variabl
 | Retrieve relevant text | `rag-lab pull "How do telescopes work?" --top-k 3` |
 | Ask with retrieved context | `rag-lab ask "What powers the Sun?"` |
 | Evaluate retrieval quality | `rag-lab evaluate --output reports/retrieval-quality.json` |
+| Compare token chunking settings | `rag-lab tune-chunking --output reports/chunking-comparison.json` |
 | Show options | `rag-lab --help` |
 
 `python -m rag_lab` is equivalent to `rag-lab`. Importing the package makes no database, model, or document requests.
@@ -110,18 +113,19 @@ rag-lab populate --limit 1
 rag-lab populate
 ```
 
-The script is also runnable with `python -m rag_lab.populate`. It reads UTF-8 `.txt` files recursively from `CORPUS_DIR` (by default `astronomy_corpus`); JSON metadata files are ignored. For PDFs or other formats, run `rag-lab extract` first and save the text under an input directory.
+The script is also runnable with `python -m rag_lab.populate`. It reads UTF-8 `.txt` and `.md` files recursively from `CORPUS_DIR` (by default `astronomy_corpus`); file symlinks are excluded. JSON files are not embedded. An optional `metadata.json` list supplies per-file metadata by its `filename` field; all record fields are preserved. For PDFs or other formats, run `rag-lab extract` first and save the Markdown output under an input directory.
 
 ```bash
-rag-lab populate --input-dir ./data --chunk-size 300 --overlap 50 --batch-size 16
+rag-lab populate --input-dir ./data --chunk-size 512 --overlap 64 --batch-size 16
 ```
 
 | Option | Default / behavior |
 | --- | --- |
 | `--input-dir` | `CORPUS_DIR` from configuration |
 | `--model` | `OLLAMA_EMBED_MODEL`; use an embedding model |
-| `--chunk-size` | 300 words per chunk |
-| `--overlap` | 50 words shared between adjacent chunks; must be smaller than chunk size |
+| `--chunk-size` | At most 512 Qwen tokens per chunk; allowed range 1–8192 |
+| `--overlap` | Target of 64 overlapping tokens; must be smaller than chunk size |
+| `--strategy` | `tokens` by default; `words` reproduces the old baseline |
 | `--batch-size` | 16 chunks per Ollama request |
 | `--limit` | Process only the first N files, sorted by path |
 | `--force` | Re-embed unchanged files for the selected model |
@@ -130,10 +134,16 @@ The command creates two tables automatically; pgvector must already be enabled b
 
 | Table | Stored information |
 | --- | --- |
-| `rag_documents` | Absolute source path, model name, content SHA-256, chunk settings, dimensions, and chunk count |
-| `rag_chunks` | Source path, model name, zero-based chunk index, text, and embedding vector |
+| `rag_documents` | Source path, model, content SHA-256, chunk settings/tokenizer revision, dimensions, count, and original document metadata |
+| `rag_chunks` | Source/model/index, exact original text slice, vector, character offsets, token count, and hierarchical heading path |
 
 Source path and model identify each document. Unchanged content and chunk settings are skipped; changed documents replace their old chunks in one transaction. Each document commits separately, so an interrupted run can resume. An embedding or database failure stops the command with a nonzero exit status; previously committed documents remain saved. Empty files retain any previous rows, and deleting source files does not remove their stored data.
+
+The default chunker counts tokens with Hugging Face's `tokenizers` and the [Qwen3 embedding vocabulary](https://huggingface.co/Qwen/Qwen3-Embedding-0.6B), pinned to revision `97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3`. First use downloads only `tokenizer.json` (about 11 MB) into ignored `.cache/huggingface`; subsequent use can use the cache. No model repository code is executed. Counts remain Qwen-token units when using another embedding-model family through `--model`; oversized inputs still fail instead of truncating.
+
+Chunks prefer nearby sentence/paragraph endings and separate substantive Markdown ATX or Wikipedia sections. Empty heading-only blocks are attached to adjacent content rather than indexed as independent facts. The heading hierarchy stays with each chunk. Text is sliced directly from the source, with Python character offsets and intact Unicode characters; overlap is a target and can shift slightly at Unicode boundaries. A source character that cannot fit an unusually tiny chunk size produces an error. Counts exclude special tokens added by the embedding service.
+
+Population adds the metadata columns to older lab tables without deleting rows. An older index needs `populate` again to replace word windows with token chunks; the strategy/tokenizer revision participate in resume checks. Existing rows keep null offsets until reindexed. To reproduce the legacy comparison explicitly, use `rag-lab populate --strategy words --chunk-size 300 --overlap 50` (this replaces the selected model's indexed chunks).
 
 Model names are stored separately, and the vector column accepts the dimensions returned by the chosen model. Filter by the same model when implementing retrieval. If you replace a model's weights under the same tag, rerun with `--force`. This lab does not create a vector search index yet.
 
@@ -176,6 +186,8 @@ Output is JSON containing the query, model, and a `matches` list. Each match con
 | `similarity` | Cosine similarity (`1 - distance`); higher is closer, not a probability |
 | `rerank_score` | Ranking score after optional lexical reranking; not a probability |
 | `text` | Full stored chunk, ready to use as context |
+| `start_char`, `end_char` | Original text character range; null for old word windows |
+| `token_count`, `heading_path`, `metadata` | Qwen token count, structural context, and original document metadata |
 
 Only vectors from the selected model and matching dimensions are compared. No documents for the selected model produces an empty list; missing tables produce an error directing you to `rag-lab populate`. Query dimensions that disagree with stored documents produce a clear error. If you change model weights under the same tag, re-populate with `--force` first.
 
@@ -205,6 +217,8 @@ rag-lab ask "How do telescopes work?" --chat-model qwen3:0.6b --top-k 3
 
 Each generated claim must cite an actual supplied source and contain a verbatim supporting quote. A separate model call checks whether the quote supports the entire claim. Invalid individual claims (including fabricated quotes or unknown citations) and unsupported claims are removed; insufficient evidence produces `status: "abstained"`. Malformed top-level responses, truncated output, and invalid grounding verdicts fail with an error. Rejection counts are included in the JSON result. The `sources` array maps citations to source paths, chunk indices, similarity scores, and the excerpts actually shown to the model. `claims` includes the evidence quotes.
 
+Paragraphs and headings are preserved in model context. `start_char`/`end_char` refer to the complete stored chunk; `excerpt_start_char`/`excerpt_end_char` identify the actual excerpt when it is clipped for the context budget. Evidence quotes are checked word-for-word with whitespace normalized.
+
 The structured request disables thinking and uses an 8192-token context window; generation still has a finite budget. Large contexts or complex questions can require a smaller model, fewer chunks, or a larger `--max-tokens` value.
 
 Retrieved text and the question stay in an untrusted JSON payload, separate from the fixed system instructions. No tools, database credentials, or local file-reading capability are given to the model. Context and output sizes are bounded. These are safeguards, not a guarantee against prompt injection or hallucination: the grounding checker is also a model, and valid citations alone do not prove an answer is true. See the [development roadmap](docs/ROADMAP.md) for the remaining evaluation and security work.
@@ -217,7 +231,26 @@ rag-lab evaluate --output reports/retrieval-quality.json
 
 The [14-case regression dataset](benchmarks/questions.jsonl) has questions, expected answers, source filenames, and gold evidence quotes (12 answerable, two unanswerable). Evaluation verifies local quotes and indexed source hashes first, then compares raw vector ranking against filtered/deduplicated/reranked candidates. It records document Recall@1/3/5, gold-quote hit rates, and unanswerable queries that still return a match. Answer accuracy and faithfulness evaluation are still pending.
 
-The [measured report](reports/retrieval-quality.json) records dataset/source hashes, embedding model digest, 40-candidate pool, 0.3 threshold, and a reproducible weight sweep. On this small set, 5% lexical weighting increased evidence hits at rank 1 from 4/12 to 5/12 while keeping hits within the top 3 at 11/12. One of two unanswerable questions still returned a match. Document Recall@K was already 100%, so that metric alone concealed passage-level mistakes. These are exploratory calibration results on the same cases, not held-out generalization claims. Postprocessing timing excludes embedding and database search.
+The [historical word-window report](reports/retrieval-quality.json) records dataset/source hashes, embedding model digest, 40-candidate pool, 0.3 threshold, and a reproducible weight sweep. On this small set, 5% lexical weighting increased evidence hits at rank 1 from 4/12 to 5/12 while keeping hits within the top 3 at 11/12. One of two unanswerable questions still returned a match. Document Recall@K was already 100%, so that metric alone concealed passage-level mistakes. These are exploratory calibration results on the same cases, not held-out generalization claims. Postprocessing timing excludes embedding and database search. The [current token-chunk report](reports/retrieval-token-chunks.json) records the applied token index separately.
+
+## Chunking comparison
+
+```bash
+rag-lab tune-chunking --output reports/chunking-comparison.json
+```
+
+This command embeds the full corpus with three token-size/overlap combinations in temporary schemas, evaluates each, and drops those schemas even on a handled failure. It requires schema creation permissions. It does not replace the current indexed corpus; only the additive metadata-column upgrade may occur before comparison. Runtime and model residency affect the measured ingestion times. The selected setting maximizes gold evidence hit@3, then reduces false matches, then improves hit@1, then favors fewer chunks.
+
+The [comparison report](reports/chunking-comparison.json) includes the word-window baseline, full per-configuration metrics, tokenizer revision, source hashes, measured ingestion times, and validation of the applied defaults. The [preliminary run](reports/chunking-preliminary.json) records the issue found before empty heading blocks were coalesced.
+
+| Strategy / size / overlap | Chunks | Evidence hit@1 | Evidence hit@3 | Evidence hit@5 |
+| --- | ---: | ---: | ---: | ---: |
+| Word baseline, 300 / 50 | 1104 | 5/12 | 11/12 | 11/12 |
+| Qwen tokens, 256 / 32 | 2340 | 6/12 | 8/12 | 8/12 |
+| Qwen tokens, 384 / 64 | 1835 | 4/12 | 9/12 | 11/12 |
+| Qwen tokens, 512 / 64 (selected) | 1548 | 7/12 | 10/12 | 11/12 |
+
+All configurations reached document Recall@3 of 100%; one of two unanswerable queries still returned a match. The selected token configuration improves first-result evidence matches and preserves structure with hard token bounds, but its top-three gold-quote coverage is below the word baseline. This tradeoff is retained explicitly; the comparison does not prove global optimality or better performance on unseen questions.
 
 ## Local PostgreSQL
 

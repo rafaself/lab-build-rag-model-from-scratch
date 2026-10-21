@@ -49,7 +49,11 @@ def pull_chunks(
         if len(vector) not in dimensions:
             raise RuntimeError("Query and stored embeddings have different dimensions. Check --model and re-populate with --force if the model changed.")
         distance = chunks.c.embedding.cosine_distance(vector).label("distance")
-        statement = select(chunks.c.source, chunks.c.chunk_index, chunks.c.content, distance).where(
+        statement = select(chunks.c.source, chunks.c.chunk_index, chunks.c.content, distance,
+                           chunks.c.start_char, chunks.c.end_char, chunks.c.token_count,
+                           chunks.c.heading_path, documents.c.source_metadata).select_from(chunks.join(
+            documents, (chunks.c.source == documents.c.source) & (chunks.c.model == documents.c.model),
+        )).where(
             chunks.c.model == model,
             func.vector_dims(chunks.c.embedding) == len(vector),
         ).order_by(distance, chunks.c.source, chunks.c.chunk_index).limit(candidate_k)
@@ -57,7 +61,10 @@ def pull_chunks(
             rows = connection.execute(statement).mappings().all()
         candidates = [
             {"source": row["source"], "chunk_index": row["chunk_index"],
-             "similarity": 1.0 - row["distance"], "text": row["content"]}
+             "similarity": 1.0 - row["distance"], "text": row["content"],
+             "start_char": row["start_char"], "end_char": row["end_char"],
+             "token_count": row["token_count"], "heading_path": row["heading_path"],
+             "metadata": row["source_metadata"]}
             for row in rows
         ]
         return rank_candidates(candidates, query, top_k=top_k, min_similarity=min_similarity,

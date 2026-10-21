@@ -1,0 +1,91 @@
+{
+  "generated_at": "2026-10-21T14:09:41.416123+00:00",
+  "tokenizer": {
+    "repo": "Qwen/Qwen3-Embedding-0.6B",
+    "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3"
+  },
+  "selected": {
+    "chunk_size": 512,
+    "overlap": 64
+  },
+  "selection_rule": "Maximize gold evidence hit@3; break ties by fewer unanswerable false matches, then evidence hit@1, then fewer chunks.",
+  "chunker_sha256": "11b581e3eac5d5933041a3aae0140ef604ad0670d1f525f3422ac1a02e3be360",
+  "description": "Preliminary token chunker indexed every heading-only section separately. Retained as measured evidence before coalescing empty heading blocks.",
+  "baseline": {
+    "document_recall@1": 1.0,
+    "evidence_hit@1": 0.4166666666666667,
+    "document_recall@3": 1.0,
+    "evidence_hit@3": 0.9166666666666666,
+    "document_recall@5": 1.0,
+    "evidence_hit@5": 0.9166666666666666,
+    "unanswerable_returned_match_rate": 0.5
+  },
+  "variants": [
+    {
+      "chunk_size": 256,
+      "overlap": 32,
+      "population": {
+        "files": 99,
+        "populated": 99,
+        "skipped": 0,
+        "empty": 0,
+        "chunks": 2603,
+        "model": "qwen3-embedding:0.6b"
+      },
+      "ingest_seconds": 49.7545370630005,
+      "metrics": {
+        "document_recall@1": 0.8333333333333334,
+        "evidence_hit@1": 0.5,
+        "document_recall@3": 1.0,
+        "evidence_hit@3": 0.6666666666666666,
+        "document_recall@5": 1.0,
+        "evidence_hit@5": 0.6666666666666666,
+        "unanswerable_returned_match_rate": 1
+      }
+    },
+    {
+      "chunk_size": 384,
+      "overlap": 64,
+      "population": {
+        "files": 99,
+        "populated": 99,
+        "skipped": 0,
+        "empty": 0,
+        "chunks": 2102,
+        "model": "qwen3-embedding:0.6b"
+      },
+      "ingest_seconds": 46.02379937400019,
+      "metrics": {
+        "document_recall@1": 0.75,
+        "evidence_hit@1": 0.3333333333333333,
+        "document_recall@3": 1.0,
+        "evidence_hit@3": 0.75,
+        "document_recall@5": 1.0,
+        "evidence_hit@5": 0.8333333333333334,
+        "unanswerable_returned_match_rate": 1
+      }
+    },
+    {
+      "chunk_size": 512,
+      "overlap": 64,
+      "population": {
+        "files": 99,
+        "populated": 99,
+        "skipped": 0,
+        "empty": 0,
+        "chunks": 1815,
+        "model": "qwen3-embedding:0.6b"
+      },
+      "ingest_seconds": 42.44452049499978,
+      "metrics": {
+        "document_recall@1": 0.8333333333333334,
+        "evidence_hit@1": 0.5833333333333334,
+        "document_recall@3": 1.0,
+        "evidence_hit@3": 0.8333333333333334,
+        "document_recall@5": 1.0,
+        "evidence_hit@5": 0.9166666666666666,
+        "unanswerable_returned_match_rate": 1
+      }
+    }
+  ]
+}

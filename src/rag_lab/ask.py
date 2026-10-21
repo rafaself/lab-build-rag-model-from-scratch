@@ -28,7 +28,7 @@ def context_sources(matches: list[dict], max_chars: int) -> list[dict]:
     sources = []
     remaining = max_chars
     for match in matches:
-        text = normalized(match["text"])
+        text = match["text"]
         if remaining < 80:
             break
         excerpt = text[:remaining]
@@ -38,6 +38,9 @@ def context_sources(matches: list[dict], max_chars: int) -> list[dict]:
             continue
         sources.append({**match, "id": len(sources) + 1, "text": excerpt,
                         "truncated": len(excerpt) < len(text)})
+        if isinstance(match.get("start_char"), int):
+            sources[-1].update(excerpt_start_char=match["start_char"],
+                               excerpt_end_char=match["start_char"] + len(excerpt))
         remaining -= len(excerpt)
     return sources
 
@@ -56,7 +59,7 @@ def validate_claims(data: dict, sources: list[dict]) -> list[dict]:
             raise RuntimeError("The model cited a source outside the supplied evidence.")
         if not isinstance(text, str) or not text.strip() or len(text) > 2000 or re.search(r"\[\d+\]", text):
             raise RuntimeError("The model returned invalid claim text.")
-        if not isinstance(quote, str) or len(normalized(quote)) < 12 or normalized(quote) not in by_id[source_id]["text"]:
+        if not isinstance(quote, str) or len(normalized(quote)) < 12 or normalized(quote) not in normalized(by_id[source_id]["text"]):
             raise RuntimeError("A model evidence quote was not found in its cited source.")
         result.append({"text": text.strip(), "source_id": source_id, "quote": normalized(quote)})
     return result

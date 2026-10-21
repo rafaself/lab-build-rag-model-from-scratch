@@ -5,6 +5,7 @@ import logging
 from pathlib import Path
 
 from rag_lab.config import Settings
+from rag_lab.chunking import DEFAULT_CHUNK_SIZE, DEFAULT_OVERLAP
 
 
 def positive_integer(value: str) -> int:
@@ -40,8 +41,9 @@ def build_parser() -> argparse.ArgumentParser:
     populate = commands.add_parser("populate", help="Store local text chunks and embeddings in PostgreSQL.")
     populate.add_argument("--input-dir", type=Path, help="Directory of .txt files; defaults to CORPUS_DIR.")
     populate.add_argument("--model", help="Override OLLAMA_EMBED_MODEL.")
-    populate.add_argument("--chunk-size", type=positive_integer, default=300, help="Words per chunk (default: 300).")
-    populate.add_argument("--overlap", type=int, default=50, help="Overlapping words (default: 50).")
+    populate.add_argument("--chunk-size", type=positive_integer, default=DEFAULT_CHUNK_SIZE, help=f"Tokens per chunk (default: {DEFAULT_CHUNK_SIZE}).")
+    populate.add_argument("--overlap", type=int, default=DEFAULT_OVERLAP, help=f"Target overlapping tokens (default: {DEFAULT_OVERLAP}).")
+    populate.add_argument("--strategy", choices=("tokens", "words"), default="tokens", help="Use tokens (default), or reproduce the legacy word-window baseline.")
     populate.add_argument("--batch-size", type=positive_integer, default=16, help="Chunks per embedding request (default: 16).")
     populate.add_argument("--limit", type=positive_integer, help="Process only the first N text files, sorted by path.")
     populate.add_argument("--force", action="store_true", help="Re-embed unchanged files for this model.")
@@ -69,6 +71,9 @@ def build_parser() -> argparse.ArgumentParser:
     evaluate.add_argument("--min-similarity", type=float, default=0.3)
     evaluate.add_argument("--candidate-k", type=positive_integer, default=40)
     evaluate.add_argument("--output", type=Path, help="Save the JSON report instead of printing it.")
+    tune = commands.add_parser("tune-chunking", help="Compare token chunk sizes in temporary PostgreSQL schemas.")
+    tune.add_argument("--dataset", type=Path)
+    tune.add_argument("--output", type=Path, required=True)
     return parser
 
 
@@ -97,6 +102,17 @@ def run(args: argparse.Namespace, settings: Settings) -> int:
             print(f"Saved extracted text to {args.output}")
         else:
             print(content)
+    elif args.command == "tune-chunking":
+        from sqlalchemy.exc import SQLAlchemyError
+        from rag_lab.evaluate import DEFAULT_DATASET
+        from rag_lab.tune_chunking import tune_chunking
+        try:
+            result = tune_chunking(settings, dataset=args.dataset or DEFAULT_DATASET)
+        except SQLAlchemyError as error:
+            raise RuntimeError("Chunk tuning failed. Check PostgreSQL and schema creation permissions.") from error
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(json.dumps(result, indent=2, ensure_ascii=False, allow_nan=False) + "\n", encoding="utf-8")
+        print(f"Saved chunking comparison to {args.output}")
     elif args.command == "evaluate":
         from sqlalchemy.exc import SQLAlchemyError
         from rag_lab.evaluate import DEFAULT_DATASET, evaluate_retrieval
@@ -142,7 +158,7 @@ def run(args: argparse.Namespace, settings: Settings) -> int:
         try:
             result = populate_database(
                 settings, input_dir=args.input_dir, model=args.model, chunk_size=args.chunk_size,
-                overlap=args.overlap, batch_size=args.batch_size, limit=args.limit, force=args.force,
+                overlap=args.overlap, batch_size=args.batch_size, limit=args.limit, force=args.force, strategy=args.strategy,
             )
         except SQLAlchemyError as error:
             raise RuntimeError("Database population failed. Check PostgreSQL, .env, and pgvector. The current document was rolled back; earlier documents remain saved.") from error
