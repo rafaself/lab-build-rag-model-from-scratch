@@ -64,24 +64,25 @@ def summarize(results: list[dict], variant: str) -> dict:
     return summary
 
 
-def evaluate_retrieval(settings: Settings, *, dataset: Path = DEFAULT_DATASET, min_similarity: float = 0.3, candidate_k: int = 40,
-                       search_mode: str = "exact", ef_search: int = DEFAULT_EF_SEARCH) -> dict:
-    if search_mode not in ("auto", "exact", "hnsw") or not 1 <= ef_search <= 1000:
-        raise ValueError("Use search mode auto/exact/hnsw and ef-search between 1 and 1000.")
-    if not 5 <= candidate_k <= 1000:
-        raise ValueError("Evaluation candidate_k must be between 5 and 1000.")
-    rank_candidates([], "", top_k=5, min_similarity=min_similarity)
-    cases = load_dataset(dataset)
+def checked_sources(cases: list[dict], corpus_dir: Path) -> dict[str, str]:
+    """Check reference quotes against original local files and fingerprint those files."""
     source_hashes = {}
     for case in cases:
         source_texts = []
         for source in case["sources"]:
-            path = settings.corpus_dir / source
+            path = corpus_dir / source
+            if path.is_symlink() or path.resolve().parent != corpus_dir.resolve():
+                raise ValueError("Benchmark sources must be regular files inside the corpus directory.")
             content = path.read_text(encoding="utf-8")
             source_texts.append(" ".join(content.split()))
             source_hashes[source] = hashlib.sha256(path.read_bytes()).hexdigest()
         if source_texts and not any(" ".join(case["gold_quote"].split()) in content for content in source_texts):
             raise ValueError(f"Gold quote missing from sources for {case['id']}.")
+    return source_hashes
+
+
+def validate_indexed_sources(settings: Settings, source_hashes: dict[str, str]) -> list:
+    """Refuse benchmarks against stale or missing indexed source content."""
     engine = create_db_engine(settings)
     try:
         with engine.connect() as connection:
@@ -93,6 +94,19 @@ def evaluate_retrieval(settings: Settings, *, dataset: Path = DEFAULT_DATASET, m
                 raise ValueError(f"Indexed source is missing or stale: {source}. Run populate first.")
     finally:
         engine.dispose()
+    return indexed
+
+
+def evaluate_retrieval(settings: Settings, *, dataset: Path = DEFAULT_DATASET, min_similarity: float = 0.3, candidate_k: int = 40,
+                       search_mode: str = "exact", ef_search: int = DEFAULT_EF_SEARCH) -> dict:
+    if search_mode not in ("auto", "exact", "hnsw") or not 1 <= ef_search <= 1000:
+        raise ValueError("Use search mode auto/exact/hnsw and ef-search between 1 and 1000.")
+    if not 5 <= candidate_k <= 1000:
+        raise ValueError("Evaluation candidate_k must be between 5 and 1000.")
+    rank_candidates([], "", top_k=5, min_similarity=min_similarity)
+    cases = load_dataset(dataset)
+    source_hashes = checked_sources(cases, settings.corpus_dir)
+    indexed = validate_indexed_sources(settings, source_hashes)
     with Client(host=settings.ollama_host) as client:
         canonical = settings.embedding_model if ":" in settings.embedding_model else settings.embedding_model + ":latest"
         digest = next((model.digest for model in client.list().models if model.model == canonical), None)

@@ -78,6 +78,13 @@ def build_parser() -> argparse.ArgumentParser:
     evaluate.add_argument("--search-mode", choices=("auto", "exact", "hnsw"), default="exact")
     evaluate.add_argument("--ef-search", type=positive_integer, default=DEFAULT_EF_SEARCH)
     evaluate.add_argument("--output", type=Path, help="Save the JSON report instead of printing it.")
+    answers = commands.add_parser("evaluate-answers", help="Measure end-to-end answer accuracy, faithfulness, and citations.")
+    answers.add_argument("--dataset", type=Path)
+    answers.add_argument("--chat-model")
+    answers.add_argument("--judge-model", help="Defaults to the generator; use another installed model for comparison.")
+    answers.add_argument("--search-mode", choices=("auto", "exact", "hnsw"), default="exact")
+    answers.add_argument("--ef-search", type=positive_integer, default=DEFAULT_EF_SEARCH)
+    answers.add_argument("--output", type=Path, required=True)
     tune = commands.add_parser("tune-chunking", help="Compare token chunk sizes in temporary PostgreSQL schemas.")
     tune.add_argument("--dataset", type=Path)
     tune.add_argument("--output", type=Path, required=True)
@@ -147,6 +154,19 @@ def run(args: argparse.Namespace, settings: Settings) -> int:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(result, indent=2, ensure_ascii=False, allow_nan=False) + "\n", encoding="utf-8")
         print(f"Saved chunking comparison to {args.output}")
+    elif args.command == "evaluate-answers":
+        from sqlalchemy.exc import SQLAlchemyError
+        from rag_lab.evaluate import DEFAULT_DATASET
+        from rag_lab.evaluate_answers import evaluate_answers
+        try:
+            result = evaluate_answers(settings, dataset=args.dataset or DEFAULT_DATASET,
+                                      chat_model=args.chat_model, judge_model=args.judge_model,
+                                      search_mode=args.search_mode, ef_search=args.ef_search)
+        except SQLAlchemyError as error:
+            raise RuntimeError("Answer evaluation could not read the vector database. Check PostgreSQL and populate first.") from error
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(json.dumps(result, indent=2, ensure_ascii=False, allow_nan=False) + "\n", encoding="utf-8")
+        print(f"Saved answer evaluation to {args.output}")
     elif args.command == "evaluate":
         from sqlalchemy.exc import SQLAlchemyError
         from rag_lab.evaluate import DEFAULT_DATASET, evaluate_retrieval

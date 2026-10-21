@@ -20,6 +20,7 @@ A local study project using Ollama, PostgreSQL, and pgvector. The commands cover
 | `src/rag_lab/benchmark_index.py` | Isolated index latency, plans, storage, and neighbor-recall measurements |
 | `src/rag_lab/retrieval.py` | Similarity filtering, duplicate removal, and lexical reranking |
 | `src/rag_lab/evaluate.py` | Source-checked retrieval benchmark and calibration |
+| `src/rag_lab/evaluate_answers.py` | End-to-end answer accuracy, faithfulness, and citation evaluation |
 | `src/rag_lab/ask.py` | Generate answers with checked evidence quotes and source references |
 | `models/Modelfile` | Custom Ollama model recipe |
 | `compose.yaml` | Local PostgreSQL service |
@@ -85,6 +86,7 @@ Commands read `.env` from the project root automatically. Exported shell variabl
 | Retrieve relevant text | `rag-lab pull "How do telescopes work?" --top-k 3` |
 | Ask with retrieved context | `rag-lab ask "What powers the Sun?"` |
 | Evaluate retrieval quality | `rag-lab evaluate --output reports/retrieval-quality.json` |
+| Evaluate generated answers | `rag-lab evaluate-answers --output reports/answer-quality.json` |
 | Compare token chunking settings | `rag-lab tune-chunking --output reports/chunking-comparison.json` |
 | Create the vector search index | `rag-lab index-db` |
 | Benchmark index scalability | `rag-lab benchmark-index --output reports/index-performance.json` |
@@ -241,6 +243,37 @@ The [14-case regression dataset](benchmarks/questions.jsonl) has questions, expe
 The [historical word-window report](reports/retrieval-quality.json) records dataset/source hashes, embedding model digest, 40-candidate pool, 0.3 threshold, and a reproducible weight sweep. On this small set, 5% lexical weighting increased evidence hits at rank 1 from 4/12 to 5/12 while keeping hits within the top 3 at 11/12. One of two unanswerable questions still returned a match. Document Recall@K was already 100%, so that metric alone concealed passage-level mistakes. These are exploratory calibration results on the same cases, not held-out generalization claims. Postprocessing timing excludes embedding and database search. The [current token-chunk report](reports/retrieval-token-chunks.json) records the applied token index separately.
 
 Evaluation defaults to `--search-mode exact` so a new approximate index does not silently change its baseline. `rag-lab evaluate --search-mode hnsw --output reports/retrieval-hnsw.json` checks the corpus with the actual HNSW path. The checked-in HNSW report matched the exact token-chunk report's document-recall and evidence-hit metrics on all 14 regression cases; approximate search can still miss neighbors on other data.
+
+## Answer evaluation
+
+```bash
+rag-lab evaluate-answers --output reports/answer-quality.json
+# Optional: compare with a different installed judge model.
+rag-lab evaluate-answers --judge-model qwen3:0.6b --output reports/answer-quality-small-judge.json
+```
+
+The command runs the actual `ask` pipeline for all 14 source-checked benchmark cases. It defaults to exact retrieval, top-k 3, candidate-k 40, minimum similarity 0.3, and the configured chat model. A separate structured model call judges semantic correctness against the reference answer and quote, and each claim's faithfulness against the retrieved source excerpts. It also audits source IDs and verbatim quotes without a model. Reports include model digests, dataset/source/module hashes, full claims and cited excerpts, reference answers, verdict reasons, timings, abstentions, and errors. They contain local source paths; review reports before publishing a private corpus.
+
+| Metric | Meaning and denominator |
+| --- | --- |
+| Answerable accuracy | Correct answers / all answerable questions; abstentions and errors count as failures |
+| Overall accuracy | Correct answers plus correct unanswerable abstentions / all questions |
+| Claim faithfulness | Supported claims / claims with successful judgments; abstentions and errors are excluded and counted separately |
+| Fully faithful answer rate | Answers with every claim supported / successfully judged nonempty answers |
+| Citation validity | Claims with valid source IDs and normalized verbatim quotes / published claims |
+| Expected-source citation rate | Claims citing a labeled source document / claims on answerable questions |
+
+| Measured result (configured Qwen 4B) | Value |
+| --- | ---: |
+| Correct answerable questions | 11 / 12 (91.67%) |
+| Correct overall, including private-question abstentions | 13 / 14 (92.86%) |
+| Model-judged faithful claims | 13 / 14 (92.86%) |
+| Valid source IDs and evidence quotes | 14 / 14 (100%) |
+| Generation / judge errors | 0 / 0 |
+
+The solar-neutrino question abstained because the selected evidence was insufficient. The judge marked an extra Mercury claim unfaithful for being irrelevant, although the full excerpt supports it; [case notes](reports/answer-review.md) distinguish this grading inconsistency from actual source support. The original verdict is retained.
+
+The [measured answer report](reports/answer-quality.json) is a small development regression benchmark. The default judge is the same Qwen model as the generator in a separate call; its judgments can share the generator's mistakes. This is not independent or human validation. Inspect individual cases, and use `--judge-model` to compare another installed model. Model judgments and valid citations do not establish real-world truth.
 
 ## Vector indexing and performance
 

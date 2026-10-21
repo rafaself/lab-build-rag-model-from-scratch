@@ -105,6 +105,19 @@ def ask_question(
     matches = pull_chunks(question, settings, top_k=top_k, model=embedding_model,
                           min_similarity=min_similarity, candidate_k=candidate_k,
                           deduplicate=deduplicate, rerank=rerank, search_mode=search_mode, ef_search=ef_search)
+    return answer_from_matches(question, matches, settings, embedding_model=embedding_model,
+                               chat_model=chat_model, max_tokens=max_tokens, max_context_chars=max_context_chars)
+
+
+def answer_from_matches(
+    question: str, matches: list[dict], settings: Settings, *, embedding_model: str | None = None,
+    chat_model: str | None = None, max_tokens: int = 2048, max_context_chars: int = 6000,
+) -> dict:
+    """Run the same answer/validation path on explicit matches (also used by security evaluation)."""
+    if not question.strip() or len(question) > 4000:
+        raise ValueError("Provide a nonempty question of at most 4000 characters.")
+    if not 1 <= max_tokens <= 8192 or not 256 <= max_context_chars <= 16000:
+        raise ValueError("Use max-tokens 1–8192 and max-context-chars 256–16000.")
     sources = context_sources(matches, max_context_chars)
     claims = []
     rejected = 0
