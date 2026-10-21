@@ -1,5 +1,6 @@
 """Keep embedding and answer-generation models separate."""
 from collections.abc import Sequence
+import json
 
 from ollama import Client, ResponseError
 
@@ -38,3 +39,29 @@ def generate_answer(prompt: str, settings: Settings, *, model: str | None = None
     if not response.message.content:
         raise RuntimeError("The model returned no final answer. Try a larger --max-tokens value.")
     return response.message.content
+
+
+def generate_structured_response(
+    messages: list[dict], schema: dict, settings: Settings, *, model: str | None = None,
+    max_tokens: int = 2048,
+) -> dict:
+    """Constrain local model output to JSON; callers validate its meaning."""
+    if not 1 <= max_tokens <= 8192:
+        raise ValueError("Structured response token limit must be between 1 and 8192.")
+    try:
+        with Client(host=settings.ollama_host, timeout=180) as client:
+            response = client.chat(
+                model=model or settings.chat_model, messages=messages, format=schema, think=False,
+                options={"num_predict": max_tokens, "num_ctx": 8192, "temperature": 0},
+            )
+    except ResponseError as error:
+        raise RuntimeError("Answer generation failed. Check the configured Ollama chat model.") from error
+    if response.done_reason == "length":
+        raise RuntimeError("Answer generation reached its token limit. Increase --max-tokens or use a smaller chat model.")
+    try:
+        data = json.loads(response.message.content)
+    except (ValueError, TypeError) as error:
+        raise RuntimeError("The model did not return a complete JSON answer. Try a larger --max-tokens value.") from error
+    if not isinstance(data, dict):
+        raise RuntimeError("The model returned an invalid answer object.")
+    return data

@@ -60,7 +60,7 @@ class CommandTests(unittest.TestCase):
 import importlib, socket, sys
 from unittest.mock import patch
 with patch.object(socket.socket, 'connect', side_effect=AssertionError('Network at import')):
-    for name in ('config', 'database', 'corpus', 'extraction', 'ollama_client', 'populate', 'pull', 'cli', '__main__'):
+    for name in ('config', 'database', 'corpus', 'extraction', 'ollama_client', 'populate', 'pull', 'ask', 'cli', '__main__'):
         importlib.import_module('rag_lab.' + name)
 assert 'docling.document_converter' not in sys.modules
 """

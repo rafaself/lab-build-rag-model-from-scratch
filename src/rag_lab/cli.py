@@ -49,6 +49,13 @@ def build_parser() -> argparse.ArgumentParser:
     pull.add_argument("query", help="Text to search for semantically.")
     pull.add_argument("--top-k", type=positive_integer, default=5, help="Maximum chunks to return (default: 5).")
     pull.add_argument("--model", help="Override OLLAMA_EMBED_MODEL; must match the stored model.")
+    ask = commands.add_parser("ask", help="Answer a question using retrieved chunks with source references.")
+    ask.add_argument("question")
+    ask.add_argument("--top-k", type=positive_integer, default=3)
+    ask.add_argument("--embedding-model", help="Override OLLAMA_EMBED_MODEL.")
+    ask.add_argument("--chat-model", help="Override OLLAMA_CHAT_MODEL.")
+    ask.add_argument("--max-tokens", type=positive_integer, default=2048)
+    ask.add_argument("--max-context-chars", type=positive_integer, default=6000)
     return parser
 
 
@@ -77,6 +84,17 @@ def run(args: argparse.Namespace, settings: Settings) -> int:
             print(f"Saved extracted text to {args.output}")
         else:
             print(content)
+    elif args.command == "ask":
+        from sqlalchemy.exc import SQLAlchemyError
+        from rag_lab.ask import ask_question
+        try:
+            result = ask_question(
+                args.question, settings, top_k=args.top_k, embedding_model=args.embedding_model,
+                chat_model=args.chat_model, max_tokens=args.max_tokens, max_context_chars=args.max_context_chars,
+            )
+        except SQLAlchemyError as error:
+            raise RuntimeError("RAG retrieval failed. Check PostgreSQL and run rag-lab populate first.") from error
+        print(json.dumps(result, indent=2, ensure_ascii=False))
     elif args.command == "pull":
         from sqlalchemy.exc import SQLAlchemyError
         from rag_lab.pull import pull_chunks

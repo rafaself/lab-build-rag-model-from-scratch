@@ -1,6 +1,6 @@
 # Lab: build a RAG model from scratch
 
-A local study project using Ollama, PostgreSQL, and pgvector. The commands below cover corpus collection, embeddings, storage, and retrieval. Combining retrieved context with answer generation remains study work.
+A local study project using Ollama, PostgreSQL, and pgvector. The commands cover corpus collection, embeddings, storage, retrieval, and answers generated from retrieved evidence.
 
 ## Project layout
 
@@ -14,6 +14,7 @@ A local study project using Ollama, PostgreSQL, and pgvector. The commands below
 | `src/rag_lab/corpus.py` | Resumable Wikipedia corpus collection |
 | `src/rag_lab/populate.py` | Chunk text files, generate embeddings, and populate pgvector |
 | `src/rag_lab/pull.py` | Retrieve stored chunks by semantic similarity |
+| `src/rag_lab/ask.py` | Generate answers with checked evidence quotes and source references |
 | `models/Modelfile` | Custom Ollama model recipe |
 | `compose.yaml` | Local PostgreSQL service |
 | `docker/postgres/init/` | Initial pgvector extension setup |
@@ -75,6 +76,7 @@ Commands read `.env` from the project root automatically. Exported shell variabl
 | Collect Wikipedia articles | `rag-lab corpus --topic astronomy --count 100` |
 | Populate the vector database | `rag-lab populate` |
 | Retrieve relevant text | `rag-lab pull "How do telescopes work?" --top-k 3` |
+| Ask with retrieved context | `rag-lab ask "What powers the Sun?"` |
 | Show options | `rag-lab --help` |
 
 `python -m rag_lab` is equivalent to `rag-lab`. Importing the package makes no database, model, or document requests.
@@ -169,6 +171,29 @@ Output is JSON containing the query, model, and a `matches` list. Each match con
 Only vectors from the selected model and matching dimensions are compared. No documents for the selected model produces an empty list; missing tables produce an error directing you to `rag-lab populate`. Query dimensions that disagree with stored documents produce a clear error. If you change model weights under the same tag, re-populate with `--force` first.
 
 This performs exact search over the lab corpus. Adjacent overlapping chunks can appear together, and even unrelated queries return their nearest matches; there is no relevance threshold or answer generation yet.
+
+## Ask questions using retrieved evidence
+
+```bash
+rag-lab ask "What powers the Sun?"
+rag-lab ask "How do telescopes work?" --chat-model qwen3:0.6b --top-k 3
+```
+
+`python -m rag_lab.ask` is equivalent. Unlike `chat`, this command retrieves local chunks, supplies bounded context to Qwen, and returns a JSON answer with numbered citations. It does not modify the database.
+
+| Option | Default / meaning |
+| --- | --- |
+| `--top-k` | 3 retrieved chunks; maximum 20 |
+| `--embedding-model` | `OLLAMA_EMBED_MODEL`; must match stored vectors |
+| `--chat-model` | `OLLAMA_CHAT_MODEL` |
+| `--max-tokens` | 2048 per generation/check call; maximum 8192 |
+| `--max-context-chars` | 6000 characters of retrieved text; allowed range 256–16000 |
+
+Each generated claim must cite an actual supplied source and contain a verbatim supporting quote. A separate model call checks whether the quote supports the entire claim. Invalid individual claims (including fabricated quotes or unknown citations) and unsupported claims are removed; insufficient evidence produces `status: "abstained"`. Malformed top-level responses, truncated output, and invalid grounding verdicts fail with an error. Rejection counts are included in the JSON result. The `sources` array maps citations to source paths, chunk indices, similarity scores, and the excerpts actually shown to the model. `claims` includes the evidence quotes.
+
+The structured request disables thinking and uses an 8192-token context window; generation still has a finite budget. Large contexts or complex questions can require a smaller model, fewer chunks, or a larger `--max-tokens` value.
+
+Retrieved text and the question stay in an untrusted JSON payload, separate from the fixed system instructions. No tools, database credentials, or local file-reading capability are given to the model. Context and output sizes are bounded. These are safeguards, not a guarantee against prompt injection or hallucination: the grounding checker is also a model, and valid citations alone do not prove an answer is true. See the [development roadmap](docs/ROADMAP.md) for the remaining evaluation and security work.
 
 ## Local PostgreSQL
 

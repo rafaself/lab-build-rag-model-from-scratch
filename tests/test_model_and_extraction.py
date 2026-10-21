@@ -6,7 +6,7 @@ from ollama import ResponseError
 
 from rag_lab.config import Settings
 from rag_lab.extraction import extract_text
-from rag_lab.ollama_client import embed_texts, generate_answer
+from rag_lab.ollama_client import embed_texts, generate_answer, generate_structured_response
 
 
 class ModelTests(unittest.TestCase):
@@ -47,6 +47,24 @@ class ModelTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     embed_texts(texts, Settings())
             factory.assert_not_called()
+
+    def test_structured_generation_uses_schema_and_closes_client(self):
+        with patch("rag_lab.ollama_client.Client") as factory:
+            client = factory.return_value.__enter__.return_value
+            client.chat.return_value = SimpleNamespace(done_reason="stop", message=SimpleNamespace(content='{"claims": []}'))
+            schema = {"type": "object"}
+            self.assertEqual(generate_structured_response([{"role": "user", "content": "q"}], schema, Settings()), {"claims": []})
+            self.assertEqual(client.chat.call_args.kwargs["format"], schema)
+            self.assertFalse(client.chat.call_args.kwargs["think"])
+            factory.return_value.__exit__.assert_called_once()
+
+    def test_truncated_or_invalid_json_is_not_published(self):
+        for reason, content in [("length", '{"claims": []}'), ("stop", "not json"), ("stop", "[]")]:
+            with patch("rag_lab.ollama_client.Client") as factory:
+                client = factory.return_value.__enter__.return_value
+                client.chat.return_value = SimpleNamespace(done_reason=reason, message=SimpleNamespace(content=content))
+                with self.assertRaises(RuntimeError):
+                    generate_structured_response([], {}, Settings())
 
 
 class ExtractionTests(unittest.TestCase):
