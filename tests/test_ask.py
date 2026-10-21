@@ -18,7 +18,8 @@ class AskTests(unittest.TestCase):
     def test_retrieval_to_cited_answer_and_system_boundary(self):
         with patch("rag_lab.ask.pull_chunks", return_value=[MATCH]) as pull, patch("rag_lab.ask.generate_structured_response", side_effect=[{"claims": [CLAIM]}, {"supported": [True]}]) as generate:
             result = ask_question("Why does the Sun shine?", Settings())
-        pull.assert_called_once_with("Why does the Sun shine?", Settings(), top_k=3, model=None)
+        pull.assert_called_once_with("Why does the Sun shine?", Settings(), top_k=3, model=None,
+                                     min_similarity=0.3, candidate_k=None, deduplicate=True, rerank=True)
         self.assertEqual(result["status"], "answered")
         self.assertEqual(result["answer"], CLAIM["text"] + " [1]")
         self.assertEqual(result["sources"][0]["source"], MATCH["source"])

@@ -14,11 +14,14 @@ A local study project using Ollama, PostgreSQL, and pgvector. The commands cover
 | `src/rag_lab/corpus.py` | Resumable Wikipedia corpus collection |
 | `src/rag_lab/populate.py` | Chunk text files, generate embeddings, and populate pgvector |
 | `src/rag_lab/pull.py` | Retrieve stored chunks by semantic similarity |
+| `src/rag_lab/retrieval.py` | Similarity filtering, duplicate removal, and lexical reranking |
+| `src/rag_lab/evaluate.py` | Source-checked retrieval benchmark and calibration |
 | `src/rag_lab/ask.py` | Generate answers with checked evidence quotes and source references |
 | `models/Modelfile` | Custom Ollama model recipe |
 | `compose.yaml` | Local PostgreSQL service |
 | `docker/postgres/init/` | Initial pgvector extension setup |
 | `tests/` | Offline unit tests |
+| `benchmarks/`, `reports/` | Labeled questions and measured evaluation results |
 | `astronomy_corpus/`, `data/` | Ignored local corpus and generated files |
 
 ## Installation
@@ -77,6 +80,7 @@ Commands read `.env` from the project root automatically. Exported shell variabl
 | Populate the vector database | `rag-lab populate` |
 | Retrieve relevant text | `rag-lab pull "How do telescopes work?" --top-k 3` |
 | Ask with retrieved context | `rag-lab ask "What powers the Sun?"` |
+| Evaluate retrieval quality | `rag-lab evaluate --output reports/retrieval-quality.json` |
 | Show options | `rag-lab --help` |
 
 `python -m rag_lab` is equivalent to `rag-lab`. Importing the package makes no database, model, or document requests.
@@ -158,6 +162,10 @@ The script is also runnable with `python -m rag_lab.pull "Why do stars produce l
 | `query` | Required search text |
 | `--top-k` | Return up to 5 chunks, ordered by similarity |
 | `--model` | Override `OLLAMA_EMBED_MODEL`; must match a stored model name |
+| `--min-similarity` | Optional raw cosine threshold, from -1 to 1 |
+| `--candidate-k` | Default `max(40, 4 × top-k)`, capped at 1000; must be at least top-k |
+| `--no-deduplicate` | Keep duplicate and near-duplicate chunks |
+| `--no-rerank` | Preserve raw vector-similarity ranking |
 
 Output is JSON containing the query, model, and a `matches` list. Each match contains:
 
@@ -166,11 +174,14 @@ Output is JSON containing the query, model, and a `matches` list. Each match con
 | `source` | Absolute path of the original text file |
 | `chunk_index` | Zero-based position in that document |
 | `similarity` | Cosine similarity (`1 - distance`); higher is closer, not a probability |
+| `rerank_score` | Ranking score after optional lexical reranking; not a probability |
 | `text` | Full stored chunk, ready to use as context |
 
 Only vectors from the selected model and matching dimensions are compared. No documents for the selected model produces an empty list; missing tables produce an error directing you to `rag-lab populate`. Query dimensions that disagree with stored documents produce a clear error. If you change model weights under the same tag, re-populate with `--force` first.
 
-This performs exact search over the lab corpus. Adjacent overlapping chunks can appear together, and even unrelated queries return their nearest matches; there is no relevance threshold or answer generation yet.
+The candidate search is exact. By default, candidates are reranked with 95% cosine similarity and 5% normalized BM25 score. BM25 runs over the candidate pool using Unicode word terms, an English stop-word list, k1=1.5, and b=0.75. It adds lexical relevance without another model or dependency; it is not a cross-encoder. Candidate pool size changes these lexical scores. Exact duplicates and near duplicates with at least 0.8 word-shingle Jaccard similarity are removed after ranking. Ordinary adjacent chunks with only a small overlap are retained. These limits can return fewer than top-k results.
+
+`pull` leaves the similarity threshold unset unless requested. `ask` defaults to 0.3, applied to raw cosine similarity before reranking. Both commands expose the threshold, candidate pool, deduplication, and reranking switches. Thresholds are corpus/model dependent and do not guarantee relevance.
 
 ## Ask questions using retrieved evidence
 
@@ -188,12 +199,25 @@ rag-lab ask "How do telescopes work?" --chat-model qwen3:0.6b --top-k 3
 | `--chat-model` | `OLLAMA_CHAT_MODEL` |
 | `--max-tokens` | 2048 per generation/check call; maximum 8192 |
 | `--max-context-chars` | 6000 characters of retrieved text; allowed range 256–16000 |
+| `--min-similarity` | 0.3 raw cosine similarity; -1 disables practical filtering |
+| `--candidate-k` | Vector candidate pool before reranking; default at least 40 |
+| `--no-deduplicate`, `--no-rerank` | Disable either postprocessing step for comparisons |
 
 Each generated claim must cite an actual supplied source and contain a verbatim supporting quote. A separate model call checks whether the quote supports the entire claim. Invalid individual claims (including fabricated quotes or unknown citations) and unsupported claims are removed; insufficient evidence produces `status: "abstained"`. Malformed top-level responses, truncated output, and invalid grounding verdicts fail with an error. Rejection counts are included in the JSON result. The `sources` array maps citations to source paths, chunk indices, similarity scores, and the excerpts actually shown to the model. `claims` includes the evidence quotes.
 
 The structured request disables thinking and uses an 8192-token context window; generation still has a finite budget. Large contexts or complex questions can require a smaller model, fewer chunks, or a larger `--max-tokens` value.
 
 Retrieved text and the question stay in an untrusted JSON payload, separate from the fixed system instructions. No tools, database credentials, or local file-reading capability are given to the model. Context and output sizes are bounded. These are safeguards, not a guarantee against prompt injection or hallucination: the grounding checker is also a model, and valid citations alone do not prove an answer is true. See the [development roadmap](docs/ROADMAP.md) for the remaining evaluation and security work.
+
+## Retrieval evaluation
+
+```bash
+rag-lab evaluate --output reports/retrieval-quality.json
+```
+
+The [14-case regression dataset](benchmarks/questions.jsonl) has questions, expected answers, source filenames, and gold evidence quotes (12 answerable, two unanswerable). Evaluation verifies local quotes and indexed source hashes first, then compares raw vector ranking against filtered/deduplicated/reranked candidates. It records document Recall@1/3/5, gold-quote hit rates, and unanswerable queries that still return a match. Answer accuracy and faithfulness evaluation are still pending.
+
+The [measured report](reports/retrieval-quality.json) records dataset/source hashes, embedding model digest, 40-candidate pool, 0.3 threshold, and a reproducible weight sweep. On this small set, 5% lexical weighting increased evidence hits at rank 1 from 4/12 to 5/12 while keeping hits within the top 3 at 11/12. One of two unanswerable questions still returned a match. Document Recall@K was already 100%, so that metric alone concealed passage-level mistakes. These are exploratory calibration results on the same cases, not held-out generalization claims. Postprocessing timing excludes embedding and database search.
 
 ## Local PostgreSQL
 

@@ -49,6 +49,10 @@ def build_parser() -> argparse.ArgumentParser:
     pull.add_argument("query", help="Text to search for semantically.")
     pull.add_argument("--top-k", type=positive_integer, default=5, help="Maximum chunks to return (default: 5).")
     pull.add_argument("--model", help="Override OLLAMA_EMBED_MODEL; must match the stored model.")
+    pull.add_argument("--min-similarity", type=float, help="Minimum raw cosine similarity (-1 to 1).")
+    pull.add_argument("--candidate-k", type=positive_integer, help="Vector candidates to rerank; at most 1000.")
+    pull.add_argument("--no-deduplicate", action="store_true")
+    pull.add_argument("--no-rerank", action="store_true")
     ask = commands.add_parser("ask", help="Answer a question using retrieved chunks with source references.")
     ask.add_argument("question")
     ask.add_argument("--top-k", type=positive_integer, default=3)
@@ -56,6 +60,15 @@ def build_parser() -> argparse.ArgumentParser:
     ask.add_argument("--chat-model", help="Override OLLAMA_CHAT_MODEL.")
     ask.add_argument("--max-tokens", type=positive_integer, default=2048)
     ask.add_argument("--max-context-chars", type=positive_integer, default=6000)
+    ask.add_argument("--min-similarity", type=float, default=0.3)
+    ask.add_argument("--candidate-k", type=positive_integer)
+    ask.add_argument("--no-deduplicate", action="store_true")
+    ask.add_argument("--no-rerank", action="store_true")
+    evaluate = commands.add_parser("evaluate", help="Compare baseline and improved retrieval on labeled questions.")
+    evaluate.add_argument("--dataset", type=Path)
+    evaluate.add_argument("--min-similarity", type=float, default=0.3)
+    evaluate.add_argument("--candidate-k", type=positive_integer, default=40)
+    evaluate.add_argument("--output", type=Path, help="Save the JSON report instead of printing it.")
     return parser
 
 
@@ -84,6 +97,21 @@ def run(args: argparse.Namespace, settings: Settings) -> int:
             print(f"Saved extracted text to {args.output}")
         else:
             print(content)
+    elif args.command == "evaluate":
+        from sqlalchemy.exc import SQLAlchemyError
+        from rag_lab.evaluate import DEFAULT_DATASET, evaluate_retrieval
+        try:
+            result = evaluate_retrieval(settings, dataset=args.dataset or DEFAULT_DATASET,
+                                        min_similarity=args.min_similarity, candidate_k=args.candidate_k)
+        except SQLAlchemyError as error:
+            raise RuntimeError("Evaluation could not read the vector database. Check PostgreSQL and populate first.") from error
+        serialized = json.dumps(result, indent=2, ensure_ascii=False, allow_nan=False) + "\n"
+        if args.output:
+            args.output.parent.mkdir(parents=True, exist_ok=True)
+            args.output.write_text(serialized, encoding="utf-8")
+            print(f"Saved evaluation to {args.output}")
+        else:
+            print(serialized, end="")
     elif args.command == "ask":
         from sqlalchemy.exc import SQLAlchemyError
         from rag_lab.ask import ask_question
@@ -91,6 +119,8 @@ def run(args: argparse.Namespace, settings: Settings) -> int:
             result = ask_question(
                 args.question, settings, top_k=args.top_k, embedding_model=args.embedding_model,
                 chat_model=args.chat_model, max_tokens=args.max_tokens, max_context_chars=args.max_context_chars,
+                min_similarity=args.min_similarity, candidate_k=args.candidate_k,
+                deduplicate=not args.no_deduplicate, rerank=not args.no_rerank,
             )
         except SQLAlchemyError as error:
             raise RuntimeError("RAG retrieval failed. Check PostgreSQL and run rag-lab populate first.") from error
@@ -99,7 +129,9 @@ def run(args: argparse.Namespace, settings: Settings) -> int:
         from sqlalchemy.exc import SQLAlchemyError
         from rag_lab.pull import pull_chunks
         try:
-            matches = pull_chunks(args.query, settings, top_k=args.top_k, model=args.model)
+            matches = pull_chunks(args.query, settings, top_k=args.top_k, model=args.model,
+                                  min_similarity=args.min_similarity, candidate_k=args.candidate_k,
+                                  deduplicate=not args.no_deduplicate, rerank=not args.no_rerank)
         except SQLAlchemyError as error:
             raise RuntimeError("Database retrieval failed. Check PostgreSQL and .env, then run rag-lab populate if the tables are missing.") from error
         print(json.dumps({"query": args.query, "model": args.model or settings.embedding_model,

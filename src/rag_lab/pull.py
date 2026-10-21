@@ -7,9 +7,14 @@ from rag_lab.config import Settings
 from rag_lab.database import create_db_engine
 from rag_lab.ollama_client import embed_texts
 from rag_lab.populate import chunks, documents
+from rag_lab.retrieval import rank_candidates
 
 
-def pull_chunks(query: str, settings: Settings, *, top_k: int = 5, model: str | None = None) -> list[dict]:
+def pull_chunks(
+    query: str, settings: Settings, *, top_k: int = 5, model: str | None = None,
+    min_similarity: float | None = None, candidate_k: int | None = None,
+    deduplicate: bool = True, rerank: bool = True,
+) -> list[dict]:
     """Read the closest chunks for the same embedding model and dimensions.
 
     Cosine similarity is a ranking score, not a confidence or probability.
@@ -17,8 +22,13 @@ def pull_chunks(query: str, settings: Settings, *, top_k: int = 5, model: str | 
     """
     if not query.strip():
         raise ValueError("Provide a nonempty search query.")
-    if top_k < 1:
-        raise ValueError("top_k must be positive.")
+    if not 1 <= top_k <= 1000:
+        raise ValueError("top_k must be between 1 and 1000.")
+    candidate_k = min(1000, max(40, top_k * 4)) if candidate_k is None else candidate_k
+    if not top_k <= candidate_k <= 1000:
+        raise ValueError("candidate_k must be between top_k and 1000.")
+    if min_similarity is not None and (not math.isfinite(min_similarity) or not -1 <= min_similarity <= 1):
+        raise ValueError("min_similarity must be a finite number between -1 and 1.")
     model = model or settings.embedding_model
     engine = create_db_engine(settings)
     try:
@@ -42,14 +52,16 @@ def pull_chunks(query: str, settings: Settings, *, top_k: int = 5, model: str | 
         statement = select(chunks.c.source, chunks.c.chunk_index, chunks.c.content, distance).where(
             chunks.c.model == model,
             func.vector_dims(chunks.c.embedding) == len(vector),
-        ).order_by(distance, chunks.c.source, chunks.c.chunk_index).limit(top_k)
+        ).order_by(distance, chunks.c.source, chunks.c.chunk_index).limit(candidate_k)
         with engine.connect() as connection:
             rows = connection.execute(statement).mappings().all()
-        return [
+        candidates = [
             {"source": row["source"], "chunk_index": row["chunk_index"],
              "similarity": 1.0 - row["distance"], "text": row["content"]}
             for row in rows
         ]
+        return rank_candidates(candidates, query, top_k=top_k, min_similarity=min_similarity,
+                               deduplicate=deduplicate, rerank=rerank)
     finally:
         engine.dispose()
 

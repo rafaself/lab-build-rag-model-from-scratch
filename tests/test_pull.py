@@ -19,7 +19,7 @@ from rag_lab.pull import pull_chunks
 class PullTests(unittest.TestCase):
     def test_invalid_query_or_limit_does_not_connect(self):
         with patch("rag_lab.pull.create_db_engine") as factory:
-            for query, count in [(" \n", 5), ("query", 0), ("query", -1)]:
+            for query, count in [(" \n", 5), ("query", 0), ("query", -1), ("query", 1001)]:
                 with self.assertRaises(ValueError):
                     pull_chunks(query, Settings(), top_k=count)
             factory.assert_not_called()
@@ -57,7 +57,8 @@ class PullTests(unittest.TestCase):
         output = io.StringIO()
         with patch("rag_lab.cli.Settings.from_env", return_value=Settings()), patch("rag_lab.pull.pull_chunks", return_value=result) as pull, redirect_stdout(output):
             self.assertEqual(main(["pull", "planets", "--top-k", "2", "--model", "fixture"]), 0)
-        pull.assert_called_once_with("planets", Settings(), top_k=2, model="fixture")
+        pull.assert_called_once_with("planets", Settings(), top_k=2, model="fixture",
+                                     min_similarity=None, candidate_k=None, deduplicate=True, rerank=True)
         self.assertEqual(json.loads(output.getvalue()), {"query": "planets", "model": "fixture", "matches": result})
 
 
@@ -115,6 +116,22 @@ class PostgreSQLPullTests(unittest.TestCase):
         with patch("rag_lab.pull.create_db_engine", return_value=self.scoped_engine), patch("rag_lab.pull.embed_texts", return_value=[[1., 0., 0.]]):
             with self.assertRaisesRegex(RuntimeError, "different dimensions"):
                 pull_chunks("query", Settings(), model="fixture")
+
+    def test_threshold_and_deduplication_apply_to_real_vector_results(self):
+        with self.scoped_engine.begin() as connection:
+            connection.execute(documents.insert().values(
+                source="nearest-copy.txt", model="fixture", content_sha256="fixture", chunk_size=300,
+                overlap=50, dimensions=2, chunk_count=1,
+            ))
+            connection.execute(chunks.insert().values(
+                source="nearest-copy.txt", model="fixture", chunk_index=0,
+                content="Text from nearest.txt", embedding=[1., 0.],
+            ))
+        with patch("rag_lab.pull.create_db_engine", return_value=self.scoped_engine), patch("rag_lab.pull.embed_texts", return_value=[[1., 0.]]):
+            matches = pull_chunks("query", Settings(), model="fixture", top_k=5, min_similarity=0.8)
+            self.assertEqual(len(matches), 1)
+            self.assertAlmostEqual(matches[0]["similarity"], 1.)
+            self.assertEqual(len(pull_chunks("query", Settings(), model="fixture", top_k=5, min_similarity=0.8, deduplicate=False)), 2)
 
 
 if __name__ == "__main__":

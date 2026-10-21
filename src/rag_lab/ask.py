@@ -90,12 +90,16 @@ def check_grounding(claims: list[dict], settings: Settings, model: str | None, m
 def ask_question(
     question: str, settings: Settings, *, top_k: int = 3, embedding_model: str | None = None,
     chat_model: str | None = None, max_tokens: int = 2048, max_context_chars: int = 6000,
+    min_similarity: float | None = 0.3, candidate_k: int | None = None,
+    deduplicate: bool = True, rerank: bool = True,
 ) -> dict:
     if not question.strip() or len(question) > 4000:
         raise ValueError("Provide a nonempty question of at most 4000 characters.")
     if not 1 <= top_k <= 20 or not 1 <= max_tokens <= 8192 or not 256 <= max_context_chars <= 16000:
         raise ValueError("Use top-k 1–20, max-tokens 1–8192, and max-context-chars 256–16000.")
-    matches = pull_chunks(question, settings, top_k=top_k, model=embedding_model)
+    matches = pull_chunks(question, settings, top_k=top_k, model=embedding_model,
+                          min_similarity=min_similarity, candidate_k=candidate_k,
+                          deduplicate=deduplicate, rerank=rerank)
     sources = context_sources(matches, max_context_chars)
     claims = []
     rejected = 0
