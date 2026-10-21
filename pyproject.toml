@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lab-build-rag-model-from-scratch"
+version = "0.1.0"
+description = "A local lab for document extraction, embeddings, and PostgreSQL"
+readme = "README.md"
+requires-python = ">=3.11"
+dynamic = ["dependencies"]
+
+[project.optional-dependencies]
+documents = ["docling==2.141.0"]
+
+[project.scripts]
+rag-lab = "rag_lab.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}

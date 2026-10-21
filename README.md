@@ -1,26 +1,46 @@
 # Lab: build a RAG model from scratch
 
-A local study project using Ollama for embeddings and answer generation, with PostgreSQL and pgvector available for storing text and vectors.
+A local study project using Ollama, PostgreSQL, and pgvector. The commands below cover corpus collection, embeddings, storage, and retrieval. Combining retrieved context with answer generation remains study work.
 
-## Python environment
+## Project layout
+
+| Path | Purpose |
+| --- | --- |
+| `src/rag_lab/cli.py` | Command-line entry point |
+| `src/rag_lab/config.py` | Central configuration from `.env` and shell variables |
+| `src/rag_lab/database.py` | SQLAlchemy sessions and pgvector connection setup |
+| `src/rag_lab/ollama_client.py` | Separate embedding and chat helpers |
+| `src/rag_lab/extraction.py` | Optional Docling document extraction |
+| `src/rag_lab/corpus.py` | Resumable Wikipedia corpus collection |
+| `src/rag_lab/populate.py` | Chunk text files, generate embeddings, and populate pgvector |
+| `src/rag_lab/pull.py` | Retrieve stored chunks by semantic similarity |
+| `models/Modelfile` | Custom Ollama model recipe |
+| `compose.yaml` | Local PostgreSQL service |
+| `docker/postgres/init/` | Initial pgvector extension setup |
+| `tests/` | Offline unit tests |
+| `astronomy_corpus/`, `data/` | Ignored local corpus and generated files |
+
+## Installation
+
+Use Python 3.11 or newer:
 
 ```bash
 python3 -m venv venv
 source venv/bin/activate
-python -m pip install -r requirements.txt
+python -m pip install -e .
 ```
 
-## Local PostgreSQL
+The editable installation makes `src/rag_lab` available as a package and installs the `rag-lab` command. Direct dependency versions live in `requirements.txt`, which the package reads during installation. PostgreSQL uses the explicit `psycopg2` driver with its binary distribution.
 
-One PostgreSQL 17 service with pgvector, a persistent volume, and a readiness check. This local Linux setup uses host networking because Docker bridge connections were blocked on the development computer. PostgreSQL listens only on localhost.
+Document extraction is optional and has larger dependencies:
 
-| Setting | Default |
-| --- | --- |
-| Host | `127.0.0.1` |
-| Host port | `55432` |
-| Database | `rag_lab` |
-| User | `postgres` |
-| Password | `POSTGRES_PASSWORD` in `.env` |
+```bash
+python -m pip install -e ".[documents]"
+```
+
+Docling is loaded only for extraction. Some document formats may download conversion models on first use.
+
+## Configuration
 
 Keep your existing `.env`. For a new checkout, copy the example and set `POSTGRES_PASSWORD`:
 
@@ -29,22 +49,162 @@ cp .env.example .env
 chmod 600 .env
 ```
 
-Start the database:
+Commands read `.env` from the project root automatically. Exported shell variables take precedence. Passwords are passed through SQLAlchemy's URL builder, so special characters do not need manual URL encoding.
+
+| Variable | Default / purpose |
+| --- | --- |
+| `POSTGRES_HOST` | `127.0.0.1` |
+| `POSTGRES_PORT` | `55432` |
+| `POSTGRES_DB` | `rag_lab` |
+| `POSTGRES_USER` | `postgres` |
+| `POSTGRES_PASSWORD` | Required for database connections; keep in ignored `.env` |
+| `OLLAMA_HOST` | `http://127.0.0.1:11434` |
+| `OLLAMA_CHAT_MODEL` | `custom_qwen` |
+| `OLLAMA_EMBED_MODEL` | `qwen3-embedding:0.6b` |
+| `WIKIPEDIA_CONTACT` | Your contact information for the Wikipedia API user agent |
+| `CORPUS_DIR` | `astronomy_corpus`, relative to the project root |
+
+## Commands
+
+| Exercise | Command |
+| --- | --- |
+| Check PostgreSQL and pgvector | `rag-lab db-check` |
+| Generate embeddings | `rag-lab embed "Here is statement one." "Here is statement two."` |
+| Ask the chat model | `rag-lab chat "What is a vector database?"` |
+| Extract a document | `rag-lab extract ./data/document.pdf --output ./data/document.txt` |
+| Collect Wikipedia articles | `rag-lab corpus --topic astronomy --count 100` |
+| Populate the vector database | `rag-lab populate` |
+| Retrieve relevant text | `rag-lab pull "How do telescopes work?" --top-k 3` |
+| Show options | `rag-lab --help` |
+
+`python -m rag_lab` is equivalent to `rag-lab`. Importing the package makes no database, model, or document requests.
+
+Prepare the models when needed:
+
+```bash
+ollama pull qwen3-embedding:0.6b
+ollama pull qwen3:4b
+ollama create custom_qwen -f models/Modelfile
+```
+
+The custom recipe uses `qwen3:4b`. Chat and embedding commands accept `--model` overrides. The embedding command prints a size summary; `rag_lab.ollama_client.embed_texts` returns the complete vectors for Python exercises.
+
+Thinking models may spend their token budget before producing a final answer ([Ollama thinking output](https://docs.ollama.com/capabilities/thinking)). If chat reports no final answer, increase `--max-tokens` or try the smaller installed model, for example `rag-lab chat "What is a vector database?" --model qwen3:0.6b --max-tokens 2048`. A failed chat does not modify the vector database.
+
+Set `WIKIPEDIA_CONTACT` before running `corpus`. Existing articles and metadata are reused, missing files are downloaded, and failed articles are recorded for retry on the next run. Progress goes to stderr and the summary to stdout. A run with remaining failures exits with status 1. Requests have a courtesy delay and respect rate-limit retry headers. The existing `astronomy_corpus` directory stays in place.
+
+## Populate the vector database
+
+Start PostgreSQL, install the embedding model if needed, and try one file before importing the whole corpus:
 
 ```bash
 docker compose up -d --wait postgres
+ollama pull qwen3-embedding:0.6b
+rag-lab populate --limit 1
+rag-lab populate
 ```
 
-Open a SQL console:
+The script is also runnable with `python -m rag_lab.populate`. It reads UTF-8 `.txt` files recursively from `CORPUS_DIR` (by default `astronomy_corpus`); JSON metadata files are ignored. For PDFs or other formats, run `rag-lab extract` first and save the text under an input directory.
 
 ```bash
+rag-lab populate --input-dir ./data --chunk-size 300 --overlap 50 --batch-size 16
+```
+
+| Option | Default / behavior |
+| --- | --- |
+| `--input-dir` | `CORPUS_DIR` from configuration |
+| `--model` | `OLLAMA_EMBED_MODEL`; use an embedding model |
+| `--chunk-size` | 300 words per chunk |
+| `--overlap` | 50 words shared between adjacent chunks; must be smaller than chunk size |
+| `--batch-size` | 16 chunks per Ollama request |
+| `--limit` | Process only the first N files, sorted by path |
+| `--force` | Re-embed unchanged files for the selected model |
+
+The command creates two tables automatically; pgvector must already be enabled by the Docker init script:
+
+| Table | Stored information |
+| --- | --- |
+| `rag_documents` | Absolute source path, model name, content SHA-256, chunk settings, dimensions, and chunk count |
+| `rag_chunks` | Source path, model name, zero-based chunk index, text, and embedding vector |
+
+Source path and model identify each document. Unchanged content and chunk settings are skipped; changed documents replace their old chunks in one transaction. Each document commits separately, so an interrupted run can resume. An embedding or database failure stops the command with a nonzero exit status; previously committed documents remain saved. Empty files retain any previous rows, and deleting source files does not remove their stored data.
+
+Model names are stored separately, and the vector column accepts the dimensions returned by the chosen model. Filter by the same model when implementing retrieval. If you replace a model's weights under the same tag, rerun with `--force`. This lab does not create a vector search index yet.
+
+Embedding requests disable silent truncation: an oversized chunk fails rather than silently losing text. Reduce `--chunk-size` if this happens ([Ollama embedding API](https://docs.ollama.com/api/embed)).
+
+Progress goes to stderr; stdout contains a JSON summary. `populated` and `chunks` count documents and chunks written during this run, including replacements; `skipped` counts unchanged files and `empty` counts empty files. To inspect stored totals in the PostgreSQL console:
+
+```sql
+SELECT model, count(*) AS documents, sum(chunk_count) AS chunks
+FROM rag_documents
+GROUP BY model;
+```
+
+## Pull relevant chunks from the database
+
+Use a natural-language query to retrieve the most similar stored chunks:
+
+```bash
+rag-lab pull "Why do stars produce light?" --top-k 3
+```
+
+The script is also runnable with `python -m rag_lab.pull "Why do stars produce light?"`. It embeds the query with `OLLAMA_EMBED_MODEL` and searches PostgreSQL using cosine distance ([pgvector Python documentation](https://github.com/pgvector/pgvector-python#sqlalchemy)). It reads the existing database; it does not import files or generate an answer.
+
+| Option | Default / behavior |
+| --- | --- |
+| `query` | Required search text |
+| `--top-k` | Return up to 5 chunks, ordered by similarity |
+| `--model` | Override `OLLAMA_EMBED_MODEL`; must match a stored model name |
+
+Output is JSON containing the query, model, and a `matches` list. Each match contains:
+
+| Field | Meaning |
+| --- | --- |
+| `source` | Absolute path of the original text file |
+| `chunk_index` | Zero-based position in that document |
+| `similarity` | Cosine similarity (`1 - distance`); higher is closer, not a probability |
+| `text` | Full stored chunk, ready to use as context |
+
+Only vectors from the selected model and matching dimensions are compared. No documents for the selected model produces an empty list; missing tables produce an error directing you to `rag-lab populate`. Query dimensions that disagree with stored documents produce a clear error. If you change model weights under the same tag, re-populate with `--force` first.
+
+This performs exact search over the lab corpus. Adjacent overlapping chunks can appear together, and even unrelated queries return their nearest matches; there is no relevance threshold or answer generation yet.
+
+## Local PostgreSQL
+
+This Linux lab uses host networking because Docker bridge connections were blocked on the development computer. PostgreSQL listens only on localhost.
+
+```bash
+docker compose up -d --wait postgres
+rag-lab db-check
 docker compose exec postgres sh -c 'psql -U postgres -d "$POSTGRES_DB"'
 ```
 
-Stop the database:
+`docker compose down` stops the service and keeps its volume. Adding `--volumes` deletes the data. The init SQL enables pgvector on first startup; `populate` creates its own tables on demand. Changing `.env` does not change passwords in an existing database.
+
+Database helpers close sessions and dispose their engines after use. Call `session.commit()` explicitly when an exercise writes data.
+
+## Validation
 
 ```bash
-docker compose down
+python -m unittest discover -s tests -v
+python -m pip check
 ```
 
-`docker compose down` keeps the database volume. Adding `--volumes` deletes the data. The init SQL enables pgvector on the first startup; document tables and embedding dimensions are left for the lab exercises. Changing `.env` later does not change passwords in an existing database.
+The tests use mocked clients and temporary files, so no running database, Ollama service, or downloads are needed.
+
+Population and retrieval also have optional PostgreSQL integration tests. They create and remove isolated test schemas and use synthetic embeddings, so no model download is needed:
+
+```bash
+RAG_TEST_POSTGRES=1 python -m unittest discover -s tests -v
+```
+
+## Previous script names
+
+| Previous file | Replacement |
+| --- | --- |
+| `database_connect_embeddings.py` | `rag-lab db-check`; `rag_lab.database.get_session` |
+| `ollama_functions.py` | `rag-lab embed` and `rag-lab chat` |
+| `extract_text.py` | `rag-lab extract` |
+| `generate_copus.py` | `rag-lab corpus` |
+| `ModelFile` | `models/Modelfile` |

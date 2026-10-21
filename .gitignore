@@ -1,5 +1,6 @@
 # Generated corpus
 astronomy_corpus/
+data/
 
 # Python virtual environments
 venv/
