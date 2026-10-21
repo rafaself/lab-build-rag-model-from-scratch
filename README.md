@@ -16,6 +16,8 @@ A local study project using Ollama, PostgreSQL, and pgvector. The commands cover
 | `src/rag_lab/chunking.py` | Pinned Qwen tokenization, structural boundaries, and source offsets |
 | `src/rag_lab/tune_chunking.py` | Real chunk-size/overlap comparison in temporary schemas |
 | `src/rag_lab/pull.py` | Retrieve stored chunks by semantic similarity |
+| `src/rag_lab/indexing.py` | Model-specific HNSW indexes and candidate-first search |
+| `src/rag_lab/benchmark_index.py` | Isolated index latency, plans, storage, and neighbor-recall measurements |
 | `src/rag_lab/retrieval.py` | Similarity filtering, duplicate removal, and lexical reranking |
 | `src/rag_lab/evaluate.py` | Source-checked retrieval benchmark and calibration |
 | `src/rag_lab/ask.py` | Generate answers with checked evidence quotes and source references |
@@ -84,6 +86,8 @@ Commands read `.env` from the project root automatically. Exported shell variabl
 | Ask with retrieved context | `rag-lab ask "What powers the Sun?"` |
 | Evaluate retrieval quality | `rag-lab evaluate --output reports/retrieval-quality.json` |
 | Compare token chunking settings | `rag-lab tune-chunking --output reports/chunking-comparison.json` |
+| Create the vector search index | `rag-lab index-db` |
+| Benchmark index scalability | `rag-lab benchmark-index --output reports/index-performance.json` |
 | Show options | `rag-lab --help` |
 
 `python -m rag_lab` is equivalent to `rag-lab`. Importing the package makes no database, model, or document requests.
@@ -145,7 +149,7 @@ Chunks prefer nearby sentence/paragraph endings and separate substantive Markdow
 
 Population adds the metadata columns to older lab tables without deleting rows. An older index needs `populate` again to replace word windows with token chunks; the strategy/tokenizer revision participate in resume checks. Existing rows keep null offsets until reindexed. To reproduce the legacy comparison explicitly, use `rag-lab populate --strategy words --chunk-size 300 --overlap 50` (this replaces the selected model's indexed chunks).
 
-Model names are stored separately, and the vector column accepts the dimensions returned by the chosen model. Filter by the same model when implementing retrieval. If you replace a model's weights under the same tag, rerun with `--force`. This lab does not create a vector search index yet.
+Model names are stored separately, and the vector column accepts the dimensions returned by the chosen model. Searches compare the same model and dimensions. If you replace a model's weights under the same tag, rerun with `--force`. Run `rag-lab index-db` after initial population to enable HNSW acceleration.
 
 Embedding requests disable silent truncation: an oversized chunk fails rather than silently losing text. Reduce `--chunk-size` if this happens ([Ollama embedding API](https://docs.ollama.com/api/embed)).
 
@@ -176,6 +180,8 @@ The script is also runnable with `python -m rag_lab.pull "Why do stars produce l
 | `--candidate-k` | Default `max(40, 4 × top-k)`, capped at 1000; must be at least top-k |
 | `--no-deduplicate` | Keep duplicate and near-duplicate chunks |
 | `--no-rerank` | Preserve raw vector-similarity ranking |
+| `--search-mode` | `auto`: use a valid HNSW index when available, otherwise exact; `exact` always scans exactly; `hnsw` requires its index |
+| `--ef-search` | 200 by default, allowed range 1–1000; internally at least candidate-k |
 
 Output is JSON containing the query, model, and a `matches` list. Each match contains:
 
@@ -191,7 +197,7 @@ Output is JSON containing the query, model, and a `matches` list. Each match con
 
 Only vectors from the selected model and matching dimensions are compared. No documents for the selected model produces an empty list; missing tables produce an error directing you to `rag-lab populate`. Query dimensions that disagree with stored documents produce a clear error. If you change model weights under the same tag, re-populate with `--force` first.
 
-The candidate search is exact. By default, candidates are reranked with 95% cosine similarity and 5% normalized BM25 score. BM25 runs over the candidate pool using Unicode word terms, an English stop-word list, k1=1.5, and b=0.75. It adds lexical relevance without another model or dependency; it is not a cross-encoder. Candidate pool size changes these lexical scores. Exact duplicates and near duplicates with at least 0.8 word-shingle Jaccard similarity are removed after ranking. Ordinary adjacent chunks with only a small overlap are retained. These limits can return fewer than top-k results.
+Candidates are selected before joining document metadata and loading chunk text. Search can be exact or HNSW approximate, according to `--search-mode`. By default, candidates are reranked with 95% cosine similarity and 5% normalized BM25 score. BM25 runs over the candidate pool using Unicode word terms, an English stop-word list, k1=1.5, and b=0.75. It adds lexical relevance without another model or dependency; it is not a cross-encoder. Candidate pool size changes these lexical scores. Exact duplicates and near duplicates with at least 0.8 word-shingle Jaccard similarity are removed after ranking. Ordinary adjacent chunks with only a small overlap are retained. These limits can return fewer than top-k results.
 
 `pull` leaves the similarity threshold unset unless requested. `ask` defaults to 0.3, applied to raw cosine similarity before reranking. Both commands expose the threshold, candidate pool, deduplication, and reranking switches. Thresholds are corpus/model dependent and do not guarantee relevance.
 
@@ -214,6 +220,7 @@ rag-lab ask "How do telescopes work?" --chat-model qwen3:0.6b --top-k 3
 | `--min-similarity` | 0.3 raw cosine similarity; -1 disables practical filtering |
 | `--candidate-k` | Vector candidate pool before reranking; default at least 40 |
 | `--no-deduplicate`, `--no-rerank` | Disable either postprocessing step for comparisons |
+| `--search-mode`, `--ef-search` | Same index selection and HNSW search settings as `pull` |
 
 Each generated claim must cite an actual supplied source and contain a verbatim supporting quote. A separate model call checks whether the quote supports the entire claim. Invalid individual claims (including fabricated quotes or unknown citations) and unsupported claims are removed; insufficient evidence produces `status: "abstained"`. Malformed top-level responses, truncated output, and invalid grounding verdicts fail with an error. Rejection counts are included in the JSON result. The `sources` array maps citations to source paths, chunk indices, similarity scores, and the excerpts actually shown to the model. `claims` includes the evidence quotes.
 
@@ -232,6 +239,34 @@ rag-lab evaluate --output reports/retrieval-quality.json
 The [14-case regression dataset](benchmarks/questions.jsonl) has questions, expected answers, source filenames, and gold evidence quotes (12 answerable, two unanswerable). Evaluation verifies local quotes and indexed source hashes first, then compares raw vector ranking against filtered/deduplicated/reranked candidates. It records document Recall@1/3/5, gold-quote hit rates, and unanswerable queries that still return a match. Answer accuracy and faithfulness evaluation are still pending.
 
 The [historical word-window report](reports/retrieval-quality.json) records dataset/source hashes, embedding model digest, 40-candidate pool, 0.3 threshold, and a reproducible weight sweep. On this small set, 5% lexical weighting increased evidence hits at rank 1 from 4/12 to 5/12 while keeping hits within the top 3 at 11/12. One of two unanswerable questions still returned a match. Document Recall@K was already 100%, so that metric alone concealed passage-level mistakes. These are exploratory calibration results on the same cases, not held-out generalization claims. Postprocessing timing excludes embedding and database search. The [current token-chunk report](reports/retrieval-token-chunks.json) records the applied token index separately.
+
+Evaluation defaults to `--search-mode exact` so a new approximate index does not silently change its baseline. `rag-lab evaluate --search-mode hnsw --output reports/retrieval-hnsw.json` checks the corpus with the actual HNSW path. The checked-in HNSW report matched the exact token-chunk report's document-recall and evidence-hit metrics on all 14 regression cases; approximate search can still miss neighbors on other data.
+
+## Vector indexing and performance
+
+```bash
+rag-lab index-db
+rag-lab pull "What powers the Sun?" --search-mode hnsw --ef-search 200
+rag-lab pull "What powers the Sun?" --search-mode exact
+```
+
+Index creation is idempotent and returns the index name, dimensions, build/analyze time, and storage bytes. Each model/dimension gets a partial cosine HNSW expression index over the existing variable-dimension vector column (m=16, ef_construction=64). It also collects model/dimension statistics. Index creation requires table ownership and blocks writes while building; run it after bulk population in this local lab. Subsequent writes maintain the index automatically. Models with more than 2000 dimensions can use exact search, but this HNSW command rejects them.
+
+`auto` uses an existing valid index for the selected cohort, or falls back to an exact query. `hnsw` fails clearly if its index is missing. `exact` changes the ordering expression to exclude approximate indexes without disabling primary-key lookups. The nearest-neighbor limit is materialized before text/metadata joins. HNSW requests use transaction-local planner settings to select their index and disable JIT; these settings expire at transaction end and do not alter server configuration. Higher `ef-search` generally trades more work for better neighbor recall ([pgvector documentation](https://github.com/pgvector/pgvector#hnsw)).
+
+```bash
+rag-lab benchmark-index --sizes 1000 5000 20000 --repeats 3 --output reports/index-performance.json
+```
+
+The benchmark copies corpus vectors/text into temporary schemas and perturbs vector coordinates with seeded noise. It compares exact search, auto, and HNSW at ef-search 40/100/200 using 12 real question embeddings and a 40-candidate pool. It measures query/fetch p50/p95, index build time/storage, and strict neighbor Recall@10/40 against exact search. It checks actual `EXPLAIN (ANALYZE, BUFFERS, VERBOSE)` plans and cleans up benchmark schemas. It does not add synthetic rows to the main corpus. Vector literals are omitted from saved plans for readability.
+
+| Vectors | Exact p50 (ms) | Auto/HNSW p50 (ms) | Speedup | Neighbor Recall@40 | Index MiB |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 1,000 | 8.08 | 4.52 | 1.79× | 100.00% | 7.82 |
+| 5,000 | 25.46 | 4.35 | 5.85× | 98.96% | 39.07 |
+| 20,000 | 97.19 | 3.92 | 24.76× | 100.00% | 156.26 |
+
+The [measured report](reports/index-performance.json) includes model/input fingerprints, server versions, method details, and all query plans. The [initial calibration](reports/index-calibration.json) explains the choice of ef-search 200 and explicit index selection. These are warm-cache local database timings, not end-to-end RAG speed or production capacity claims. Synthetic copies do not replace tests on a naturally growing corpus, cold IO, or concurrent traffic. HNSW construction can vary between builds; high recall here is not a guarantee elsewhere.
 
 ## Chunking comparison
 

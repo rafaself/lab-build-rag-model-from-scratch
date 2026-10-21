@@ -14,6 +14,7 @@ from rag_lab.pull import pull_chunks
 from rag_lab.retrieval import RERANK_WEIGHT, rank_candidates
 from rag_lab.database import create_db_engine
 from rag_lab.populate import documents
+from rag_lab.indexing import DEFAULT_EF_SEARCH
 
 DEFAULT_DATASET = PROJECT_ROOT / "benchmarks/questions.jsonl"
 
@@ -63,7 +64,10 @@ def summarize(results: list[dict], variant: str) -> dict:
     return summary
 
 
-def evaluate_retrieval(settings: Settings, *, dataset: Path = DEFAULT_DATASET, min_similarity: float = 0.3, candidate_k: int = 40) -> dict:
+def evaluate_retrieval(settings: Settings, *, dataset: Path = DEFAULT_DATASET, min_similarity: float = 0.3, candidate_k: int = 40,
+                       search_mode: str = "exact", ef_search: int = DEFAULT_EF_SEARCH) -> dict:
+    if search_mode not in ("auto", "exact", "hnsw") or not 1 <= ef_search <= 1000:
+        raise ValueError("Use search mode auto/exact/hnsw and ef-search between 1 and 1000.")
     if not 5 <= candidate_k <= 1000:
         raise ValueError("Evaluation candidate_k must be between 5 and 1000.")
     rank_candidates([], "", top_k=5, min_similarity=min_similarity)
@@ -96,7 +100,7 @@ def evaluate_retrieval(settings: Settings, *, dataset: Path = DEFAULT_DATASET, m
     sweeps = {str(weight): [] for weight in (0, 0.01, 0.02, 0.03, 0.05, 0.075, 0.1, 0.15)}
     for case in cases:
         candidates = pull_chunks(case["question"], settings, top_k=candidate_k, candidate_k=candidate_k,
-                                 deduplicate=False, rerank=False)
+                                 deduplicate=False, rerank=False, search_mode=search_mode, ef_search=ef_search)
         start = time.perf_counter()
         improved = rank_candidates(candidates, case["question"], top_k=5, min_similarity=min_similarity)
         durations.append((time.perf_counter() - start) * 1000)
@@ -119,6 +123,7 @@ def evaluate_retrieval(settings: Settings, *, dataset: Path = DEFAULT_DATASET, m
         "embedding_model_digest": digest, "indexed_documents": len(indexed),
         "indexed_chunks": sum(row["chunk_count"] for row in indexed),
         "candidate_k": candidate_k, "min_similarity": min_similarity,
+        "search_mode": search_mode, "ef_search": ef_search,
         "rerank_weight": RERANK_WEIGHT,
         "cases": len(cases), "answerable_cases": sum(not c["unanswerable"] for c in cases),
         "baseline": summarize(results, "baseline"), "improved": summarize(results, "improved"),

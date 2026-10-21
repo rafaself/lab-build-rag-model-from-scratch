@@ -1,19 +1,21 @@
 """Retrieve stored text chunks by semantic similarity to a query."""
 import math
 
-from sqlalchemy import func, select
+from sqlalchemy import select
 
 from rag_lab.config import Settings
 from rag_lab.database import create_db_engine
 from rag_lab.ollama_client import embed_texts
 from rag_lab.populate import chunks, documents
 from rag_lab.retrieval import rank_candidates
+from rag_lab.indexing import DEFAULT_EF_SEARCH, candidate_statement, configure_search
 
 
 def pull_chunks(
     query: str, settings: Settings, *, top_k: int = 5, model: str | None = None,
     min_similarity: float | None = None, candidate_k: int | None = None,
     deduplicate: bool = True, rerank: bool = True,
+    search_mode: str = "auto", ef_search: int = DEFAULT_EF_SEARCH,
 ) -> list[dict]:
     """Read the closest chunks for the same embedding model and dimensions.
 
@@ -22,6 +24,8 @@ def pull_chunks(
     """
     if not query.strip():
         raise ValueError("Provide a nonempty search query.")
+    if search_mode not in ("auto", "exact", "hnsw") or not 1 <= ef_search <= 1000:
+        raise ValueError("Use search mode auto/exact/hnsw and ef-search between 1 and 1000.")
     if not 1 <= top_k <= 1000:
         raise ValueError("top_k must be between 1 and 1000.")
     candidate_k = min(1000, max(40, top_k * 4)) if candidate_k is None else candidate_k
@@ -48,16 +52,10 @@ def pull_chunks(
             raise RuntimeError("Ollama returned a nonfinite or zero query vector.")
         if len(vector) not in dimensions:
             raise RuntimeError("Query and stored embeddings have different dimensions. Check --model and re-populate with --force if the model changed.")
-        distance = chunks.c.embedding.cosine_distance(vector).label("distance")
-        statement = select(chunks.c.source, chunks.c.chunk_index, chunks.c.content, distance,
-                           chunks.c.start_char, chunks.c.end_char, chunks.c.token_count,
-                           chunks.c.heading_path, documents.c.source_metadata).select_from(chunks.join(
-            documents, (chunks.c.source == documents.c.source) & (chunks.c.model == documents.c.model),
-        )).where(
-            chunks.c.model == model,
-            func.vector_dims(chunks.c.embedding) == len(vector),
-        ).order_by(distance, chunks.c.source, chunks.c.chunk_index).limit(candidate_k)
-        with engine.connect() as connection:
+        with engine.begin() as connection:
+            approximate = configure_search(connection, settings, model, len(vector), mode=search_mode,
+                                           ef_search=ef_search, candidate_k=candidate_k)
+            statement = candidate_statement(model, vector, candidate_k, exact=not approximate)
             rows = connection.execute(statement).mappings().all()
         candidates = [
             {"source": row["source"], "chunk_index": row["chunk_index"],

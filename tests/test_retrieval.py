@@ -40,7 +40,8 @@ class RetrievalQualityTests(unittest.TestCase):
     def test_bad_retrieval_limits_fail_before_database(self):
         with patch("rag_lab.pull.create_db_engine") as engine:
             for options in ({"min_similarity": float("nan")}, {"min_similarity": 1.1},
-                            {"candidate_k": 2}, {"candidate_k": 1001}):
+                            {"candidate_k": 2}, {"candidate_k": 1001}, {"search_mode": "invalid"},
+                            {"ef_search": 0}, {"ef_search": 1001}):
                 with self.assertRaises(ValueError):
                     pull_chunks("query", Settings(), **options)
         engine.assert_not_called()

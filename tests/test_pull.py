@@ -58,7 +58,8 @@ class PullTests(unittest.TestCase):
         with patch("rag_lab.cli.Settings.from_env", return_value=Settings()), patch("rag_lab.pull.pull_chunks", return_value=result) as pull, redirect_stdout(output):
             self.assertEqual(main(["pull", "planets", "--top-k", "2", "--model", "fixture"]), 0)
         pull.assert_called_once_with("planets", Settings(), top_k=2, model="fixture",
-                                     min_similarity=None, candidate_k=None, deduplicate=True, rerank=True)
+                                     min_similarity=None, candidate_k=None, deduplicate=True, rerank=True,
+                                     search_mode="auto", ef_search=200)
         self.assertEqual(json.loads(output.getvalue()), {"query": "planets", "model": "fixture", "matches": result})
 
 
@@ -132,6 +133,37 @@ class PostgreSQLPullTests(unittest.TestCase):
             self.assertEqual(len(matches), 1)
             self.assertAlmostEqual(matches[0]["similarity"], 1.)
             self.assertEqual(len(pull_chunks("query", Settings(), model="fixture", top_k=5, min_similarity=0.8, deduplicate=False)), 2)
+
+    def test_hnsw_index_creation_idempotency_and_exact_search(self):
+        from rag_lab.indexing import create_hnsw_index, candidate_statement, configure_search
+        from rag_lab.benchmark_index import explain
+        with patch("rag_lab.indexing.create_db_engine", return_value=self.scoped_engine):
+            first = create_hnsw_index(Settings(), model="fixture")
+            self.assertTrue(first["created"])
+            self.assertFalse(create_hnsw_index(Settings(), model="fixture")["created"])
+        with patch("rag_lab.pull.create_db_engine", return_value=self.scoped_engine), patch("rag_lab.pull.embed_texts", return_value=[[1., 0.]]):
+            exact = pull_chunks("query", Settings(), model="fixture", top_k=3, search_mode="exact")
+            approximate = pull_chunks("query", Settings(), model="fixture", top_k=3, search_mode="hnsw")
+            self.assertEqual([row["source"] for row in approximate], [row["source"] for row in exact])
+        with self.scoped_engine.begin() as connection:
+            configure_search(connection, Settings(), "fixture", 2, mode="hnsw", ef_search=100, candidate_k=40)
+            plan = explain(connection, candidate_statement("fixture", [1., 0.], 40))
+            self.assertTrue(plan["uses_hnsw"])
+            self.assertEqual(plan["schemas"], [self.schema])
+        from sqlalchemy import text
+        with self.scoped_engine.connect() as connection:
+            query = text("SELECT current_setting('enable_seqscan'), current_setting('enable_sort'), current_setting('jit')")
+            before = connection.execute(query).one()
+            connection.commit()
+            with connection.begin():
+                configure_search(connection, Settings(), "fixture", 2, mode="hnsw", ef_search=200, candidate_k=40)
+                self.assertEqual(connection.execute(query).one(), ("off", "off", "off"))
+            self.assertEqual(connection.execute(query).one(), before)
+
+    def test_hnsw_requires_an_index_for_the_requested_cohort(self):
+        with patch("rag_lab.pull.create_db_engine", return_value=self.scoped_engine), patch("rag_lab.pull.embed_texts", return_value=[[1., 0.]]):
+            with self.assertRaisesRegex(ValueError, "index-db"):
+                pull_chunks("query", Settings(), model="fixture", search_mode="hnsw")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,142 @@
+{
+  "generated_at": "2026-10-21T17:59:23.059275+00:00",
+  "seed": 42,
+  "dataset_sha256": "48bb65a5a0fa211945b395aff6690a3cbe352286e509cd28198093ed98f87c51",
+  "model": "qwen3-embedding:0.6b",
+  "dimensions": 1024,
+  "queries": 12,
+  "environment": {
+    "postgres_version": "17.11 (Debian 17.11-1.pgdg12+2)",
+    "pgvector_version": "0.8.7",
+    "maintenance_work_mem": "64MB"
+  },
+  "description": "Initial calibration: auto left planner choice unchanged; ef-search default was 100. This exposed sequential selection at 20000 rows and lower HNSW neighbor recall at ef-search 100. The final implementation uses an existing valid index in auto mode and defaults to ef-search 200.",
+  "measurements": [
+    {
+      "rows": 1000,
+      "exact_p50_ms": 9.875440500763943,
+      "variants": [
+        {
+          "mode": "auto",
+          "ef_search": 100,
+          "p50_ms": 7.242354500704096,
+          "p95_ms": 8.971408002253156,
+          "neighbor_recall@10": 1.0,
+          "neighbor_recall@40": 1.0,
+          "uses_hnsw": false
+        },
+        {
+          "mode": "hnsw",
+          "ef_search": 40,
+          "p50_ms": 3.4740759983833414,
+          "p95_ms": 4.3592539987002965,
+          "neighbor_recall@10": 1.0,
+          "neighbor_recall@40": 0.99375,
+          "uses_hnsw": true
+        },
+        {
+          "mode": "hnsw",
+          "ef_search": 100,
+          "p50_ms": 3.5184490006940905,
+          "p95_ms": 4.242775998136494,
+          "neighbor_recall@10": 1.0,
+          "neighbor_recall@40": 1.0,
+          "uses_hnsw": true
+        },
+        {
+          "mode": "hnsw",
+          "ef_search": 200,
+          "p50_ms": 3.9057140002114465,
+          "p95_ms": 4.949402002239367,
+          "neighbor_recall@10": 1.0,
+          "neighbor_recall@40": 1.0,
+          "uses_hnsw": true
+        }
+      ]
+    },
+    {
+      "rows": 5000,
+      "exact_p50_ms": 34.62550450058188,
+      "variants": [
+        {
+          "mode": "auto",
+          "ef_search": 100,
+          "p50_ms": 3.8468000002467306,
+          "p95_ms": 5.282111000269651,
+          "neighbor_recall@10": 1.0,
+          "neighbor_recall@40": 0.9895833333333334,
+          "uses_hnsw": true
+        },
+        {
+          "mode": "hnsw",
+          "ef_search": 40,
+          "p50_ms": 3.5003649991267594,
+          "p95_ms": 5.147952000697842,
+          "neighbor_recall@10": 1.0,
+          "neighbor_recall@40": 0.9708333333333333,
+          "uses_hnsw": true
+        },
+        {
+          "mode": "hnsw",
+          "ef_search": 100,
+          "p50_ms": 4.075389999343315,
+          "p95_ms": 5.403086001024349,
+          "neighbor_recall@10": 1.0,
+          "neighbor_recall@40": 0.9895833333333334,
+          "uses_hnsw": true
+        },
+        {
+          "mode": "hnsw",
+          "ef_search": 200,
+          "p50_ms": 4.8894094998104265,
+          "p95_ms": 5.647470999974757,
+          "neighbor_recall@10": 1.0,
+          "neighbor_recall@40": 0.9895833333333334,
+          "uses_hnsw": true
+        }
+      ]
+    },
+    {
+      "rows": 20000,
+      "exact_p50_ms": 135.0473200000124,
+      "variants": [
+        {
+          "mode": "auto",
+          "ef_search": 100,
+          "p50_ms": 97.86738050024724,
+          "p95_ms": 106.69546099961735,
+          "neighbor_recall@10": 1.0,
+          "neighbor_recall@40": 1.0,
+          "uses_hnsw": false
+        },
+        {
+          "mode": "hnsw",
+          "ef_search": 40,
+          "p50_ms": 3.347149999171961,
+          "p95_ms": 3.9924009979586117,
+          "neighbor_recall@10": 0.8333333333333334,
+          "neighbor_recall@40": 0.775,
+          "uses_hnsw": true
+        },
+        {
+          "mode": "hnsw",
+          "ef_search": 100,
+          "p50_ms": 3.605946500101709,
+          "p95_ms": 4.521795999608003,
+          "neighbor_recall@10": 0.8333333333333334,
+          "neighbor_recall@40": 0.80625,
+          "uses_hnsw": true
+        },
+        {
+          "mode": "hnsw",
+          "ef_search": 200,
+          "p50_ms": 3.9990530003706226,
+          "p95_ms": 5.29365200054599,
+          "neighbor_recall@10": 1.0,
+          "neighbor_recall@40": 1.0,
+          "uses_hnsw": true
+        }
+      ]
+    }
+  ]
+}

@@ -19,7 +19,8 @@ class AskTests(unittest.TestCase):
         with patch("rag_lab.ask.pull_chunks", return_value=[MATCH]) as pull, patch("rag_lab.ask.generate_structured_response", side_effect=[{"claims": [CLAIM]}, {"supported": [True]}]) as generate:
             result = ask_question("Why does the Sun shine?", Settings())
         pull.assert_called_once_with("Why does the Sun shine?", Settings(), top_k=3, model=None,
-                                     min_similarity=0.3, candidate_k=None, deduplicate=True, rerank=True)
+                                     min_similarity=0.3, candidate_k=None, deduplicate=True, rerank=True,
+                                     search_mode="auto", ef_search=200)
         self.assertEqual(result["status"], "answered")
         self.assertEqual(result["answer"], CLAIM["text"] + " [1]")
         self.assertEqual(result["sources"][0]["source"], MATCH["source"])
