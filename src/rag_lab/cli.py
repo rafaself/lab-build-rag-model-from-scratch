@@ -85,6 +85,11 @@ def build_parser() -> argparse.ArgumentParser:
     answers.add_argument("--search-mode", choices=("auto", "exact", "hnsw"), default="exact")
     answers.add_argument("--ef-search", type=positive_integer, default=DEFAULT_EF_SEARCH)
     answers.add_argument("--output", type=Path, required=True)
+    security = commands.add_parser("evaluate-security", help="Run synthetic post-retrieval prompt-injection regressions.")
+    security.add_argument("--dataset", type=Path)
+    security.add_argument("--chat-model")
+    security.add_argument("--judge-model")
+    security.add_argument("--output", type=Path, required=True)
     tune = commands.add_parser("tune-chunking", help="Compare token chunk sizes in temporary PostgreSQL schemas.")
     tune.add_argument("--dataset", type=Path)
     tune.add_argument("--output", type=Path, required=True)
@@ -154,6 +159,13 @@ def run(args: argparse.Namespace, settings: Settings) -> int:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(result, indent=2, ensure_ascii=False, allow_nan=False) + "\n", encoding="utf-8")
         print(f"Saved chunking comparison to {args.output}")
+    elif args.command == "evaluate-security":
+        from rag_lab.evaluate_security import DEFAULT_SECURITY_DATASET, evaluate_security
+        result = evaluate_security(settings, dataset=args.dataset or DEFAULT_SECURITY_DATASET,
+                                   chat_model=args.chat_model, judge_model=args.judge_model)
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(json.dumps(result, indent=2, ensure_ascii=False, allow_nan=False) + "\n", encoding="utf-8")
+        print(f"Saved security evaluation to {args.output}")
     elif args.command == "evaluate-answers":
         from sqlalchemy.exc import SQLAlchemyError
         from rag_lab.evaluate import DEFAULT_DATASET

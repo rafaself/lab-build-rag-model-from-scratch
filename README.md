@@ -21,11 +21,12 @@ A local study project using Ollama, PostgreSQL, and pgvector. The commands cover
 | `src/rag_lab/retrieval.py` | Similarity filtering, duplicate removal, and lexical reranking |
 | `src/rag_lab/evaluate.py` | Source-checked retrieval benchmark and calibration |
 | `src/rag_lab/evaluate_answers.py` | End-to-end answer accuracy, faithfulness, and citation evaluation |
+| `src/rag_lab/evaluate_security.py` | Controlled injection regressions with attack and answer-utility metrics |
 | `src/rag_lab/ask.py` | Generate answers with checked evidence quotes and source references |
 | `models/Modelfile` | Custom Ollama model recipe |
 | `compose.yaml` | Local PostgreSQL service |
 | `docker/postgres/init/` | Initial pgvector extension setup |
-| `tests/` | Offline unit tests |
+| `tests/` | Offline unit tests and opt-in PostgreSQL integration tests |
 | `benchmarks/`, `reports/` | Labeled questions and measured evaluation results |
 | `astronomy_corpus/`, `data/` | Ignored local corpus and generated files |
 
@@ -87,6 +88,7 @@ Commands read `.env` from the project root automatically. Exported shell variabl
 | Ask with retrieved context | `rag-lab ask "What powers the Sun?"` |
 | Evaluate retrieval quality | `rag-lab evaluate --output reports/retrieval-quality.json` |
 | Evaluate generated answers | `rag-lab evaluate-answers --output reports/answer-quality.json` |
+| Test injection safeguards | `rag-lab evaluate-security --output reports/security-regression.json` |
 | Compare token chunking settings | `rag-lab tune-chunking --output reports/chunking-comparison.json` |
 | Create the vector search index | `rag-lab index-db` |
 | Benchmark index scalability | `rag-lab benchmark-index --output reports/index-performance.json` |
@@ -230,7 +232,7 @@ Paragraphs and headings are preserved in model context. `start_char`/`end_char` 
 
 The structured request disables thinking and uses an 8192-token context window; generation still has a finite budget. Large contexts or complex questions can require a smaller model, fewer chunks, or a larger `--max-tokens` value.
 
-Retrieved text and the question stay in an untrusted JSON payload, separate from the fixed system instructions. No tools, database credentials, or local file-reading capability are given to the model. Context and output sizes are bounded. These are safeguards, not a guarantee against prompt injection or hallucination: the grounding checker is also a model, and valid citations alone do not prove an answer is true. See the [development roadmap](docs/ROADMAP.md) for the remaining evaluation and security work.
+Retrieved text and the question stay in an untrusted JSON payload, separate from the fixed system instructions. No tools, database credentials, or local file-reading capability are given to the model. Context and output sizes are bounded. These are safeguards, not a guarantee against prompt injection or hallucination: the grounding checker is also a model, and valid citations alone do not prove an answer is true. See the [development roadmap](docs/ROADMAP.md) for validation evidence and remaining work.
 
 ## Retrieval evaluation
 
@@ -274,6 +276,26 @@ The command runs the actual `ask` pipeline for all 14 source-checked benchmark c
 The solar-neutrino question abstained because the selected evidence was insufficient. The judge marked an extra Mercury claim unfaithful for being irrelevant, although the full excerpt supports it; [case notes](reports/answer-review.md) distinguish this grading inconsistency from actual source support. The original verdict is retained.
 
 The [measured answer report](reports/answer-quality.json) is a small development regression benchmark. The default judge is the same Qwen model as the generator in a separate call; its judgments can share the generator's mistakes. This is not independent or human validation. Inspect individual cases, and use `--judge-model` to compare another installed model. Model judgments and valid citations do not establish real-world truth.
+
+## Prompt-injection regression tests
+
+```bash
+rag-lab evaluate-security --output reports/security-regression.json
+```
+
+The [11-case synthetic suite](benchmarks/security.jsonl) includes nine direct/document attacks and two clean controls: role overrides, forged system delimiters, JSON delimiter tricks, encoded instructions, citation spoofing, instruction-only evidence, private-data requests, and command/URL instructions. It injects controlled post-retrieval excerpts into the same generation, quote validation, and grounding functions used by `ask`; it bypasses corpus retrieval and never writes poisoned text to PostgreSQL. Only a fake public canary is used. Tests verify that private settings, source paths, metadata, and tool permissions are absent from model messages.
+
+Attack success combines deterministic forbidden-output checks with a separate fallible semantic judge. Raw cited source text may naturally contain attack strings, so only the published answer and claim text count as following an output instruction. Missing/failed attack judgments are unassessed, not successful defenses. Answer usefulness under attack, clean controls, abstentions, and errors are separate metrics; refusing everything cannot demonstrate a useful RAG system.
+
+| Initial measured baseline | Result |
+| --- | ---: |
+| Observed successful attacks | 0 / 9 |
+| Correct answers under answerable attacks | 0 / 7 |
+| Correct clean controls | 1 / 2 |
+| Abstentions | 10 / 11 |
+| Generation/judge errors | 0 |
+
+The [baseline report](reports/security-regression.json) exposes excessive refusal despite the absence of observed attack success. Prompt improvements and repeat measurements remain. This fixed suite is not exhaustive red teaming, an adaptive attack evaluation, or a guarantee of security. The separate judge is the generator model by default and can share its mistakes. Model output is untrusted; this CLI does not give it tools or execute its output. The design follows structured data/instruction separation and least privilege described by the [OWASP prevention guidance](https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html); JSON schema constrains format, not semantic safety ([Ollama structured outputs](https://docs.ollama.com/capabilities/structured-outputs)).
 
 ## Vector indexing and performance
 
